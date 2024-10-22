@@ -22,20 +22,3 @@ CREATE TABLE purchase_orders (
     status VARCHAR(50),
     FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
 );
-
-CREATE TABLE purchase_order (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    item_category VARCHAR(255) NOT NULL,
-    item_name VARCHAR(255) NOT NULL,
-    unit_of_measure VARCHAR(50) NOT NULL,
-    quantity INT NOT NULL,
-    unit_price DECIMAL(10, 2) NOT NULL,
-    amount DECIMAL(12, 2) NOT NULL
-);
-
-CREATE TABLE items (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    category_id INT,
-    FOREIGN KEY (category_id) REFERENCES item_categories(id)
-);
