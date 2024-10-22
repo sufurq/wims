@@ -1,9 +1,32 @@
 <?php
-require_once "./util/dbhelper.php";
-$db = new DbHelper();
+$conn = new mysqli("localhost", "root", "", "inventory_management");
 
-$podGetAllrecords = $db->getAllRecords("pod_items");
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $category = $_POST['category'];
+    $item = $_POST['item'];
+    $uom = $_POST['uom'];
+    $quantity = $_POST['quantity'];
+    $unit_price = $_POST['unit_price'];
+    $amount = $_POST['amount'];
+
+    $stmt = $conn->prepare("INSERT INTO pod_items (category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssidd", $category, $item, $uom, $quantity, $unit_price, $amount);
+    $stmt->execute();
+    $stmt->close();
+}
+
+// Deleting a record
+if (isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+    $conn->query("DELETE FROM pod_items WHERE id = $id");
+    header("Location: index.php"); // Redirect back to the page after deletion
+}
+
+$result = $conn->query("SELECT * FROM pod_items");
 ?>
 
 <!DOCTYPE html>
@@ -226,7 +249,7 @@ body {
                 <div class="dropdown-container" style="position:relative; left:-815px;">
                     <h4>Show&nbsp;</h4>
                     <select class="status-dropdown" style="width:100px;">
-                     <option value="1">10</option>
+                        <option value="1">10</option>
                         <option value="2">25</option>
                         <option value="3">50</option>
                         <option value="4">100</option>
@@ -241,7 +264,7 @@ body {
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th>Item</th>
+                    <th>Item Code</th>
                     <th>Unit of Issue</th>
                     <th>Description</th>
                     <th>QTY</th>
@@ -251,29 +274,20 @@ body {
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($podGetAllrecords as $pod): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
                 <tr>
+                    <td><?= $row['category'] ?></td>
+                    <td><?= $row['item_description'] ?></td>
+                    <td><?= $row['unit_of_measure'] ?></td>
+                    <td><?= $row['quantity'] ?></td>
+                    <td><?= $row['unit_price'] ?></td>
+                    <td><?= $row['amount'] ?></td>
                     <td>
-                        <?php echo $pod["category"] ?>
-
+                    <a href="./crud_form/edit_pod.php?id=<?php echo $row["id"] ?>"class="edit-btn" onclick="return confirm('Are you sure you want to edit this item?');">EDIT</a>
+                    <a href="./logic/delete_pod.php?id=<?php echo $row['id'] ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                     </td>
-                    <td>
-                        <?php echo $pod["unit_of_measure"] ?>
-                    </td>
-                    <td>
-                        <?php echo $pod["item_description"] ?>
-                    </td>
-                    <td>
-                        <?php echo $pod["quantity"] ?>
-                    </td>
-                    <td>
-                        <?php echo $pod["unit_price"] ?>
-                    </td>
-                    <td>
-                        <?php echo $pod["amount"] ?>
-                    </td>
-</tr>
-                    <?php endforeach;?>
+                </tr>
+                <?php endwhile; ?>
             </tbody>
         </table>
     </div>
