@@ -226,7 +226,7 @@ body {
                 <div class="dropdown-container" style="position:relative; left:-815px;">
                     <h4>Show&nbsp;</h4>
                     <select class="status-dropdown" style="width:100px;">
-                        <option value="1">10</option>
+                     <option value="1">10</option>
                         <option value="2">25</option>
                         <option value="3">50</option>
                         <option value="4">100</option>
