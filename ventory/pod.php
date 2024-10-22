@@ -1,32 +1,9 @@
 <?php
-$conn = new mysqli("localhost", "root", "", "inventory_management");
+require_once "./util/dbhelper.php";
+$db = new DbHelper();
 
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+$podGetAllrecords = $db->getAllRecords("pod_items");
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $category = $_POST['category'];
-    $item = $_POST['item'];
-    $uom = $_POST['uom'];
-    $quantity = $_POST['quantity'];
-    $unit_price = $_POST['unit_price'];
-    $amount = $_POST['amount'];
-
-    $stmt = $conn->prepare("INSERT INTO pod_items (category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssidd", $category, $item, $uom, $quantity, $unit_price, $amount);
-    $stmt->execute();
-    $stmt->close();
-}
-
-// Deleting a record
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    $conn->query("DELETE FROM pod_items WHERE id = $id");
-    header("Location: index.php"); // Redirect back to the page after deletion
-}
-
-$result = $conn->query("SELECT * FROM pod_items");
 ?>
 
 <!DOCTYPE html>
@@ -264,7 +241,7 @@ body {
         <table class="custom-table">
             <thead>
                 <tr>
-                    <th>Item Code</th>
+                    <th>Item</th>
                     <th>Unit of Issue</th>
                     <th>Description</th>
                     <th>QTY</th>
@@ -274,20 +251,29 @@ body {
                 </tr>
             </thead>
             <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
+                <?php foreach ($podGetAllrecords as $pod): ?>
                 <tr>
-                    <td><?= $row['category'] ?></td>
-                    <td><?= $row['item_description'] ?></td>
-                    <td><?= $row['unit_of_measure'] ?></td>
-                    <td><?= $row['quantity'] ?></td>
-                    <td><?= $row['unit_price'] ?></td>
-                    <td><?= $row['amount'] ?></td>
                     <td>
-                        <a href="edit.php?id=<?= $row['id'] ?>" class="edit-btn">Edit</a>
-                        <a href="index.php?delete=<?= $row['id'] ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                        <?php echo $pod["category"] ?>
+
                     </td>
-                </tr>
-                <?php endwhile; ?>
+                    <td>
+                        <?php echo $pod["unit_of_measure"] ?>
+                    </td>
+                    <td>
+                        <?php echo $pod["item_description"] ?>
+                    </td>
+                    <td>
+                        <?php echo $pod["quantity"] ?>
+                    </td>
+                    <td>
+                        <?php echo $pod["unit_price"] ?>
+                    </td>
+                    <td>
+                        <?php echo $pod["amount"] ?>
+                    </td>
+</tr>
+                    <?php endforeach;?>
             </tbody>
         </table>
     </div>
