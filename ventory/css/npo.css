@@ -1,0 +1,515 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', serif;
+}
+
+header {
+    background-color: #343A40;
+    width: 100%;
+    height: 135px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    color: black;
+}
+
+.logo-title {
+    font-size: 20px;
+    color: black;
+}
+
+/* Navigation Bar */
+.main-nav {
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Shadowed bottom border */
+}
+
+.main-nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.main-nav ul li {
+    margin-right: 20px;
+    font-size: 20px;
+    font-weight: 400;
+    padding: 10px 20px; /* Padding for links */
+    border-radius: 10px; /* Curved corners */
+}
+
+.main-nav ul li:first-child {
+    background-color: #415EF6; /* Blue box around Home */
+    color: white;
+    border-radius: 8px; /* Curved corners for Home */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Small shadow for Home */
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+}
+
+.profile-section span {
+    font-size: 20px;
+    margin-right: 10px;
+}
+
+.profile-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    height: calc(100vh - 135px);
+}
+
+/* Sub Menu Styles */
+.sub-menu {
+    width: 282px;
+    height: 786px;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.1); /* Shadowed right and bottom border */
+}
+
+.sub-menu h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    color: black;
+    margin-bottom: 20px;
+}
+
+.sub-menu ul {
+    list-style-type: none;
+}
+
+.sub-menu ul li {
+    font-size: 18px;
+    padding: 10px 0;
+}
+
+.sub-menu ul li:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+}
+
+.sub-menu hr {
+    margin: 20px 0;
+}
+
+/* Blue Box for Purchase Order */
+.sub-menu ul li:nth-child(2) {
+    background-color: #415EF6; /* Blue box around Purchase Order */
+    color: white;
+    border-radius: 8px; /* Curved corners for Purchase Order */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Small shadow for Purchase Order */
+    padding: 10px 20px; /* Padding inside the box */
+}
+
+/* Adjust other items in the menu */
+.sub-menu ul li:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: white; /* Text color on hover */
+}
+
+/* Blue Box for Selected Item */
+.sub-menu ul li.selected {
+    background-color: #415EF6; /* Blue box around selected item */
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Small shadow */
+    padding: 10px 20px;
+}
+
+/* Purchase Order Page */
+.purchase-order {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.purchase-order h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+/* Button to toggle sub-menu */
+.new-record-btn {
+    background-color: #007bff; /* Blue background */
+    color: white;
+    position: absolute;
+    left: 1455px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px; /* Curved corners */
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.new-record-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Centering the dropdown */
+.dropdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: vh;
+}
+
+/* Dropdown Styles */
+.status-dropdown {
+    width: 500px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.status-dropdown:hover {
+    border-color: #007bff;
+}
+
+/* Show Entries Container */
+.show-entries-container {
+    display: flex;
+    align-items: center;
+    font-family: 'Roboto', serif;
+    font-size: 16px;
+    gap: 10px;
+}
+
+/* Entries Dropdown */
+.entries-dropdown {
+    width: 60px;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.entries-dropdown:hover {
+    border-color: #007bff;
+}
+
+/* Search Container */
+.search-container {
+    display: flex;
+    align-items: center;
+    font-family: 'Roboto', serif;
+    font-size: 16px;
+    gap: 10px;
+}
+
+/* Search Input */
+.search-input {
+    width: 250px;
+    left: 565px;
+    top: 352px;
+    position: absolute;
+    padding: 8px 12px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* Table Container */
+.table-container {
+    width: 100%;
+    padding: 20px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Table Styles */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th, 
+.custom-table td {
+    text-align: left;
+    padding: 12px 10px;
+    font-size: 16px;
+    border-bottom: 1px solid #ccc;
+}
+
+.custom-table td:last-child {
+    text-transform: uppercase;
+}
+
+/* Toggle Button */
+.toggle-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Sub-menu Content */
+.sub-menu-content {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+.sub-menu-content p {
+    margin: 10px 0;
+}
+
+/* Action Buttons in Sub-menu */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 15px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.ocean-blue {
+    background-color: #007bff;
+}
+
+.dark-blue {
+    background-color: #001f3f;
+}
+
+.red {
+    background-color: #dc3545;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+
+
+.details-table {
+position: absolute;
+bottom:20px;
+}
+
+
+.nav-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    position: fixed;
+    bottom: 10px;
+    right: 30px;
+    font-family: Arial, sans-serif;
+    margin-top: 50px;
+}
+
+/* Styling for the buttons */
+.nav-btn {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.nav-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Styling for the number box */
+.number-box {
+    font-size: 24px;
+    padding: 10px 20px;
+    border: 2px solid #007BFF;
+    border-radius: 5px;
+    min-width: 50px;
+    text-align: center;
+    color: #333;
+}
+
+/* Modal Overlay to dim the background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; /* Hidden by default */
+    z-index: 999;
+}
+
+/* Modal Container */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Above the overlay */
+}
+
+/* Modal Content */
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 16px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.modal-content .submit-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-content .submit-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Close Button */
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.sub-menu-row {
+    display: none; /* Initially hide the sub-menu rows */
+}
+
+/* Modal Overlay to dim the background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; /* Hidden by default */
+    z-index: 999;
+}
+
+/* Modal Container */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none; /* Hidden by default */
+    z-index: 1000; /* Above the overlay */
+}
+
+/* Modal Content */
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modal-content label {
+    display: block;
+    margin: 10px 0 5px;
+    font-size: 16px;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+}
+
+.submit-btn, .back-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.back-btn {
+    background-color: #ccc; 
+    color: #000;
+    border: none;
+}
+
+.submit-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+}
