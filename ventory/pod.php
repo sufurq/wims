@@ -84,7 +84,7 @@ $totalPage = ceil($totalRecords / $recordsPerPage);
                 <li class="nav-item"><a class="nav-link" href="#">Audit</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Master Pages</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Log Out</a></li>
+                <li class="nav-item"><a class="nav-link" href="./logic/logout.php">Log Out</a></li>
             </ul>
         </aside>
 
