@@ -1,0 +1,23 @@
+
+
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 70%;
+}
+
+.search-icon {
+    margin-right: 5px;
+    
+}
+
+.search-input {
+    flex-grow: 1; 
+    padding: 8px;
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+}
+.fixed-width {
+    width: 150px; 
+}

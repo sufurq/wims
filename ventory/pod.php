@@ -19,14 +19,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->close();
 }
 
-// Deleting a record
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    $conn->query("DELETE FROM pod_items WHERE id = $id");
-    header("Location: index.php"); // Redirect back to the page after deletion
-}
 
 $result = $conn->query("SELECT * FROM pod_items");
+
+require_once "./util/dbhelper.php";
+$db = new DbHelper();
+$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$recordsPerPage = 10;
+$start = ($page - 1) * $recordsPerPage;
+$query = isset($_GET['query']) ? htmlspecialchars($_GET['query'], ENT_QUOTES, 'UTF-8') : '';
+$row = $db->fetchRecords_limit("pod_items", $start, $recordsPerPage, $query);
+$totalRecords = $db->fetchTotalRecords("pod_items", $query);
+$totalPage = ceil($totalRecords / $recordsPerPage);
 ?>
 
 <!DOCTYPE html>
@@ -35,270 +39,149 @@ $result = $conn->query("SELECT * FROM pod_items");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Order</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/index.css">
-    <script defer src="script/script.js"></script>
+    <link rel="stylesheet" href="./assets/css/pod_style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-<style>
-        /* General Body Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
 
-/* Form Container */
-.form-container {
-    max-width: 1200px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-}
-
-/* Form Title */
-.form-container h2 {
-    font-size: 24px;
-    color: #2e3d56;
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-/* Form Layout */
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-    align-items: start;
-}
-
-/* Form Group */
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #4a6fa1;
-    background-color: #fff;
-}
-
-/* Full Width Fields */
-.form-group.full-width {
-    grid-column: 1 / 3;
-}
-
-/* Button Styles */
-.form-actions {
-    margin-top: 20px;
-    text-align: left;
-}
-
-.form-actions button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.form-actions .submit-btn {
-    background-color: #4a6fa1;
-    transition: background-color 0.3s ease;
-}
-
-.form-actions .submit-btn:hover {
-    background-color: #2e3d56;
-}
-
-.form-actions .back-btn {
-    background-color: #d9534f;
-}
-
-.form-actions .back-btn:hover {
-    background-color: #c9302c;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-group.full-width {
-        grid-column: 1 / 2;
-    }
-}
-/* Close Button Styles */
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    background-color: transparent;
-    border: none;
-    font-size: 24px;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-    color: #d9534f;
-}
-
-/* Relative position for the form-container */
-.form-container {
-    position: relative;
-    max-width: 1200px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-}
-
-.sub-menu a {
-  text-decoration: none; /* Remove underline */
-}
-</style>
-<style>
-    .sub-menu a {
-  text-decoration: none; /* Remove underline */
-}
-</style>
 <body>
-    <header>
-        <div class="logo-title"><img src="img/coclogo.png" width="300" alt="Company Logo"></div>
-    </header>
+<header class="bg-light py-3 d-flex justify-content-start align-items-center">
+    <img src="img/coclogo.png" class="img-fluid" alt="Company Logo" style="max-width: 20%; height: auto; margin-right: 10px;">
+</header>
 
-    <!-- Navigation -->
-    <nav class="main-nav">
-        <ul>
-            <li>Home</li>
-            <li>Groups</li>
-            <li>Users</li>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">SIT.io</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Groups</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Users</a></li>
         </ul>
-        <div class="profile-section">
-            <img src="img/avatar.png" alt="Profile" class="profile-avatar">
+        <div class="navbar-text ml-auto d-flex align-items-center">
+            <img src="img/avatar.png" class="rounded-circle mr-2" alt="Profile" width="40">
             <span>Jcolonia</span>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <!-- Main Section -->
-    <div class="container">
-        <!-- Sub Menu -->
-        <aside class="sub-menu">
-            <h1><center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
-            <ul>
-                <center><li><a href="#">Dashboard</a></li></center>
-                <center><li class="selected">
-                    <a href="index.php" style="color: white;">Purchase Order</a></li>
-                </center>
-                <center><li><a href="#">Delivery Receipt</a></li></center>
-                <center><li><a href="#">POWE</a></li></center>
-                <center><li><a href="#">RIS</a></li></center>
-                <center><li><a href="#">Audit</a></li></center>
-                <center><li><a href="#">Reports</a></li></center>
-                <hr>
-                <center><li><a href="#">Master Pages</a></li></center>
-                <hr>
-                <center><li><a href="#">Log Out</a></li></center>
+<div class="container-fluid">
+    <div class="row">
+        <aside class="col-lg-3 col-md-4 col-sm-12 bg-light p-3">
+            <div class="text-center mb-4">
+                <img src="img/box.png" alt="Icon" height="60">
+                <h1>SIT.io</h1>
+            </div>
+            <ul class="nav flex-column text-center">
+                <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link active" href="index.php">Purchase Order</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Delivery Receipt</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">POWE</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">RIS</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Audit</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Master Pages</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Log Out</a></li>
             </ul>
         </aside>
 
-        <!-- Purchase Order Page -->
-        <section class="purchase-order">
-            <center><h2>Purchase Order</h2></center>
-            <a href="cnpod.php"><button class="new-record-btn" style="position:relative; right:20px; top:-60px"><b>New Detail</b></button></a>
-
-            <!-- Search field for filtering entries -->
-            <div class="search-container" style="position: relative; left:10px;">
-                <i class="fa fa-search search-icon" style="position:relative; left:10px;"></i>
-                <input type="text" style="position:relative; right:20px;" class="search-input" placeholder="Search" id="search-input">
+        <main class="col-lg-9 col-md-8 col-sm-12 p-4">
+            <div class="text-center">
+                <h2 class="mb-4">Purchase Order</h2>
             </div>
 
-            <div class="text-center mb-3">
-                <!-- Dropdown to select the number of entries to display -->
-                <div class="dropdown-container" style="position:relative; left:-815px;">
-                    <h4>Show&nbsp;</h4>
-                    <select class="status-dropdown" style="width:100px;">
-                        <option value="1">10</option>
-                        <option value="2">25</option>
-                        <option value="3">50</option>
-                        <option value="4">100</option>
-                        <option value="10" selected>10</option>
-                    </select>
-                    <h4>&nbsp;Entries</h4>
+            <!-- Create a flex container for the search and button -->
+            <div class="d-flex justify-content-between mb-3">
+                <form action="pod.php" method="get" class="form-inline d-flex flex-grow-1">
+                    <div class="form-group flex-grow-1">
+                        <div class="search-container d-flex align-items-center">
+                            <img src="./assets/img/search.svg" alt="Logo" class="search-icon" style="margin-right: 5px; width: 30px; height: 30px;">
+                            <input type="text" name="query" class="form-control" placeholder="Search..." value="<?php echo htmlspecialchars($query, ENT_QUOTES, 'UTF-8'); ?>" required>
+                            <button type="submit" class="btn btn-primary ml-2">SEARCH</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- New Detail button placed beside the search -->
+                <div class="new-details ml-3">
+                    <a href="cnpod.php">
+                        <button class="btn btn-primary btn-sm" style="width:auto"><b>New Detail</b></button>
+                    </a>
                 </div>
             </div>
 
-    <!-- Purchase Orders Table -->
-    <div class="table-container">
-        <table class="custom-table">
-            <thead>
-                <tr>
-                    <th>Item Code</th>
-                    <th>Unit of Issue</th>
-                    <th>Description</th>
-                    <th>QTY</th>
-                    <th>Unit Cost</th>
-                    <th>Amount</th>
-                    <th>Action(s)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                <tr>
-                    <td><?= $row['category'] ?></td>
-                    <td><?= $row['item_description'] ?></td>
-                    <td><?= $row['unit_of_measure'] ?></td>
-                    <td><?= $row['quantity'] ?></td>
-                    <td><?= $row['unit_price'] ?></td>
-                    <td><?= $row['amount'] ?></td>
-                    <td>
-                    <a href="./crud_form/edit_pod.php?id=<?php echo $row["id"] ?>"class="edit-btn" onclick="return confirm('Are you sure you want to edit this item?');">EDIT</a>
-                    <a href="./logic/delete_pod.php?id=<?php echo $row['id'] ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
-                    </td>
-                </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-    </div>
-
-   <div class="nav-container">
-                <button class="nav-btn" id="prev-btn">Previous</button>
-                <div class="number-box" id="number-display">1</div>
-                <button class="nav-btn" id="next-btn">Next</button>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Item Code</th>
+                            <th>Description</th>
+                            <th>Unit of Issue</th>
+                            <th>QTY</th>
+                            <th>Unit Cost</th>
+                            <th>Amount</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($row)): ?>
+                            <?php foreach ($row as $rows): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($rows["id"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($rows["item_description"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($rows["unit_of_measure"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($rows["quantity"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($rows["unit_price"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($rows["amount"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td>
+                                        <a href="./crud_form/edit_pod.php?id=<?= $rows['id'] ?>" class="btn btn-primary btn-sm">Edit</a>
+                                        <a href="./logic/delete_pod.php?id=<?= $rows['id'] ?>" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td colspan="7" class="text-center">No records found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
             </div>
-        </section>
+        </main>
     </div>
+</div>
+
+
+<div class="d-flex justify-content-center justify-content-md-end mt-4">
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            <?php if ($page > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo $page - 1; ?>&query=<?php echo urlencode($query); ?>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            <?php endif; ?>
+            <?php for ($i = 1; $i <= $totalPage; $i++): ?>
+                <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                    <a class="page-link" href="?page=<?php echo $i; ?>&query=<?php echo urlencode($query); ?>"><?php echo $i; ?></a>
+                </li>
+            <?php endfor; ?>
+            <?php if ($page < $totalPage): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?php echo $page + 1; ?>&query=<?php echo urlencode($query); ?>" aria-label="Next">
+                        Next &raquo;
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+</div>
+
+
 
 </body>
 </html>

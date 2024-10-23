@@ -84,4 +84,65 @@ class DbHelper
         return $this->conn->affected_rows;
     }
 
+    //pagenion
+
+    public function fetchRecords_limit($table, $start = 0, $limit = 1, $search = '')
+    {
+
+        $sql = "SELECT * FROM $table WHERE category LIKE ? OR item_description LIKE ? LIMIT ?, ?";
+
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+        $searchParam = "%$search%";
+        $stmt->bind_param("ssii", $searchParam, $searchParam, $start, $limit);
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        if (!$result) {
+            die("Get result failed: " . $stmt->error);
+        }
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        $stmt->close();
+
+        return $rows;
+    }
+
+
+    public function fetchTotalRecords($table, $search = '')
+    {
+
+        $sql = "SELECT COUNT(*) as count FROM $table WHERE category LIKE ? OR item_description LIKE ?";
+
+
+        $stmt = $this->conn->prepare($sql);
+        if (!$stmt) {
+            die("Prepare failed: " . $this->conn->error);
+        }
+
+        $searchParam = "%$search%";
+        $stmt->bind_param("ss", $searchParam, $searchParam);
+
+
+        $stmt->execute();
+
+
+        $result = $stmt->get_result();
+        if (!$result) {
+            die("Get result failed: " . $stmt->error);
+        }
+
+
+        $row = $result->fetch_assoc();
+
+
+        $stmt->close();
+
+        return $row['count'];
+    }
 }
