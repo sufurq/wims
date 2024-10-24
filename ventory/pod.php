@@ -118,6 +118,7 @@ $totalPage = ceil($totalRecords / $recordsPerPage);
                     <thead class="thead-dark">
                         <tr>
                             <th>Item Code</th>
+                            <th>Category</th>
                             <th>Description</th>
                             <th>Unit of Issue</th>
                             <th>QTY</th>
@@ -131,6 +132,7 @@ $totalPage = ceil($totalRecords / $recordsPerPage);
                             <?php foreach ($row as $rows): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($rows["id"], ENT_QUOTES, 'UTF-8'); ?></td>
+                                    <td><?php echo htmlspecialchars($rows["category"], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($rows["item_description"], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($rows["unit_of_measure"], ENT_QUOTES, 'UTF-8'); ?></td>
                                     <td><?php echo htmlspecialchars($rows["quantity"], ENT_QUOTES, 'UTF-8'); ?></td>
