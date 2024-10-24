@@ -73,10 +73,11 @@ include "../shared/navbar_admin.php";
                     </div>
 
                     <div class="form-group">
-                        <label for="item_description">Description</label>
-                        <input type="text" id="item_description" name="item_description" value="<?php echo $pod["item_description"] ?>" required>
-                            </div>
-
+                        <label for="item">Item:</label>
+                        <select id="item" name="item" required>
+                            <option value="">Select Item</option>
+                        </select>
+                    </div>
 
 
                     <div class="form-group">
@@ -105,8 +106,24 @@ include "../shared/navbar_admin.php";
     </section>
     <script>
         function closeForm() {
-            window.location.href = "../pod.php";
+            window.location.href = "./pod.php"; 
         }
+
+        $('#category').change(function() {
+            var category = $(this).val();
+            if (category) {
+                $.ajax({
+                    type: "POST",
+                    url: "../fetch_items.php",
+                    data: {category: category},
+                    success: function(response) {
+                        $('#item').html(response);
+                    }
+                });
+            } else {
+                $('#item').html('<option value="">Select Item</option>');
+            }
+        });
     </script>
 
     <script src="../assets/js/calculate_amount.js"></script>
