@@ -106,7 +106,7 @@ include "../shared/navbar_admin.php";
     </section>
     <script>
         function closeForm() {
-            window.location.href = "./pod.php"; 
+            window.location.href = "../pod.php"; 
         }
 
         $('#category').change(function() {
