@@ -1,27 +1,4 @@
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "purchase_orders_db";
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $password);
- 
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $supplier_query = "SELECT * FROM suppliers";
-    $suppliers_result = $conn->query($supplier_query);
-
-    $po_query = "SELECT po.id, po.po_number, po.po_date, po.procurement_number, po.procurement_model, po.procurement_date, po.delivery_place, po.delivery_date, po.terms_delivery, s.name AS supplier, po.total_amount, po.status 
-                 FROM purchase_orders po 
-                 JOIN suppliers s ON po.supplier_id = s.id
-                 ORDER BY po.id DESC";
-    $po_result = $conn->query($po_query);
-    
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
-?>
 
 <!DOCTYPE html>
 <html lang="en">
