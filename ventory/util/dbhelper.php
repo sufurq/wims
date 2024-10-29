@@ -181,4 +181,49 @@ WHERE
     return $p_oder;
 }
 
+public function display_value_all_purchase()
+{
+    $sql = "SELECT 
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.mode_of_procurement,
+        purchase_orders.procurement_number,
+        purchase_orders.procurement_date,
+        purchase_orders.place_of_delivery,
+        purchase_orders.delivery_date,
+        purchase_orders.term_of_delivery,
+        purchase_orders.status,
+        suppliers.description
+    FROM 
+        purchase_orders
+    LEFT JOIN 
+        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id";
+
+    // Prepare the SQL statement
+    $stmt = $this->conn->prepare($sql);
+    if (!$stmt) {
+        // Handle the error
+        die('Prepare failed: ' . $this->conn->error);
+    }
+
+    // Execute the statement
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Fetch all rows into an array
+    $p_order = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_order[] = (object) $row;
+    }
+
+    // Return the array of purchase orders
+    return $p_order;
+}
+
+
+
+
+
+
 }

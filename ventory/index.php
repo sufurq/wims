@@ -2,7 +2,7 @@
 
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
-$display = $db->getAllRecords("purchase_orders");
+$display = $db->display_value_all_purchase();
 ?>
 
 <!DOCTYPE html>
@@ -125,20 +125,22 @@ $display = $db->getAllRecords("purchase_orders");
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($display as $row) : ?>   
+    <?php foreach ($display as $row) : ?>   
+        <tr>
+            <td><?php echo htmlspecialchars($row->purchase_order_number); ?></td>
+            <td><?php echo htmlspecialchars($row->order_date); ?></td>
+            <td><?php echo htmlspecialchars($row->procurement_number); ?></td>
+            <td><?php echo htmlspecialchars($row->description); ?></td>
+            <td><?php echo "45646373" ?></td>
+            <td><?php echo htmlspecialchars($row->status); ?></td>
+            <td><?php echo "ACTION"?></td>
+            <td>
 
-                <tr>
-                <td><?php echo $row["purchase_order_number"] ?></td>
-                <td><?php echo $row["order_date"] ?></td>
-                <td><?php echo $row["procurement_number"] ?></td>
-                <td><?php echo $row["supplier_id"] ?></td>
-                
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
 
-
-                </tr>
-
-                <?php endforeach; ?>
-        </tbody>
     </table>
 </div>
 
