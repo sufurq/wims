@@ -145,4 +145,40 @@ class DbHelper
 
         return $row['count'];
     }
+
+   // Dashboard for purchase Order
+
+   public function Purchase_order($id)
+{
+    $sql = "SELECT 
+    purchase_orders.supplier_id,
+    purchase_orders.purchase_order_number,
+    purchase_orders.order_date,
+    purchase_orders.mode_of_procurement,
+    purchase_orders.procurement_number,
+    purchase_orders.procurement_date,
+    purchase_orders.place_of_delivery,
+    purchase_orders.delivery_date,
+    purchase_orders.term_of_delivery,
+    purchase_orders.status
+FROM 
+    purchase_orders
+JOIN
+    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+WHERE 
+    purchase_orders.supplier_id = '$id'";
+
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $id); 
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    $p_oder = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_oder[] = (object) $row;
+    }
+    return $p_oder;
+}
+
 }

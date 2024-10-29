@@ -70,13 +70,12 @@
                     <table class="table table-bordered table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th>Item Code</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Unit of Issue</th>
-                                <th>QTY</th>
-                                <th>Unit Cost</th>
-                                <th>Amount</th>
+                                <th>#PO</th>
+                                <th>Date Created</th>
+                                <th>Procurement No</th>
+                                <th>Supplier</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                                 <th>Status</th>
                             </tr>

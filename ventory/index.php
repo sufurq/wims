@@ -1,4 +1,9 @@
+<?php 
 
+require_once "./util/dbhelper.php";
+$db = new DbHelper();
+$display = $db->getAllRecords("purchase_orders");
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -120,42 +125,19 @@
             </tr>
         </thead>
         <tbody>
-        <?php if ($po_result->rowCount() > 0): ?>
-            <?php while($row = $po_result->fetch(PDO::FETCH_ASSOC)): ?>
-                    <tr>
-                        <td><?php echo htmlspecialchars($row['po_number']); ?></td>
-                        <td><?php echo htmlspecialchars($row['po_date']); ?></td>
-                        <td><?php echo htmlspecialchars($row['procurement_number']); ?></td>
-                        <td><?php echo htmlspecialchars($row['supplier']); ?></td>
-                        <td><?php echo number_format($row['total_amount'], 2); ?></td>
-                        <td><?php echo htmlspecialchars($row['status']); ?></td>
-                        <td>
-                            <!-- Plus button to toggle hidden details -->
-                            <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
-                        </td>
-                    </tr>
-                    <tr class="details-row" style="display:none;">
-                        <td colspan="7">
-                            <div class="details-container p-3 bg-light">          
-                                <p><strong>Procurement Model:</strong> <?php echo htmlspecialchars($row['procurement_model']); ?></p>
-                                <p><strong>Procurement Date:</strong> <?php echo htmlspecialchars($row['procurement_date']); ?></p>
-                                <p><strong>Place of Delivery:</strong> <?php echo htmlspecialchars($row['delivery_place']); ?></p>
-                                <p><strong>Date of Delivery:</strong> <?php echo htmlspecialchars($row['delivery_date']); ?></p>
-                                <p><strong>Term of Delivery:</strong> <?php echo htmlspecialchars($row['terms_delivery']); ?></p>
-                                <p><strong>Status:</strong> <?php echo htmlspecialchars($row['status']); ?></p>
-                               <br>
-                                <div class="action-buttons mt-3">
-                                    <button class="edit-btn btn btn-warning btn-sm" onclick="editRecord(<?php echo $row['id']; ?>)">Edit</button>
-                                    <button class="details-btn btn btn-info btn-sm" onclick="location.href='pod.php?id=<?php echo $row['id']; ?>'">Details</button>
-                                    <button class="delete-btn btn btn-danger btn-sm" onclick="deleteRecord(<?php echo $row['id']; ?>)">Delete</button>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            <?php else: ?>
-                <tr><td colspan="7">No Purchase Orders</td></tr>
-            <?php endif; ?>
+            <?php foreach ($display as $row) : ?>   
+
+                <tr>
+                <td><?php echo $row["purchase_order_number"] ?></td>
+                <td><?php echo $row["order_date"] ?></td>
+                <td><?php echo $row["procurement_number"] ?></td>
+                <td><?php echo $row["supplier_id"] ?></td>
+                
+
+
+                </tr>
+
+                <?php endforeach; ?>
         </tbody>
     </table>
 </div>
