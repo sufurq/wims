@@ -63,7 +63,7 @@ if (empty($unique_id)) {
                 <center><li><a href="#">Log Out</a></li></center>
             </ul>
         </aside>
-        <a href="../cnpod.php?php echo $_GET['id']; ?>"><button class="new-record-btn"><b>New Record</b></button></a>
+        <a href="../cnpod.php?id=<?= urlencode($id); ?>"><button class="new-record-btn"><b>New Record</b></button></a>
 
         <div class="table-container">
             <table class="custom-table">
@@ -90,6 +90,12 @@ if (empty($unique_id)) {
                             <td><?= "Total Amount Placeholder"; ?></td>
                             <td><?= htmlspecialchars($row->status); ?></td>
                             <td>Action</td>
+                            <td>
+    <a href="../cnpod.php?id=<?= urlencode($row->supplier_id); ?>">
+        <button class="new-record-btn"><b>New Record</b></button>
+    </a>
+</td>
+</td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
