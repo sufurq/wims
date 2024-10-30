@@ -150,6 +150,7 @@ class DbHelper
 
    public function Purchase_order($id)
 {
+    // Ensure the SQL statement is correctly defined
     $sql = "SELECT 
     purchase_orders.supplier_id,
     purchase_orders.purchase_order_number,
@@ -160,65 +161,75 @@ class DbHelper
     purchase_orders.place_of_delivery,
     purchase_orders.delivery_date,
     purchase_orders.term_of_delivery,
-    purchase_orders.status
+    purchase_orders.status,
+    suppliers.description -- Assuming you want to fetch the supplier description
 FROM 
     purchase_orders
 JOIN
     suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
 WHERE 
-    purchase_orders.supplier_id = '$id'";
-
-
+    purchase_orders.supplier_id = ?"; 
     $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $this->conn->error);
+    }
+
+    // Bind the parameter
     $stmt->bind_param("i", $id); 
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    $p_oder = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_oder[] = (object) $row;
-    }
-    return $p_oder;
-}
-
-public function display_value_all_purchase()
-{
-    $sql = "SELECT 
-        purchase_orders.purchase_order_id,
-        purchase_orders.purchase_order_number,
-        purchase_orders.order_date,
-        purchase_orders.mode_of_procurement,
-        purchase_orders.procurement_number,
-        purchase_orders.procurement_date,
-        purchase_orders.place_of_delivery,
-        purchase_orders.delivery_date,
-        purchase_orders.term_of_delivery,
-        purchase_orders.status,
-        suppliers.description
-    FROM 
-        purchase_orders
-    LEFT JOIN 
-        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id";
-
-    // Prepare the SQL statement
-    $stmt = $this->conn->prepare($sql);
-    if (!$stmt) {
-        // Handle the error
-        die('Prepare failed: ' . $this->conn->error);
-    }
 
     // Execute the statement
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (!$stmt->execute()) {
+        die('Execute error: ' . $stmt->error);
+    }
 
-    // Fetch all rows into an array
+    // Get the result
+    $result = $stmt->get_result();
+    
+    // Fetch the results into an array
     $p_order = array();
     while ($row = $result->fetch_assoc()) {
         $p_order[] = (object) $row;
     }
 
-    // Return the array of purchase orders
-    return $p_order;
+    // Close the statement
+    $stmt->close();
+
+    return $p_order; 
+}
+
+
+
+public function display_value_all_purchase()
+{
+    $sql = "SELECT 
+    purchase_orders.purchase_order_id,
+    purchase_orders.purchase_order_number,
+    purchase_orders.order_date,
+    purchase_orders.mode_of_procurement,
+    purchase_orders.procurement_number,
+    purchase_orders.procurement_date,
+    purchase_orders.place_of_delivery,
+    purchase_orders.delivery_date,
+    purchase_orders.term_of_delivery,
+    purchase_orders.status,
+    suppliers.description,
+    suppliers.supplier_id
+FROM 
+    purchase_orders
+LEFT JOIN 
+    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+WHERE 
+    suppliers.supplier_id
+";
+
+$query = $this->conn->query($sql);
+$Cservices = array();
+while ($row = $query->fetch_assoc()) {
+    $Cservices[] = (object) $row;
+}
+return $Cservices;
+}
+
 }
 
 
@@ -226,4 +237,3 @@ public function display_value_all_purchase()
 
 
 
-}

@@ -34,6 +34,7 @@ $query = isset($_GET['query']) ? htmlspecialchars($_GET['query'], ENT_QUOTES, 'U
 $row = $db->fetchRecords_limit("pod_items", $start, $recordsPerPage, $query);
 $totalRecords = $db->fetchTotalRecords("pod_items", $query);
 $totalPage = ceil($totalRecords / $recordsPerPage);
+
 ?>
 
 <!DOCTYPE html>
