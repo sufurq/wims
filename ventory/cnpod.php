@@ -28,6 +28,12 @@ $result = $conn->query("SELECT DISTINCT category FROM (
 while ($row = $result->fetch_assoc()) {
     $categories[] = $row['category'];
 }
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+} else {
+    die("ID is not defined.");
+}
 ?>
 
 <!DOCTYPE html>
@@ -230,6 +236,8 @@ while ($row = $result->fetch_assoc()) {
             <h2>Create New Purchase Order Details</h2>
 
             <form action="pod.php" method="post">
+            <input type="hidden" name="supplier_id" id="supplier_id" value="<?= htmlspecialchars($id); ?>">
+
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="category">Item Category:</label>
@@ -257,6 +265,7 @@ while ($row = $result->fetch_assoc()) {
                         <label for="quantity">Quantity:</label>
                         <input type="number" id="quantity" name="quantity" required>
                     </div>
+                    
 
                     <div class="form-group">
                         <label for="unit_price">Unit Price:</label>

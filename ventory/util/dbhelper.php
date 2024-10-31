@@ -148,55 +148,96 @@ class DbHelper
 
    // Dashboard for purchase Order
 
-   public function Purchase_order($id)
+//    public function Purchase_order($id)
+// {
+//     $sql = "SELECT 
+//     purchase_orders.supplier_id,
+//     purchase_orders.purchase_order_number,
+//     purchase_orders.order_date,
+//     purchase_orders.mode_of_procurement,
+//     purchase_orders.procurement_number,
+//     purchase_orders.procurement_date,
+//     purchase_orders.place_of_delivery,
+//     purchase_orders.delivery_date,
+//     purchase_orders.term_of_delivery,
+//     purchase_orders.status,
+//     suppliers.description
+// FROM 
+//     purchase_orders
+// JOIN
+//     suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+// WHERE 
+//     purchase_orders.supplier_id = ?"; 
+//     $stmt = $this->conn->prepare($sql);
+//     if ($stmt === false) {
+//         die('MySQL prepare error: ' . $this->conn->error);
+//     }
+//     $stmt->bind_param("i", $id); 
+
+//     if (!$stmt->execute()) {
+//         die('Execute error: ' . $stmt->error);
+//     }
+//     $result = $stmt->get_result();
+//     $p_order = array();
+//     while ($row = $result->fetch_assoc()) {
+//         $p_order[] = (object) $row;
+//     }
+//     $stmt->close();
+
+//     return $p_order; 
+// }
+
+
+// view_details_purchase_order
+
+
+public function view_details_purchase_order($id)
 {
-    // Ensure the SQL statement is correctly defined
-    $sql = "SELECT 
-    purchase_orders.supplier_id,
-    purchase_orders.purchase_order_number,
-    purchase_orders.order_date,
-    purchase_orders.mode_of_procurement,
-    purchase_orders.procurement_number,
-    purchase_orders.procurement_date,
-    purchase_orders.place_of_delivery,
-    purchase_orders.delivery_date,
-    purchase_orders.term_of_delivery,
-    purchase_orders.status,
-    suppliers.description -- Assuming you want to fetch the supplier description
-FROM 
-    purchase_orders
-JOIN
-    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
-WHERE 
-    purchase_orders.supplier_id = ?"; 
+    $sql = "
+        SELECT 
+            pod_items.category,
+            pod_items.item_description,
+            pod_items.unit_of_measure,
+            pod_items.quantity,
+            pod_items.unit_price,
+            pod_items.amount,
+            suppliers.supplier_id
+        
+        FROM 
+            pod_items
+        JOIN
+            suppliers ON pod_items.supplier_id = suppliers.supplier_id
+        WHERE
+        pod_items.supplier_id = ?
+    ";
+
     $stmt = $this->conn->prepare($sql);
     if ($stmt === false) {
         die('MySQL prepare error: ' . $this->conn->error);
     }
+    
+    // Bind the parameter (it should be an integer based on your earlier context)
+    $stmt->bind_param("i", $id); // Corrected the parameter type to "i" for integer
 
-    // Bind the parameter
-    $stmt->bind_param("i", $id); 
-
-    // Execute the statement
     if (!$stmt->execute()) {
         die('Execute error: ' . $stmt->error);
     }
-
-    // Get the result
-    $result = $stmt->get_result();
     
-    // Fetch the results into an array
+    $result = $stmt->get_result();
     $p_order = array();
     while ($row = $result->fetch_assoc()) {
         $p_order[] = (object) $row;
     }
-
-    // Close the statement
+    
     $stmt->close();
 
     return $p_order; 
 }
 
+
+
+
+//Display value
 
 
 public function display_value_all_purchase()

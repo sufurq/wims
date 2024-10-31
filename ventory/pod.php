@@ -6,24 +6,31 @@ if ($conn->connect_error) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $supplier_id = $_POST['supplier_id'];
     $category = $_POST['category'];
-    $item = $_POST['item'];
-    $uom = $_POST['uom'];
+    $item_description = $_POST['item']; // Corrected variable name
+    $unit_of_measure = $_POST['uom']; // Corrected variable name
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
     $amount = $_POST['amount'];
 
-    $stmt = $conn->prepare("INSERT INTO pod_items (category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssidd", $category, $item, $uom, $quantity, $unit_price, $amount);
-    $stmt->execute();
+    $stmt = $conn->prepare("INSERT INTO pod_items (supplier_id, category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("isssidd", $supplier_id, $category, $item_description, $unit_of_measure, $quantity, $unit_price, $amount);
+    
+    if ($stmt->execute()) {
+        // Redirect after successful insert
+        header("Location: pod.php");
+        exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
     $stmt->close();
-
-    header("Location: pod.php");
-    exit();
 }
 
-
 $result = $conn->query("SELECT * FROM pod_items");
+
+$conn->close();
+
 
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
@@ -142,13 +149,14 @@ $totalPage = ceil($totalRecords / $recordsPerPage);
                                         <td><?php echo htmlspecialchars($rows["unit_price"], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td><?php echo htmlspecialchars($rows["amount"], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td>
-                                        <button onclick="showAlertEdit();" class="btn btn-primary btn-sm">
-    Edit
-</button>
-                                            
-<button onclick="showAlertDelete();" class="btn btn-danger btn-sm">
-    Delete
-</button>                                        </td>
+                                            <button onclick="showAlertEdit();" class="btn btn-primary btn-sm">
+                                                Edit
+                                            </button>
+
+                                            <button onclick="showAlertDelete();" class="btn btn-danger btn-sm">
+                                                Delete
+                                            </button>
+                                        </td>
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else : ?>
@@ -156,7 +164,7 @@ $totalPage = ceil($totalRecords / $recordsPerPage);
                                     <td colspan="8" class="text-center">No records found.</td>
                                 </tr>
                             <?php endif; ?>
-                        </tbody>    
+                        </tbody>
                     </table>
                 </div>
             </main>
@@ -191,36 +199,36 @@ $totalPage = ceil($totalRecords / $recordsPerPage);
     </div>
 
     <script>
-function showAlertEdit() {
-    const userConfirmed = confirm("Are you sure you want to Edit?");
-    
-    if (userConfirmed) {
-        
-        alert("You chose to edit.");
-        // Redirect to the edit page
-        window.location.href = './crud_form/edit_pod.php?id=<?= $rows['id'] ?>';
-    } else {
-        // If the user cancels the edit
-        alert("You chose not to edit.");
-    }
-}
-</script>
+        function showAlertEdit() {
+            const userConfirmed = confirm("Are you sure you want to Edit?");
 
-<script>
-function showAlertDelete() {
-    const userConfirmed = confirm("Are you sure you want to Delete?");
-    
-    if (userConfirmed) {
-        
-        alert("You chose to delete.");
-        // Redirect to the edit page
-        window.location.href = './logic/delete_pod.php?id=<?= $rows['id'] ?>';
-    } else {
-        // If the user cancels the edit
-        alert("You chose not to Delete.");
-    }
-}
-</script>
+            if (userConfirmed) {
+
+                alert("You chose to edit.");
+                // Redirect to the edit page
+                window.location.href = './crud_form/edit_pod.php?id=<?= $rows['id'] ?>';
+            } else {
+                // If the user cancels the edit
+                alert("You chose not to edit.");
+            }
+        }
+    </script>
+
+    <script>
+        function showAlertDelete() {
+            const userConfirmed = confirm("Are you sure you want to Delete?");
+
+            if (userConfirmed) {
+
+                alert("You chose to delete.");
+                // Redirect to the edit page
+                window.location.href = './logic/delete_pod.php?id=<?= $rows['id'] ?>';
+            } else {
+                // If the user cancels the edit
+                alert("You chose not to Delete.");
+            }
+        }
+    </script>
 
 </body>
 

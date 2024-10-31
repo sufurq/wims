@@ -8,12 +8,7 @@ if (isset($_GET['id'])) {
 }
 
 $db = new DbHelper();
-$unique_id = $db->Purchase_order($id);
-
-// Debugging: Check if $unique_id is empty
-if (empty($unique_id)) {
-    die("No data found for the provided ID.");
-}
+$unique_id = $db->view_details_purchase_order($id);
 ?>
 
 <!DOCTYPE html>
@@ -66,40 +61,36 @@ if (empty($unique_id)) {
         <a href="../cnpod.php?id=<?= urlencode($id); ?>"><button class="new-record-btn"><b>New Record</b></button></a>
 
         <div class="table-container">
-            <table class="custom-table">
-                <thead>
-                    <tr>
-                        <th>P.O #</th>
-                        <th>Date Created</th>
-                        <th>Procurement No</th>
-                        <th>Supplier</th>
-                        <th>Total Amount</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($unique_id as $row) : ?>   
+            <?php if (empty($unique_id)) : ?>
+                <!-- Display message if there are no purchase orders -->
+                <p style="text-align: center; font-size: 1.5em; color: #555;">No purchase</p>
+            <?php else : ?>
+                <!-- Display the table if there are purchase orders -->
+                <table class="custom-table">
+                    <thead>
                         <tr>
-                    
-
-                            <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
-                            <td><?= htmlspecialchars($row->order_date); ?></td>
-                            <td><?= htmlspecialchars($row->procurement_number); ?></td>
-                            <td><?= htmlspecialchars($row->description); ?></td>
-                            <td><?= "Total Amount Placeholder"; ?></td>
-                            <td><?= htmlspecialchars($row->status); ?></td>
-                            <td>Action</td>
-                            <td>
-    <a href="../cnpod.php?id=<?= urlencode($row->supplier_id); ?>">
-        <button class="new-record-btn"><b>New Record</b></button>
-    </a>
-</td>
-</td>
+                            <th>Unit of Issue #</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost</th>
+                            <th>Amount</th>
+                            <th>Action</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($unique_id as $row) : ?>   
+                            <tr>
+                                <td><?= htmlspecialchars($row->category); ?></td>
+                                <td><?= htmlspecialchars($row->item_description); ?></td>
+                                <td><?= htmlspecialchars($row->quantity); ?></td>
+                                <td><?= htmlspecialchars($row->unit_price); ?></td>
+                                <td><?= htmlspecialchars($row->amount); ?></td>
+                                <td>DELETED</td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            <?php endif; ?>
         </div>
 
         <!-- Pagination -->
