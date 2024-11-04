@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 04, 2024 at 02:56 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 7.3.2
+-- Generation Time: Oct 22, 2024 at 08:18 AM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -21,25 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `inventory_management`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `admin`
---
-
-CREATE TABLE `admin` (
-  `id` int(11) NOT NULL,
-  `username` varchar(100) NOT NULL,
-  `password` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `admin`
---
-
-INSERT INTO `admin` (`id`, `username`, `password`) VALUES
-(1, 'admin', '$2y$10$22jJuBCERGitK9tgS9i3UOG2P1ObNCWq8yF7KZHOHOywCwwvGUEFC');
 
 -- --------------------------------------------------------
 
@@ -112,25 +92,6 @@ INSERT INTO `chb_casting` (`id`, `description`, `category`, `reorder_level`, `re
 (1, 'Cement Bags', 'CHB Casting (LSB Warehouse)', 50, 100, 'High demand in rainy season'),
 (2, 'CHB Blocks', 'CHB Casting (LSB Warehouse)', 200, 500, 'Needs restocking soon'),
 (3, 'Gravel', 'CHB Casting (LSB Warehouse)', 75, 150, 'Sufficient for upcoming projects');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `connect_purchase_order_pod`
---
-
-CREATE TABLE `connect_purchase_order_pod` (
-  `id` int(11) NOT NULL,
-  `supplier_id` int(11) NOT NULL,
-  `pod_id` int(11) NOT NULL,
-  `purchase_order_id` int(11) NOT NULL,
-  `Item_code` int(50) NOT NULL,
-  `unit_of_issue` varchar(100) NOT NULL,
-  `description` varchar(100) NOT NULL,
-  `quantity` int(100) NOT NULL,
-  `Unit_cost` int(100) NOT NULL,
-  `Amount` int(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -332,34 +293,21 @@ INSERT INTO `plumbing` (`id`, `description`, `category`, `reorder_level`, `reord
 
 CREATE TABLE `pod_items` (
   `id` int(11) NOT NULL,
-  `supplier_id` int(11) DEFAULT NULL,
   `category` varchar(100) DEFAULT NULL,
-  `item_description` varchar(100) DEFAULT NULL,
+  `item_description` varchar(255) DEFAULT NULL,
   `unit_of_measure` varchar(50) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `unit_price` decimal(10,2) DEFAULT NULL,
   `amount` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- --------------------------------------------------------
-
 --
--- Table structure for table `purchase_orders`
+-- Dumping data for table `pod_items`
 --
 
-CREATE TABLE `purchase_orders` (
-  `purchase_order_id` int(11) NOT NULL,
-  `supplier_id` int(11) NOT NULL,
-  `purchase_order_number` varchar(50) NOT NULL,
-  `order_date` date NOT NULL,
-  `mode_of_procurement` varchar(100) NOT NULL,
-  `procurement_number` varchar(50) NOT NULL,
-  `procurement_date` date NOT NULL,
-  `place_of_delivery` varchar(255) NOT NULL,
-  `delivery_date` date NOT NULL,
-  `term_of_delivery` varchar(100) DEFAULT NULL,
-  `status` enum('Pending','Cancelled','Accepted','') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+INSERT INTO `pod_items` (`id`, `category`, `item_description`, `unit_of_measure`, `quantity`, `unit_price`, `amount`) VALUES
+(1, 'Tools And Equipments', 'Wrench', 'sh', 11112211, '1111.00', '99999999.99'),
+(2, 'Carpentry', 'Hammer', 'sh', 11112211, '1111.00', '99999999.99');
 
 -- --------------------------------------------------------
 
@@ -460,27 +408,6 @@ INSERT INTO `sports_equipment` (`id`, `description`, `category`, `reorder_level`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `suppliers`
---
-
-CREATE TABLE `suppliers` (
-  `supplier_id` int(11) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `abbreviation` varchar(50) NOT NULL,
-  `address` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `suppliers`
---
-
-INSERT INTO `suppliers` (`supplier_id`, `description`, `abbreviation`, `address`) VALUES
-(1, 'Kugihan', 'kug', 'lorega'),
-(4, 'kfdflkjsafda', 'kjdsmndskvjsa', 'busay');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `tools_and_equipments`
 --
 
@@ -508,12 +435,6 @@ INSERT INTO `tools_and_equipments` (`id`, `description`, `category`, `reorder_le
 --
 
 --
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `bedding_and_linens`
 --
 ALTER TABLE `bedding_and_linens`
@@ -530,15 +451,6 @@ ALTER TABLE `carpentry`
 --
 ALTER TABLE `chb_casting`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `connect_purchase_order_pod`
---
-ALTER TABLE `connect_purchase_order_pod`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `connect_purchase_order_pod_ibfk_2` (`supplier_id`),
-  ADD KEY `connect_purchase_order_pod_ibfk_3` (`purchase_order_id`),
-  ADD KEY `pod_id` (`pod_id`);
 
 --
 -- Indexes for table `construction`
@@ -592,15 +504,7 @@ ALTER TABLE `plumbing`
 -- Indexes for table `pod_items`
 --
 ALTER TABLE `pod_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `supplier_id` (`supplier_id`);
-
---
--- Indexes for table `purchase_orders`
---
-ALTER TABLE `purchase_orders`
-  ADD PRIMARY KEY (`purchase_order_id`),
-  ADD KEY `purchase_orders_ibfk_1` (`supplier_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `reserved_items`
@@ -627,12 +531,6 @@ ALTER TABLE `sports_equipment`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `suppliers`
---
-ALTER TABLE `suppliers`
-  ADD PRIMARY KEY (`supplier_id`);
-
---
 -- Indexes for table `tools_and_equipments`
 --
 ALTER TABLE `tools_and_equipments`
@@ -643,16 +541,10 @@ ALTER TABLE `tools_and_equipments`
 --
 
 --
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
 -- AUTO_INCREMENT for table `bedding_and_linens`
 --
 ALTER TABLE `bedding_and_linens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `carpentry`
@@ -665,12 +557,6 @@ ALTER TABLE `carpentry`
 --
 ALTER TABLE `chb_casting`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `connect_purchase_order_pod`
---
-ALTER TABLE `connect_purchase_order_pod`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `construction`
@@ -724,13 +610,7 @@ ALTER TABLE `plumbing`
 -- AUTO_INCREMENT for table `pod_items`
 --
 ALTER TABLE `pod_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `purchase_orders`
---
-ALTER TABLE `purchase_orders`
-  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `reserved_items`
@@ -757,40 +637,10 @@ ALTER TABLE `sports_equipment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `suppliers`
---
-ALTER TABLE `suppliers`
-  MODIFY `supplier_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
 -- AUTO_INCREMENT for table `tools_and_equipments`
 --
 ALTER TABLE `tools_and_equipments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `connect_purchase_order_pod`
---
-ALTER TABLE `connect_purchase_order_pod`
-  ADD CONSTRAINT `connect_purchase_order_pod_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`supplier_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `connect_purchase_order_pod_ibfk_3` FOREIGN KEY (`purchase_order_id`) REFERENCES `reserved_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `connect_purchase_order_pod_ibfk_4` FOREIGN KEY (`pod_id`) REFERENCES `pod_items` (`id`);
-
---
--- Constraints for table `pod_items`
---
-ALTER TABLE `pod_items`
-  ADD CONSTRAINT `pod_items_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`supplier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints for table `purchase_orders`
---
-ALTER TABLE `purchase_orders`
-  ADD CONSTRAINT `purchase_orders_ibfk_1` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`supplier_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
