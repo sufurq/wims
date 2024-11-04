@@ -1,12 +1,15 @@
-<?php 
+<?php
 
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $display = $db->display_value_all_purchase();
+$totalAmount = $db->total_amount_of_purchase_oder();
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +18,7 @@ $display = $db->display_value_all_purchase();
     <link rel="stylesheet" href="css/index.css">
     <script defer src="script/script.js"></script>
 </head>
+
 <body>
     <!-- Header -->
     <header>
@@ -38,25 +42,47 @@ $display = $db->display_value_all_purchase();
     <div class="container">
         <!-- Sub Menu -->
         <aside class="sub-menu">
-            <h1><center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
+            <h1>
+                <center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
+            </h1>
             <ul>
-                <center><li><a href="dashboard.php">Dashboard</a></li></center>
-                <center><li class="selected"><a href="index.php">Purchase Order</a></li></center>
-                <center><li><a href="#">Delivery Receipt</a></li></center>
-                <center><li><a href="#">POWE</a></li></center>
-                <center><li><a href="#">RIS</a></li></center>
-                <center><li><a href="#">Audit</a></li></center>
-                <center><li><a href="#">Reports</a></li></center>
+                <center>
+                    <li><a href="dashboard.php">Dashboard</a></li>
+                </center>
+                <center>
+                    <li class="selected"><a href="index.php">Purchase Order</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Delivery Receipt</a></li>
+                </center>
+                <center>
+                    <li><a href="#">POWE</a></li>
+                </center>
+                <center>
+                    <li><a href="#">RIS</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Audit</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Reports</a></li>
+                </center>
                 <hr>
-                <center><li><a href="#">Master Pages</a></li></center>
+                <center>
+                    <li><a href="#">Master Pages</a></li>
+                </center>
                 <hr>
-                <center><li><a href="#">Log Out</a></li></center>
+                <center>
+                    <li><a href="#">Log Out</a></li>
+                </center>
             </ul>
         </aside>
 
         <!-- Purchase Order Page -->
         <section class="purchase-order">
-            <center><h2>Purchase Order</h2></center>
+            <center>
+                <h2>Purchase Order</h2>
+            </center>
             <a href="npo.php"><button class="new-record-btn"><b>New Record</b></button></a>
 
             <br>
@@ -82,7 +108,7 @@ $display = $db->display_value_all_purchase();
             <div class="dropdown-container" style="position:relative; left:-620px;">
                 <h4>Show&nbsp;</h4>
                 <select class="status-dropdown" style="width:100px;">
-                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <?php for ($i = 1; $i <= 10; $i++) : ?>
                         <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
                     <?php endfor; ?>
                 </select>
@@ -104,13 +130,16 @@ $display = $db->display_value_all_purchase();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($display as $row) : ?>   
-                            <tr><td><?= htmlspecialchars($row->purchase_order_id); ?></td>
+                        <?php foreach ($display as $row) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
                                 <td><?= htmlspecialchars($row->order_date); ?></td>
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->description); ?></td>
-                                <td><?= "Total Amount Placeholder"; ?></td>
+                                <?php foreach ($totalAmount as $total) : ?>
+                                    <td><?= htmlspecialchars($total->total_amount); ?></td>
+                                <?php endforeach; ?>
                                 <td><?= htmlspecialchars($row->status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
@@ -119,7 +148,7 @@ $display = $db->display_value_all_purchase();
 
                             <tr class="details-row" style="display:none;">
                                 <td colspan="7">
-                                    <div class="details-container p-3 bg-light">          
+                                    <div class="details-container p-3 bg-light">
                                         <p><strong>Procurement Model:</strong> <?= htmlspecialchars($row->mode_of_procurement); ?></p>
                                         <p><strong>Procurement Date:</strong> <?= htmlspecialchars($row->procurement_date); ?></p>
                                         <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
@@ -131,13 +160,17 @@ $display = $db->display_value_all_purchase();
                                             <button class="edit-btn btn btn-warning btn-sm" onclick="editRecord(<?= $row->id; ?>)">Edit</button>
                                             <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->supplier_id ?>'">Details</button>
 
-                                            <button class="delete-btn btn btn-danger btn-sm" onclick="deleteRecord(<?= $row->id; ?>)">Delete</button>
-                                            
+                                            <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->supplier_id; ?>'">Delete</button>
+
                                         </div>
                                     </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
+
+
+
+
                     </tbody>
                 </table>
             </div>
@@ -164,10 +197,11 @@ $display = $db->display_value_all_purchase();
 
         function deleteRecord(id) {
             if (confirm("Are you sure you want to delete this record?")) {
-                
+
                 alert(`Record ID ${id} deleted.`);
             }
         }
     </script>
 </body>
+
 </html>

@@ -271,6 +271,45 @@ while ($row = $query->fetch_assoc()) {
 return $Cservices;
 }
 
+
+//Deletion for purchase_order
+
+public function deleteRecordFromPOders($id) {
+    $sql = "DELETE FROM purchase_orders WHERE supplier_id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        return "Record with supplier ID $id successfully deleted.";
+    } else {
+        return "Error deleting record with supplier ID $id: " . $this->conn->error;
+    }
+
+    $stmt->close();
+}
+
+// total Amount of Purchase Order
+
+public function total_amount_of_purchase_oder () {
+    $sql = "
+    SELECT 
+    pod_items.supplier_id,
+    COALESCE(SUM(pod_items.amount), 0) AS total_amount
+FROM
+    pod_items
+GROUP BY 
+    pod_items.supplier_id;
+
+
+    ";
+    $query = $this->conn->query($sql);
+    $Cservices = array();
+    while ($row = $query->fetch_assoc()) {
+        $Cservices[] = (object) $row;
+    }
+    return $Cservices;
+}
+
 }
 
 
