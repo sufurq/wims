@@ -3,7 +3,7 @@
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $display = $db->display_value_all_purchase();
-$totalAmount = $db->total_amount_of_purchase_oder();
+
 
 ?>
 
@@ -137,9 +137,7 @@ $totalAmount = $db->total_amount_of_purchase_oder();
                                 <td><?= htmlspecialchars($row->order_date); ?></td>
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->description); ?></td>
-                                <?php foreach ($totalAmount as $total) : ?>
-                                    <td><?= htmlspecialchars($total->total_amount); ?></td>
-                                <?php endforeach; ?>
+                                <td><?= htmlspecialchars($row->Total_Amount);?></td>
                                 <td><?= htmlspecialchars($row->status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>

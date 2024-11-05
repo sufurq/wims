@@ -147,6 +147,8 @@ class DbHelper
     }
 
   
+// view_details_purchase_order
+
 
 public function view_details_purchase_order($id)
 {
@@ -173,8 +175,8 @@ public function view_details_purchase_order($id)
         die('MySQL prepare error: ' . $this->conn->error);
     }
     
-   
-    $stmt->bind_param("i", $id);
+    // Bind the parameter (it should be an integer based on your earlier context)
+    $stmt->bind_param("i", $id); // Corrected the parameter type to "i" for integer
 
     if (!$stmt->execute()) {
         die('Execute error: ' . $stmt->error);
@@ -200,34 +202,63 @@ public function view_details_purchase_order($id)
 public function display_value_all_purchase()
 {
     $sql = "SELECT 
-    purchase_orders.purchase_order_id,
-    purchase_orders.purchase_order_number,
-    purchase_orders.order_date,
-    purchase_orders.mode_of_procurement,
-    purchase_orders.procurement_number,
-    purchase_orders.procurement_date,
-    purchase_orders.place_of_delivery,
-    purchase_orders.delivery_date,
-    purchase_orders.term_of_delivery,
-    purchase_orders.status,
-    suppliers.description,
-    suppliers.supplier_id
-FROM 
-    purchase_orders
-LEFT JOIN 
-    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
-WHERE 
-    suppliers.supplier_id
-";
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.mode_of_procurement,
+        purchase_orders.procurement_number,
+        purchase_orders.procurement_date,
+        purchase_orders.place_of_delivery,
+        purchase_orders.delivery_date,
+        purchase_orders.term_of_delivery,
+        purchase_orders.status,
+        suppliers.description,
+        suppliers.supplier_id,
+        COALESCE(SUM(CASE WHEN suppliers.supplier_id = 1 THEN pod_items.amount ELSE 0 END), 0) AS Total_Amount
+    FROM 
+        purchase_orders
+    LEFT JOIN 
+        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+    LEFT JOIN
+        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+    GROUP BY 
+        purchase_orders.purchase_order_id, 
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.mode_of_procurement,
+        purchase_orders.procurement_number,
+        purchase_orders.procurement_date,
+        purchase_orders.place_of_delivery,
+        purchase_orders.delivery_date,
+        purchase_orders.term_of_delivery,
+        purchase_orders.status,
+        suppliers.description,
+        suppliers.supplier_id;
+    ";
 
-$query = $this->conn->query($sql);
-$Cservices = array();
-while ($row = $query->fetch_assoc()) {
-    $Cservices[] = (object) $row;
-}
-return $Cservices;
-}
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $this->conn->error);
+    }
 
+    if (!$stmt->execute()) {
+        die('Execute error: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    if ($result === false) {
+        die('Get result error: ' . $stmt->error);
+    }
+
+    $p_order = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_order[] = (object) $row;
+    }
+
+    $stmt->close();
+
+    return $p_order; 
+}
 
 //Deletion for purchase_order
 
