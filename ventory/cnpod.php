@@ -29,11 +29,8 @@ while ($row = $result->fetch_assoc()) {
     $categories[] = $row['category'];
 }
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-} else {
-    die("ID is not defined.");
-}
+$supplier_id = isset($_GET['supplier_id']) ? $_GET['supplier_id'] : null;
+$purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_id'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -236,7 +233,9 @@ if (isset($_GET['id'])) {
             <h2>Create New Purchase Order Details</h2>
 
             <form action="pod.php" method="post">
-            <input type="hidden" name="supplier_id" id="supplier_id" value="<?= htmlspecialchars($id); ?>">
+            <input type="hidden" name="supplier_Id" id="supplier_Id" value="<?= htmlspecialchars($supplier_id); ?>">
+                    <input type="hidden" name="purchase_order_id" id="purchase_order_id" value="<?= htmlspecialchars($purchase_order_id); ?>">
+
 
                 <div class="form-grid">
                     <div class="form-group">

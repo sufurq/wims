@@ -146,50 +146,7 @@ class DbHelper
         return $row['count'];
     }
 
-   // Dashboard for purchase Order
-
-//    public function Purchase_order($id)
-// {
-//     $sql = "SELECT 
-//     purchase_orders.supplier_id,
-//     purchase_orders.purchase_order_number,
-//     purchase_orders.order_date,
-//     purchase_orders.mode_of_procurement,
-//     purchase_orders.procurement_number,
-//     purchase_orders.procurement_date,
-//     purchase_orders.place_of_delivery,
-//     purchase_orders.delivery_date,
-//     purchase_orders.term_of_delivery,
-//     purchase_orders.status,
-//     suppliers.description
-// FROM 
-//     purchase_orders
-// JOIN
-//     suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
-// WHERE 
-//     purchase_orders.supplier_id = ?"; 
-//     $stmt = $this->conn->prepare($sql);
-//     if ($stmt === false) {
-//         die('MySQL prepare error: ' . $this->conn->error);
-//     }
-//     $stmt->bind_param("i", $id); 
-
-//     if (!$stmt->execute()) {
-//         die('Execute error: ' . $stmt->error);
-//     }
-//     $result = $stmt->get_result();
-//     $p_order = array();
-//     while ($row = $result->fetch_assoc()) {
-//         $p_order[] = (object) $row;
-//     }
-//     $stmt->close();
-
-//     return $p_order; 
-// }
-
-
-// view_details_purchase_order
-
+  
 
 public function view_details_purchase_order($id)
 {
@@ -216,8 +173,8 @@ public function view_details_purchase_order($id)
         die('MySQL prepare error: ' . $this->conn->error);
     }
     
-    // Bind the parameter (it should be an integer based on your earlier context)
-    $stmt->bind_param("i", $id); // Corrected the parameter type to "i" for integer
+   
+    $stmt->bind_param("i", $id);
 
     if (!$stmt->execute()) {
         die('Execute error: ' . $stmt->error);
@@ -307,6 +264,53 @@ GROUP BY
     while ($row = $query->fetch_assoc()) {
         $Cservices[] = (object) $row;
     }
+    return $Cservices;
+}
+
+//joining pod_items,purchase_order and Suplplier
+
+
+public function join_pod_items_purchase_order_andSupplier($supplier_id)
+{
+    $sql = "SELECT 
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.mode_of_procurement,
+        purchase_orders.procurement_number,
+        purchase_orders.procurement_date,
+        purchase_orders.place_of_delivery,
+        purchase_orders.delivery_date,
+        purchase_orders.term_of_delivery,
+        purchase_orders.status,
+        suppliers.description,
+        suppliers.supplier_id,
+        pod_items.category,
+        pod_items.item_description,
+        pod_items.unit_of_measure,
+        pod_items.quantity,
+        pod_items.unit_price,
+        pod_items.amount
+    FROM 
+        pod_items
+    LEFT JOIN 
+        suppliers ON pod_items.supplier_Id = suppliers.supplier_id
+    LEFT JOIN 
+        purchase_orders ON pod_items.purchase_order_id = purchase_orders.purchase_order_id
+    WHERE 
+        pod_items.supplier_id = ?
+    ";
+
+    $stmt = $this->conn->prepare($sql);
+    $stmt->bind_param("i", $supplier_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $Cservices = array();
+    while ($row = $result->fetch_assoc()) {
+        $Cservices[] = (object) $row;
+    }
+
     return $Cservices;
 }
 

@@ -1,12 +1,14 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "inventory_management");
 
+// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $supplier_id = $_POST['supplier_id'];
+    $supplier_Id = $_POST['supplier_Id'];
+    $purchase_order_id = $_POST['purchase_order_id'];
     $category = $_POST['category'];
     $item_description = $_POST['item']; // Corrected variable name
     $unit_of_measure = $_POST['uom']; // Corrected variable name
@@ -14,24 +16,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $unit_price = $_POST['unit_price'];
     $amount = $_POST['amount'];
 
-    $stmt = $conn->prepare("INSERT INTO pod_items (supplier_id, category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->bind_param("isssidd", $supplier_id, $category, $item_description, $unit_of_measure, $quantity, $unit_price, $amount);
-    
-    if ($stmt->execute()) {
-        // Redirect after successful insert
-        header("Location: pod.php");
-        exit();
+    // Check if the supplier_id exists in the suppliers table
+    $checkSupplier = $conn->prepare("SELECT * FROM suppliers WHERE supplier_Id = ?");
+    $checkSupplier->bind_param("i", $supplier_Id);
+    $checkSupplier->execute();
+    $resultSupplier = $checkSupplier->get_result();
+
+    if ($resultSupplier->num_rows > 0) {
+        // Supplier exists, proceed with insertion
+        $stmt = $conn->prepare("INSERT INTO pod_items (supplier_Id, purchase_order_id, category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("iisssidd", $supplier_Id, $purchase_order_id, $category, $item_description, $unit_of_measure, $quantity, $unit_price, $amount);
+        
+        if ($stmt->execute()) {
+            // Redirect after successful insert
+            header("Location: pod.php");
+            exit();
+        } else {
+            echo "Error: " . $stmt->error;
+        }
+        $stmt->close();
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error: Supplier ID does not exist.";
     }
-    $stmt->close();
+
+    $checkSupplier->close();
 }
 
-$result = $conn->query("SELECT * FROM pod_items");
-
-$conn->close();
-
-
+// Fetch records for display
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -42,7 +53,9 @@ $row = $db->fetchRecords_limit("pod_items", $start, $recordsPerPage, $query);
 $totalRecords = $db->fetchTotalRecords("pod_items", $query);
 $totalPage = ceil($totalRecords / $recordsPerPage);
 
+$conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

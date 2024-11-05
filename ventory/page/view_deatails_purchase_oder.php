@@ -1,6 +1,7 @@
 <?php 
 require_once "../util/dbhelper.php";
 
+// Check if 'id' is set in the query parameters
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 } else {
@@ -8,7 +9,10 @@ if (isset($_GET['id'])) {
 }
 
 $db = new DbHelper();
-$unique_id = $db->view_details_purchase_order($id);
+$unique_id = $db->join_pod_items_purchase_order_andSupplier($id);
+
+$supplier_id = isset($_GET['supplier_id']) ? $_GET['supplier_id'] : null;
+$purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_id'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +28,9 @@ $unique_id = $db->view_details_purchase_order($id);
 <body>
     <!-- Header -->
     <header>
-        <div class="logo-title"><img src="../img/coclogo.png" width="300" alt="Company Logo"></div>
+        <div class="logo-title">
+            <img src="../img/coclogo.png" width="300" alt="Company Logo">
+        </div>
     </header>
 
     <!-- Navigation -->
@@ -43,7 +49,11 @@ $unique_id = $db->view_details_purchase_order($id);
     <div class="container">
         <!-- Sub Menu -->
         <aside class="sub-menu">
-            <h1><center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
+            <h1>
+                <center>
+                    <img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io
+                </center>
+            </h1>
             <ul>
                 <center><li><a href="dashboard.php">Dashboard</a></li></center>
                 <center><li class="selected"><a href="index.php">Purchase Order</a></li></center>
@@ -58,7 +68,16 @@ $unique_id = $db->view_details_purchase_order($id);
                 <center><li><a href="#">Log Out</a></li></center>
             </ul>
         </aside>
-        <a href="../cnpod.php?id=<?= urlencode($id); ?>"><button class="new-record-btn"><b>New Record</b></button></a>
+
+        <!-- New Record Button -->
+        <?php if (!empty($unique_id)): ?>
+            <?php foreach ($unique_id as $uni): ?>
+                <button class="details-btn btn btn-info btn-sm" 
+                        onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($uni->supplier_id); ?>&purchase_order_id=<?= urlencode($uni->purchase_order_id); ?>'">
+                    <b>New Record</b>
+                </button>
+            <?php endforeach; ?>
+        <?php endif; ?>
 
         <div class="table-container">
             <?php if (empty($unique_id)) : ?>
