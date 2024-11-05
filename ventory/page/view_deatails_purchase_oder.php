@@ -71,13 +71,16 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
 
         <!-- New Record Button -->
         <?php if (!empty($unique_id)): ?>
-            <?php foreach ($unique_id as $uni): ?>
-                <button class="details-btn btn btn-info btn-sm" 
-                        onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($uni->supplier_id); ?>&purchase_order_id=<?= urlencode($uni->purchase_order_id); ?>'">
-                    <b>New Record</b>
-                </button>
-            <?php endforeach; ?>
+    <?php foreach ($unique_id as $index => $uni): ?>
+        <?php if ($index == 0): // Only display the first button ?>
+            <button class="details-btn btn btn-info btn-sm" 
+                    onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($uni->supplier_id); ?>&purchase_order_id=<?= urlencode($uni->purchase_order_id); ?>'">
+                <b>New Record</b>
+            </button>
+            <?php break; // Stop the loop after displaying one button ?>
         <?php endif; ?>
+    <?php endforeach; ?>
+<?php endif; ?>
 
         <div class="table-container">
             <?php if (empty($unique_id)) : ?>
