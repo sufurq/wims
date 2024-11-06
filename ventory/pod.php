@@ -218,10 +218,8 @@ $conn->close();
             if (userConfirmed) {
 
                 alert("You chose to edit.");
-                // Redirect to the edit page
                 window.location.href = './crud_form/edit_pod.php?id=<?= $rows['id'] ?>';
             } else {
-                // If the user cancels the edit
                 alert("You chose not to edit.");
             }
         }
@@ -234,10 +232,8 @@ $conn->close();
             if (userConfirmed) {
 
                 alert("You chose to delete.");
-                // Redirect to the edit page
-                window.location.href = './logic/delete_pod.php?id=<?= $rows['id'] ?>';
+                window.location.href = './logic/delete_pod_items.php?id=<?= $rows['id'] ?>';
             } else {
-                // If the user cancels the edit
                 alert("You chose not to Delete.");
             }
         }

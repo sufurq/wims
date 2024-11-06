@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once "../util/dbhelper.php";
 
 // Check if 'id' is set in the query parameters
@@ -17,6 +17,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,11 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/index.css">
     <script defer src="../script/script.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
+
 <body>
     <!-- Header -->
     <header>
@@ -55,35 +60,52 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                 </center>
             </h1>
             <ul>
-                <center><li><a href="dashboard.php">Dashboard</a></li></center>
-                <center><li class="selected"><a href="index.php">Purchase Order</a></li></center>
-                <center><li><a href="#">Delivery Receipt</a></li></center>
-                <center><li><a href="#">POWE</a></li></center>
-                <center><li><a href="#">RIS</a></li></center>
-                <center><li><a href="#">Audit</a></li></center>
-                <center><li><a href="#">Reports</a></li></center>
+                <center>
+                    <li><a href="dashboard.php">Dashboard</a></li>
+                </center>
+                <center>
+                    <li class="selected"><a href="index.php">Purchase Order</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Delivery Receipt</a></li>
+                </center>
+                <center>
+                    <li><a href="#">POWE</a></li>
+                </center>
+                <center>
+                    <li><a href="#">RIS</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Audit</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Reports</a></li>
+                </center>
                 <hr>
-                <center><li><a href="#">Master Pages</a></li></center>
+                <center>
+                    <li><a href="#">Master Pages</a></li>
+                </center>
                 <hr>
-                <center><li><a href="#">Log Out</a></li></center>
+                <center>
+                    <li><a href="#">Log Out</a></li>
+                </center>
             </ul>
         </aside>
-        <div class="table-container">
-            <?php if (!empty($unique_id)): ?>
-                <button class="details-btn btn btn-info btn-sm" 
-                        onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+        <div style="margin-left:10%;" class="table-container">
+            <?php if (!empty($unique_id)) : ?>
+                <button class="details-btn btn btn-info btn-sm w-100" style="height: auto;" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
                     <b>New Record</b>
                 </button>
+
             <?php endif; ?>
 
-            <?php if (empty($unique_id)): ?>
+            <?php if (empty($unique_id)) : ?>
                 <p style="text-align: center; font-size: 1.5em; color: #555;">No purchase</p>
-                <button class="details-btn btn btn-info btn-sm" 
-                        onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
                     <b>New Record</b>
                 </button>
-            <?php else: ?>
-                
+            <?php else : ?>
+
                 <table class="custom-table">
                     <thead>
                         <tr>
@@ -96,7 +118,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($unique_id as $row) : ?>   
+                        <?php foreach ($unique_id as $row) : ?>
                             <tr>
                                 <td><?= htmlspecialchars($row->category); ?></td>
                                 <td><?= htmlspecialchars($row->item_description); ?></td>
@@ -119,4 +141,5 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
         </div>
     </div>
 </body>
+
 </html>

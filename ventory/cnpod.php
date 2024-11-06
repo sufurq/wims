@@ -29,6 +29,7 @@ while ($row = $result->fetch_assoc()) {
     $categories[] = $row['category'];
 }
 
+
 $supplier_id = isset($_GET['supplier_id']) ? $_GET['supplier_id'] : null;
 $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_id'] : null;
 ?>

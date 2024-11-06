@@ -264,7 +264,7 @@ GROUP BY
 //Deletion for purchase_order
 
 public function deleteRecordFromPOders($id) {
-    $sql = "DELETE FROM purchase_orders WHERE supplier_id = ?";
+    $sql = "DELETE FROM purchase_orders WHERE purchase_order_id = ?";
     $stmt = $this->conn->prepare($sql);
     $stmt->bind_param("i", $id);
 
@@ -277,29 +277,20 @@ public function deleteRecordFromPOders($id) {
     $stmt->close();
 }
 
-// total Amount of Purchase Order
+//Delete Record POD Items.
 
-public function total_amount_of_purchase_oder () {
-    $sql = "
-    SELECT 
-    pod_items.supplier_id,
-    COALESCE(SUM(pod_items.amount), 0) AS total_amount
-FROM
-    pod_items
-GROUP BY 
-    pod_items.supplier_id;
+public function deletePod_Items($id) {
+    $sql = " DELETE FROM pod_items WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+    $stmt-> bind_param("i", $id);
 
-
-    ";
-    $query = $this->conn->query($sql);
-    $Cservices = array();
-    while ($row = $query->fetch_assoc()) {
-        $Cservices[] = (object) $row;
+    if ($stmt->execute()) {
+        return "Return with supplier ID $id: successfully deleted";
+    } else {
+        return "Error deleting record with pod_items ID $id: ". $this->conn->error;
     }
-    return $Cservices;
+    $stmt->close();
 }
-
-
 
 
 //DISPLAY ALL POD_ITEMS
@@ -339,8 +330,7 @@ WHERE
         die('MySQL prepare error: ' . $this->conn->error);
     }
 
-    // Bind the parameter to the statement
-    $stmt->bind_param("i", $purchase_order_id); // "i" denotes an integer parameter
+    $stmt->bind_param("i", $purchase_order_id);
 
     if (!$stmt->execute()) {
         die('Execute error: ' . $stmt->error);

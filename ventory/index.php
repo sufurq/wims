@@ -47,7 +47,7 @@ $display = $db->display_value_all_purchase();
             </h1>
             <ul>
                 <center>
-                    <li><a href="dashboard.php">Dashboard</a></li>
+                    <li><a href="pod.php">Dashboard</a></li>
                 </center>
                 <center>
                     <li class="selected"><a href="index.php">Purchase Order</a></li>
@@ -158,7 +158,7 @@ $display = $db->display_value_all_purchase();
                                             <button class="edit-btn btn btn-warning btn-sm" onclick="editRecord(<?= $row->id; ?>)">Edit</button>
                                             <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
 
-                                            <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->supplier_id; ?>'">Delete</button>
+                                            <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
 
                                         </div>
                                     </div>
@@ -189,7 +189,6 @@ $display = $db->display_value_all_purchase();
         }
 
         function editRecord(id) {
-            // Define logic to edit a record
             alert(`Edit Record ID: ${id}`);
         }
 
