@@ -156,7 +156,7 @@ $display = $db->display_value_all_purchase();
                                         <br>
                                         <div class="action-buttons mt-3">
                                             <button class="edit-btn btn btn-warning btn-sm" onclick="editRecord(<?= $row->id; ?>)">Edit</button>
-                                            <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->supplier_id ?>'">Details</button>
+                                            <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
 
                                             <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->supplier_id; ?>'">Delete</button>
 

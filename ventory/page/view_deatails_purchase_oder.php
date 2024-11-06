@@ -9,7 +9,7 @@ if (isset($_GET['id'])) {
 }
 
 $db = new DbHelper();
-$unique_id = $db->join_pod_items_purchase_order_andSupplier($id);
+$unique_id = $db->display_all_pod_items_where_supplier_id($id);
 
 $supplier_id = isset($_GET['supplier_id']) ? $_GET['supplier_id'] : null;
 $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_id'] : null;
@@ -68,26 +68,22 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                 <center><li><a href="#">Log Out</a></li></center>
             </ul>
         </aside>
-
-        <!-- New Record Button -->
-        <?php if (!empty($unique_id)): ?>
-    <?php foreach ($unique_id as $index => $uni): ?>
-        <?php if ($index == 0): // Only display the first button ?>
-            <button class="details-btn btn btn-info btn-sm" 
-                    onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($uni->supplier_id); ?>&purchase_order_id=<?= urlencode($uni->purchase_order_id); ?>'">
-                <b>New Record</b>
-            </button>
-            <?php break; // Stop the loop after displaying one button ?>
-        <?php endif; ?>
-    <?php endforeach; ?>
-<?php endif; ?>
-
         <div class="table-container">
-            <?php if (empty($unique_id)) : ?>
-                <!-- Display message if there are no purchase orders -->
+            <?php if (!empty($unique_id)): ?>
+                <button class="details-btn btn btn-info btn-sm" 
+                        onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+                    <b>New Record</b>
+                </button>
+            <?php endif; ?>
+
+            <?php if (empty($unique_id)): ?>
                 <p style="text-align: center; font-size: 1.5em; color: #555;">No purchase</p>
-            <?php else : ?>
-                <!-- Display the table if there are purchase orders -->
+                <button class="details-btn btn btn-info btn-sm" 
+                        onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+                    <b>New Record</b>
+                </button>
+            <?php else: ?>
+                
                 <table class="custom-table">
                     <thead>
                         <tr>
