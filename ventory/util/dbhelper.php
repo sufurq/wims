@@ -269,12 +269,14 @@ public function deleteRecordFromPOders($id) {
     $stmt->bind_param("i", $id);
 
     if ($stmt->execute()) {
+        $stmt->close();
         return "Record with supplier ID $id successfully deleted.";
     } else {
+        $stmt->close();
         return "Error deleting record with supplier ID $id: " . $this->conn->error;
     }
 
-    $stmt->close();
+    
 }
 
 //Delete Record POD Items.
@@ -285,12 +287,33 @@ public function deletePod_Items($id) {
     $stmt-> bind_param("i", $id);
 
     if ($stmt->execute()) {
+        $stmt->close();
         return "Return with supplier ID $id: successfully deleted";
     } else {
+        $stmt->close();
         return "Error deleting record with pod_items ID $id: ". $this->conn->error;
     }
-    $stmt->close();
+    
 }
+// Update Purchase Order 
+
+public function edit_pod_items($id, $category, $item, $quantity, $unit_price, $unit_of_measure, $amount) {
+    $sql = "UPDATE pod_items SET category = ?, item_description = ?, quantity = ?, unit_price = ?, unit_of_measure = ?, amount = ? WHERE id = ?";
+    $stmt = $this->conn->prepare($sql);
+
+    $stmt->bind_param("sssdidsi", $category, $item, $quantity, $unit_price, $unit_of_measure, $amount, $id);
+
+    if ($stmt->execute()) {
+        $stmt->close();
+        return true;
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
+
+
+
 
 
 //DISPLAY ALL POD_ITEMS

@@ -129,11 +129,6 @@ $conn->close();
                         </div>
                     </form>
 
-                    <div class="new-details ml-3">
-                        <a href="cnpod.php">
-                            <button class="btn btn-primary btn-sm" style="width:auto"><b>New Detail</b></button>
-                        </a>
-                    </div>
                 </div>
 
                 <div class="table-responsive">
@@ -162,11 +157,11 @@ $conn->close();
                                         <td><?php echo htmlspecialchars($rows["unit_price"], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td><?php echo htmlspecialchars($rows["amount"], ENT_QUOTES, 'UTF-8'); ?></td>
                                         <td>
-                                            <button onclick="showAlertEdit();" class="btn btn-primary btn-sm">
+                                            <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= $rows['id'] ?>">
                                                 Edit
                                             </button>
 
-                                            <button onclick="showAlertDelete();" class="btn btn-danger btn-sm">
+                                            <button onclick="showAlertDelete(this);" class="btn btn-danger btn-sm" data-id="<?= $rows['id'] ?>">
                                                 Delete
                                             </button>
                                         </td>
@@ -183,8 +178,6 @@ $conn->close();
             </main>
         </div>
     </div>
-
-
     <div class="d-flex justify-content-center justify-content-md-end mt-4">
         <nav aria-label="Page navigation">
             <ul class="pagination">
@@ -210,29 +203,24 @@ $conn->close();
             </ul>
         </nav>
     </div>
-
     <script>
-        function showAlertEdit() {
+        function showAlertEdit(button) {
+            const id = button.getAttribute('data-id');
             const userConfirmed = confirm("Are you sure you want to Edit?");
-
             if (userConfirmed) {
-
                 alert("You chose to edit.");
-                window.location.href = './crud_form/edit_pod.php?id=<?= $rows['id'] ?>';
+                window.location.href = './crud_form/edit_pod.php?id=' + id;
             } else {
                 alert("You chose not to edit.");
             }
         }
-    </script>
 
-    <script>
-        function showAlertDelete() {
+        function showAlertDelete(button) {
+            const id = button.getAttribute('data-id');
             const userConfirmed = confirm("Are you sure you want to Delete?");
-
             if (userConfirmed) {
-
                 alert("You chose to delete.");
-                window.location.href = './logic/delete_pod_items.php?id=<?= $rows['id'] ?>';
+                window.location.href = './logic/delete_pod_items.php?id=' + id;
             } else {
                 alert("You chose not to Delete.");
             }
