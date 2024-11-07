@@ -41,8 +41,8 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create POD</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
-
+    <link rel="stylesheet" href="../css/style.css">
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <style>
