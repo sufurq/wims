@@ -3,18 +3,21 @@ include "../util/dbhelper.php";
 $db = new dbhelper();
 
 if (isset($_POST["submit"])) {
-    $id = $_POST['id'];
-    $category = $_POST['category'];
-    $item = $_POST['item'];
-    $quantity = $_POST['quantity'];
-    $unit_price = $_POST['unit_price'];
-    $unit_of_measure = $_POST['unit_of_measure'];
-    $amount = $_POST['amount'];
+    $purchase_order_id = $_POST['purchase_order_id'];
+    $order_date = $_POST['order_date'];
+    $purchase_order_number = $_POST['purchase_order_number'];
+    $mode_of_procurement = $_POST['mode_of_procurement'];
+    $procurement_number = $_POST['procurement_number'];
+    $procurement_date = $_POST['procurement_date'];
+    $place_of_delivery = $_POST['place_of_delivery'];
+    $delivery_date = $_POST['delivery_date'];
+    $term_of_delivery = $_POST['term_of_delivery'];
 
-    // Correct the validation condition (closing the parentheses properly)
-    if (!empty(trim($category)) && !empty(trim($item)) && !empty(trim($quantity)) && !empty(trim($unit_price)) && !empty(trim($unit_of_measure)) && !empty(trim($amount))) {
-        // Call the edit_pod_items method
-        $updatePod = $db->edit_pod_items($id, $category, $item, $quantity, $unit_price, $unit_of_measure, $amount);
+    // Check that all required fields are filled
+    if (!empty(trim($purchase_order_id)) && !empty(trim($order_date)) && !empty(trim($purchase_order_number)) && !empty(trim($mode_of_procurement)) && !empty(trim($procurement_number)) && !empty(trim($procurement_date)) && !empty(trim($place_of_delivery)) && !empty(trim($delivery_date)) && !empty(trim($term_of_delivery))) {
+        
+        // Call the Edit_purchase_order function with the correct parameters
+        $updatePod = $db->Edit_purchase_order($purchase_order_id, $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery);
 
         if ($updatePod) {
             header("Location: ../pod.php");
@@ -30,5 +33,5 @@ if (isset($_POST["submit"])) {
 } else {
     header("Location: ../");
     exit();
-}   
+}
 ?>

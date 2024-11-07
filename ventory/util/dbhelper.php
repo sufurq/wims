@@ -279,6 +279,25 @@ public function deleteRecordFromPOders($id) {
     
 }
 
+// Update Purchase_order
+
+public function Edit_purchase_order($purchase_order_id, $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery) {
+  
+    $sql = "UPDATE purchase_orders SET purchase_order_number = ?, order_date = ?, mode_of_procurement = ?, procurement_number = ?, procurement_date = ?, place_of_delivery = ?, delivery_date = ?, term_of_delivery = ? WHERE purchase_order_id = ?";
+    $stmt = $this->conn->prepare($sql);
+
+    // Adjust the bind_param types if necessary based on your database schema
+    $stmt->bind_param("ssssssssi", $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery, $purchase_order_id);
+
+    if ($stmt->execute()) {
+        $stmt->close();
+        return true;
+    } else {
+        $stmt->close();
+        return false;
+    }
+}
+
 //Delete Record POD Items.
 
 public function deletePod_Items($id) {
@@ -295,7 +314,7 @@ public function deletePod_Items($id) {
     }
     
 }
-// Update Purchase Order 
+// Update Pod_items_Dashboard
 
 public function edit_pod_items($id, $category, $item, $quantity, $unit_price, $unit_of_measure, $amount) {
     $sql = "UPDATE pod_items SET category = ?, item_description = ?, quantity = ?, unit_price = ?, unit_of_measure = ?, amount = ? WHERE id = ?";
@@ -311,7 +330,6 @@ public function edit_pod_items($id, $category, $item, $quantity, $unit_price, $u
         return false;
     }
 }
-
 
 
 
