@@ -99,6 +99,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                     </button>
                 <?php endif; ?>
 
+<<<<<<< HEAD
                 <?php if (empty($unique_id)) : ?>
                     <p class="text-center text-muted font-weight-bold">No purchase records found</p>
                     <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
@@ -114,6 +115,39 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                                 <th class="text-center">Unit Cost</th>
                                 <th class="text-center">Amount</th>
                                 <th class="text-center">Action</th>
+=======
+            <?php endif; ?>
+
+            <?php if (empty($unique_id)) : ?>
+                <p style="text-align: center; font-size: 1.5em; color: #555;">No purchase</p>
+                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+                    <b>New Record</b>
+                </button>
+            <?php else : ?>
+
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Unit of Issue</th>
+                            <th>Description</th>
+                            <th>Quantity</th>
+                            <th>Unit Cost</th>
+                            <th>Amount</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($unique_id as $row) : ?>
+                            <tr>
+                                <td><?= htmlspecialchars($row->category); ?></td>
+                                <td><?= htmlspecialchars($row->unit_of_measure); ?></td>
+                                <td><?= htmlspecialchars($row->item_description); ?></td>
+                                <td><?= htmlspecialchars($row->quantity); ?></td>
+                                <td><?= htmlspecialchars($row->unit_price); ?></td>
+                                <td><?= htmlspecialchars($row->amount); ?></td>
+                                <td>DELETED</td>
+>>>>>>> cc735e06445ad71e8b6d50e19e758d364630aea0
                             </tr>
                         </thead>
                         <tbody>
