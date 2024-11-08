@@ -33,8 +33,9 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
 <body>
     <!-- Header -->
     <header>
-    <div style="margin-right:87%; margin-top:10px;" class="logo-title text-center my-3">
-    <img src="../img/coclogo.png" width="300" alt="Company Logo">
+        <div class="logo-title text-center my-3">
+        <img src="../img/coclogo.png" width="300" alt="Company Logo" style="margin-right: 87%;">
+
         </div>
     </header>
 
@@ -46,8 +47,8 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             <li>Users</li>
         </ul>
         <div class="profile-section">
-            <img src="../img/avatar.png" alt="Profile" class="profile-avatar">
-            <span>Jcolonia</span>
+        <div style="margin-right:87%; margin-top:10px;" class="logo-title text-center my-3">
+        <span>Jcolonia</span>
         </div>
     </nav>
 
@@ -63,7 +64,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                         <a class="nav-link" href="dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link selected" href="index.php">Purchase Order</a>
+                        <a class="nav-link selected" href="./index.php">Purchase Order</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Delivery Receipt</a>
@@ -92,14 +93,13 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             </aside>
 
             <!-- Content -->
-            <div class="col-md-9 content-wrapper p-5">
+            <div class="col-md-9 content-wrapper p-4">
                 <?php if (!empty($unique_id)) : ?>
                     <button class="details-btn btn btn-info btn-sm w-100 mb-3" style="height: 60px;" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
                     <b>New Record</b>
                     </button>
                 <?php endif; ?>
 
-<<<<<<< HEAD
                 <?php if (empty($unique_id)) : ?>
                     <p class="text-center text-muted font-weight-bold">No purchase records found</p>
                     <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
@@ -115,39 +115,6 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                                 <th class="text-center">Unit Cost</th>
                                 <th class="text-center">Amount</th>
                                 <th class="text-center">Action</th>
-=======
-            <?php endif; ?>
-
-            <?php if (empty($unique_id)) : ?>
-                <p style="text-align: center; font-size: 1.5em; color: #555;">No purchase</p>
-                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
-                    <b>New Record</b>
-                </button>
-            <?php else : ?>
-
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Unit of Issue</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Unit Cost</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($unique_id as $row) : ?>
-                            <tr>
-                                <td><?= htmlspecialchars($row->category); ?></td>
-                                <td><?= htmlspecialchars($row->unit_of_measure); ?></td>
-                                <td><?= htmlspecialchars($row->item_description); ?></td>
-                                <td><?= htmlspecialchars($row->quantity); ?></td>
-                                <td><?= htmlspecialchars($row->unit_price); ?></td>
-                                <td><?= htmlspecialchars($row->amount); ?></td>
-                                <td>DELETED</td>
->>>>>>> cc735e06445ad71e8b6d50e19e758d364630aea0
                             </tr>
                         </thead>
                         <tbody>
@@ -169,7 +136,11 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                 <?php endif; ?>
 
                 <!-- Pagination -->
-               
+                <div class="d-flex justify-content-center mt-3">
+                    <button class="btn btn-outline-secondary" id="prev-btn">Previous</button>
+                    <span class="px-3" id="number-display">1</span>
+                    <button class="btn btn-outline-secondary" id="next-btn">Next</button>
+                </div>
             </div>
         </div>
     </div>
