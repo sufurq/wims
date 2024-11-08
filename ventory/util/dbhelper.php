@@ -356,7 +356,8 @@ public function display_all_pod_items_where_supplier_id($purchase_order_id)
     pod_items.unit_of_measure,
     pod_items.unit_price,
     pod_items.amount,
-    pod_items.quantity
+    pod_items.quantity, 
+    pod_items.id
 FROM 
     purchase_orders
 LEFT JOIN 

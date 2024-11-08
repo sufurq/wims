@@ -1,7 +1,6 @@
 <?php
 require_once "../util/dbhelper.php";
 
-// Check if 'id' is set in the query parameters
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 } else {
@@ -61,10 +60,10 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                 </h1>
                 <ul class="nav flex-column w-100 text-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.php">Dashboard</a>
+                        <a class="nav-link" href="../pod.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link selected" href="index.php">Purchase Order</a>
+                        <a class="nav-link selected" href="../index.php">Purchase Order</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Delivery Receipt</a>
@@ -87,7 +86,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                     </li>
                     <hr class="w-100">
                     <li class="nav-item">
-                        <a class="nav-link text-danger" href="#">Log Out</a>
+                        <a class="nav-link text-danger" href="../logic/logout.php">Log Out</a>
                     </li>
                 </ul>
             </aside>
@@ -128,14 +127,17 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                                     <td class="text-center"><?= htmlspecialchars($row->unit_price); ?></td>
                                     <td class="text-center"><?= htmlspecialchars($row->amount); ?></td>
                                     <td class="text-center">
-                                        <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= $row->id ?>">Edit</button>
-                                        <button onclick="showAlertDelete(this);" class="btn btn-danger btn-sm" data-id="<?= $row->id ?>">Delete</button>
+                                    <a href="../crud_form/edit_pod.php?id=<?= $row->id ?>" class="btn btn-primary btn-sm">Edit</a>  
+                                    <a href="../logic/delete_pod_items.php?id=<?= $row->id ?>" class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
                 <?php endif; ?>
+
+               
+    </script>
 
                 <!-- Pagination -->
                 <div class="d-flex justify-content-center mt-3">

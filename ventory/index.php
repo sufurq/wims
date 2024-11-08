@@ -73,7 +73,7 @@ $display = $db->display_value_all_purchase();
                 </center>
                 <hr>
                 <center>
-                    <li><a href="#">Log Out</a></li>
+                    <li><a href="./logic/logout.php">Log Out</a></li>
                 </center>
             </ul>
         </aside>
