@@ -109,7 +109,8 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                 <table class="custom-table">
                     <thead>
                         <tr>
-                            <th>Unit of Issue #</th>
+                            <th>Category</th>
+                            <th>Unit of Issue</th>
                             <th>Description</th>
                             <th>Quantity</th>
                             <th>Unit Cost</th>
@@ -121,6 +122,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                         <?php foreach ($unique_id as $row) : ?>
                             <tr>
                                 <td><?= htmlspecialchars($row->category); ?></td>
+                                <td><?= htmlspecialchars($row->unit_of_measure); ?></td>
                                 <td><?= htmlspecialchars($row->item_description); ?></td>
                                 <td><?= htmlspecialchars($row->quantity); ?></td>
                                 <td><?= htmlspecialchars($row->unit_price); ?></td>
