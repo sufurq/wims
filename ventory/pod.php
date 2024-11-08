@@ -96,7 +96,7 @@ $conn->close();
                     <h1>SIT.io</h1>
                 </div>
                 <ul class="nav flex-column text-center">
-                    <li class="nav-item"><a class="nav-link" href="#">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pod.php">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link active" href="index.php">Purchase Order</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Delivery Receipt</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">POWE</a></li>

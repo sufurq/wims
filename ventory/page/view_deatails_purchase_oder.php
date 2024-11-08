@@ -64,7 +64,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                         <a class="nav-link" href="dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link selected" href="./index.php">Purchase Order</a>
+                        <a class="nav-link selected" href="index.php">Purchase Order</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Delivery Receipt</a>
@@ -109,7 +109,8 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                     <table class="table table-striped">
                         <thead class="thead-dark">
                             <tr>
-                                <th class="text-center">Unit of Issue #</th>
+                                <th class="text-center">Category</th>
+                                <th class="text-center">Unit Of Issue</th>
                                 <th class="text-center">Description</th>
                                 <th class="text-center">Quantity</th>
                                 <th class="text-center">Unit Cost</th>
@@ -121,6 +122,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                             <?php foreach ($unique_id as $row) : ?>
                                 <tr>
                                     <td class="text-center"><?= htmlspecialchars($row->category); ?></td>
+                                    <td class="text-center"><?= htmlspecialchars($row->unit_of_measure); ?></td>
                                     <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
                                     <td class="text-center"><?= htmlspecialchars($row->quantity); ?></td>
                                     <td class="text-center"><?= htmlspecialchars($row->unit_price); ?></td>
