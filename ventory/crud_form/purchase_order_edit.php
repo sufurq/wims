@@ -174,7 +174,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             color: #333;
             cursor: pointer;
             transition: color 0.3s ease;
-        }
+        }   
 
         .close-btn:hover {
             color: #d9534f;
@@ -234,61 +234,56 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
 
             <h2>Create New Purchase Order Details</h2>
 
-            <form action="pod.php" method="post">
+            <form action="../logic/edit_purchase_oder.php" method="POST" class="purchase-order-form">
             <input type="hidden" name="supplier_Id" id="supplier_Id" value="<?= htmlspecialchars($supplier_id); ?>">
-                    <input type="hidden" name="purchase_order_id" id="purchase_order_id" value="<?= htmlspecialchars($purchase_order_id); ?>">
-
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="category">Item Category:</label>
-                        <select id="category" name="category" required>
-                            <option value="">Select Category</option>
-                            <?php foreach ($categories as $category): ?>
-                                <option value="<?= $category ?>"><?= $category ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="item">Item:</label>
-                        <select id="item" name="item" required>
-                            <option value="">Select Item</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="uom">Unit of Measure:</label>
-                        <input type="text" id="uom" name="uom" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" required>
-                    </div>
+            <input type="hidden" name="purchase_order_id" id="purchase_order_id" value="<?= htmlspecialchars($purchase_order_id); ?>">
+                    <div class="form-grid">
                     
-
-                    <div class="form-group">
-                        <label for="unit_price">Unit Price:</label>
-                        <input type="text" id="unit_price" name="unit_price" required>
+                        <div class="form-group">
+                            <label for="po-number">P.O #:</label>
+                            <input type="text" id="po-number" name="po_number" placeholder="Enter P.O number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="po-date">Date:</label>
+                            <input type="date" id="po-date" name="po_date" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="procurement-model">Model of Procurement:</label>
+                            <input type="text" id="procurement-model" name="procurement_model" placeholder="Enter procurement model">
+                        </div>
+                        <div class="form-group">
+                            <label for="procurement-number">Procurement #:</label>
+                            <input type="text" id="procurement-number" name="procurement_number" placeholder="Enter procurement number">
+                        </div>
+                        <div class="form-group">
+                            <label for="procurement-date">Procurement Date:</label>
+                            <input type="date" id="procurement-date" name="procurement_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-place">Place Of Delivery:</label>
+                            <input type="text" id="delivery-place" name="delivery_place" placeholder="Enter place of delivery">
+                        </div>
+                        <div class="form-group">
+                            <label for="delivery-date">Date Of Delivery:</label>
+                            <input type="date" id="delivery-date" name="delivery_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="terms-delivery">Terms of Delivery:</label>
+                            <input type="text" id="terms-delivery" name="terms_delivery" placeholder="Enter terms of delivery">
+                        </div>
+                        <div class="form-group full-width">
+                            <div class="form-actions">
+                                <button type="submit"  name="submit" class="submit-btn">Submit</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="amount">Amount:</label>
-                        <input type="text" id="amount" name="amount" readonly>
-                    </div>
-
-                    <div class="form-actions full-width">
-                        <button type="submit" class="submit-btn">Submit</button>
-                    </div>
-                </div>
-            </form>
+                </form>
         </div>
     </section>
     
     <script>
         function closeForm() {
-            window.location.href = './pod.php'; 
+            window.location.href = '../index.php'; 
         }
 
         $('#category').change(function() {

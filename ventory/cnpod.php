@@ -287,10 +287,10 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
     
     <script>
         function closeForm() {
-            window.location.href = 'pod.php'; 
+            window.location.href = 'index.php'; 
         }
 
-        $('#category').change(function() {
+        $('#category').change(function() {  
             var category = $(this).val();
             if (category) {
                 $.ajax({

@@ -1,7 +1,6 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "inventory_management");
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -10,25 +9,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $supplier_Id = $_POST['supplier_Id'];
     $purchase_order_id = $_POST['purchase_order_id'];
     $category = $_POST['category'];
-    $item_description = $_POST['item']; // Corrected variable name
-    $unit_of_measure = $_POST['uom']; // Corrected variable name
+    $item_description = $_POST['item']; 
+    $unit_of_measure = $_POST['uom']; 
     $quantity = $_POST['quantity'];
     $unit_price = $_POST['unit_price'];
     $amount = $_POST['amount'];
 
-    // Check if the supplier_id exists in the suppliers table
     $checkSupplier = $conn->prepare("SELECT * FROM suppliers WHERE supplier_Id = ?");
     $checkSupplier->bind_param("i", $supplier_Id);
     $checkSupplier->execute();
     $resultSupplier = $checkSupplier->get_result();
 
     if ($resultSupplier->num_rows > 0) {
-        // Supplier exists, proceed with insertion
         $stmt = $conn->prepare("INSERT INTO pod_items (supplier_Id, purchase_order_id, category, item_description, unit_of_measure, quantity, unit_price, amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("iisssidd", $supplier_Id, $purchase_order_id, $category, $item_description, $unit_of_measure, $quantity, $unit_price, $amount);
         
         if ($stmt->execute()) {
-            // Redirect after successful insert
             header("Location: pod.php");
             exit();
         } else {
@@ -42,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $checkSupplier->close();
 }
 
-// Fetch records for display
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -115,7 +110,7 @@ $conn->close();
 
             <main class="col-lg-9 col-md-8 col-sm-12 p-4">
                 <div class="text-center">
-                    <h2 class="mb-4">Purchase Order</h2>
+                    <h2 class="mb-4">Dashboard</h2>
                 </div>
 
                 <div class="d-flex justify-content-between mb-3">

@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
 
     $db = new DbHelper();
     $result = $db->deletePod_Items($id); 
-    header("Location: ./index.php?message=" . urlencode($result));
+    header("Location: ../pod.php?message=" . urlencode($result));
     exit();
 } else {
     header("Location: ./index.php?message=" . urlencode("Invalid ID provided for deletion."));

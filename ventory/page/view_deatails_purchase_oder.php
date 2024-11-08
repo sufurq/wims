@@ -33,8 +33,8 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
 <body>
     <!-- Header -->
     <header>
-        <div class="logo-title">
-            <img src="../img/coclogo.png" width="300" alt="Company Logo">
+    <div style="margin-right:87%; margin-top:10px;" class="logo-title text-center my-3">
+    <img src="../img/coclogo.png" width="300" alt="Company Logo">
         </div>
     </header>
 
@@ -51,93 +51,92 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
         </div>
     </nav>
 
-    <div class="container">
-        <!-- Sub Menu -->
-        <aside class="sub-menu">
-            <h1>
-                <center>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sub Menu -->
+            <aside class="col-md-3 sub-menu bg-light p-3 d-flex flex-column align-items-center">
+                <h1 class="text-center mb-4">
                     <img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io
-                </center>
-            </h1>
-            <ul>
-                <center>
-                    <li><a href="dashboard.php">Dashboard</a></li>
-                </center>
-                <center>
-                    <li class="selected"><a href="index.php">Purchase Order</a></li>
-                </center>
-                <center>
-                    <li><a href="#">Delivery Receipt</a></li>
-                </center>
-                <center>
-                    <li><a href="#">POWE</a></li>
-                </center>
-                <center>
-                    <li><a href="#">RIS</a></li>
-                </center>
-                <center>
-                    <li><a href="#">Audit</a></li>
-                </center>
-                <center>
-                    <li><a href="#">Reports</a></li>
-                </center>
-                <hr>
-                <center>
-                    <li><a href="#">Master Pages</a></li>
-                </center>
-                <hr>
-                <center>
-                    <li><a href="#">Log Out</a></li>
-                </center>
-            </ul>
-        </aside>
-        <div style="margin-left:10%;" class="table-container">
-            <?php if (!empty($unique_id)) : ?>
-                <button class="details-btn btn btn-info btn-sm w-100" style="height: auto;" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+                </h1>
+                <ul class="nav flex-column w-100 text-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.php">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link selected" href="index.php">Purchase Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Delivery Receipt</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">POWE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">RIS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Audit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Reports</a>
+                    </li>
+                    <hr class="w-100">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Master Pages</a>
+                    </li>
+                    <hr class="w-100">
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" href="#">Log Out</a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Content -->
+            <div class="col-md-9 content-wrapper p-5">
+                <?php if (!empty($unique_id)) : ?>
+                    <button class="details-btn btn btn-info btn-sm w-100 mb-3" style="height: 60px;" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
                     <b>New Record</b>
-                </button>
+                    </button>
+                <?php endif; ?>
 
-            <?php endif; ?>
-
-            <?php if (empty($unique_id)) : ?>
-                <p style="text-align: center; font-size: 1.5em; color: #555;">No purchase</p>
-                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
-                    <b>New Record</b>
-                </button>
-            <?php else : ?>
-
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>Unit of Issue #</th>
-                            <th>Description</th>
-                            <th>Quantity</th>
-                            <th>Unit Cost</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($unique_id as $row) : ?>
+                <?php if (empty($unique_id)) : ?>
+                    <p class="text-center text-muted font-weight-bold">No purchase records found</p>
+                    <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
+                        <b>New Record</b>
+                    </button>
+                <?php else : ?>
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
                             <tr>
-                                <td><?= htmlspecialchars($row->category); ?></td>
-                                <td><?= htmlspecialchars($row->item_description); ?></td>
-                                <td><?= htmlspecialchars($row->quantity); ?></td>
-                                <td><?= htmlspecialchars($row->unit_price); ?></td>
-                                <td><?= htmlspecialchars($row->amount); ?></td>
-                                <td>DELETED</td>
+                                <th class="text-center">Unit of Issue #</th>
+                                <th class="text-center">Description</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Unit Cost</th>
+                                <th class="text-center">Amount</th>
+                                <th class="text-center">Action</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php endif; ?>
-        </div>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($unique_id as $row) : ?>
+                                <tr>
+                                    <td class="text-center"><?= htmlspecialchars($row->category); ?></td>
+                                    <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
+                                    <td class="text-center"><?= htmlspecialchars($row->quantity); ?></td>
+                                    <td class="text-center"><?= htmlspecialchars($row->unit_price); ?></td>
+                                    <td class="text-center"><?= htmlspecialchars($row->amount); ?></td>
+                                    <td class="text-center">
+                                        <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= $row->id ?>">Edit</button>
+                                        <button onclick="showAlertDelete(this);" class="btn btn-danger btn-sm" data-id="<?= $row->id ?>">Delete</button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
 
-        <!-- Pagination -->
-        <div class="nav-container">
-            <button class="nav-btn" id="prev-btn">Previous</button>
-            <div class="number-box" id="number-display">1</div>
-            <button class="nav-btn" id="next-btn">Next</button>
+                <!-- Pagination -->
+               
+            </div>
         </div>
     </div>
 </body>
