@@ -229,7 +229,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
     <section class="purchase-order">
         <div class="form-container">
             <!-- Close Button -->
-            <button class="close-btn" onclick="closeForm()">&#10006;</button>
+            <button class="close-btn" onclick="closeForm(<?= $purchase_order_id?>)">&#10006;</button>
 
             <h2>Create New Purchase Order Details</h2>
 
@@ -287,7 +287,10 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
     
     <script>
         function closeForm() {
-            window.location.href = 'index.php'; 
+            const urlParams = new URLSearchParams(window.location.search);
+                const purchase_order_id = urlParams.get('purchase_order_id');
+                
+                window.location.href = "./page/view_deatails_purchase_oder.php?id=" + purchase_order_id;
         }
 
         $('#category').change(function() {  

@@ -33,6 +33,9 @@ while ($row = $result->fetch_assoc()) {
 include "../util/dbhelper.php";
 $db = new DbHelper();
 $pod = $db->getRecord("pod_items", ["id" => $_GET["id"]]);
+$purchase_order_id = isset($_GET["purchase_order_id"]) ? $_GET["purchase_order_id"] : null;
+
+
 include "../shared/navbar_admin.php";
 ?>
 
@@ -55,7 +58,7 @@ include "../shared/navbar_admin.php";
     <section class="purchase-order">
         <div class="form-container">
             <!-- Close Button -->
-            <button class="close-btn" onclick="closeForm()">&#10006;</button>
+            <button class="close-btn" onclick="closeForm(<?= $purchase_order_id ?>)">&#10006;</button>
 
             <h2>Edit Purchase Order Details</h2>
             <form action="../logic/edit.php" method="post">
@@ -106,7 +109,10 @@ include "../shared/navbar_admin.php";
     </section>
     <script>
         function closeForm() {
-            window.location.href = "../pod.php"; 
+            const urlParams = new URLSearchParams(window.location.search);
+                const purchase_order_id = urlParams.get('purchase_order_id');
+                
+                window.location.href = "../page/view_deatails_purchase_oder.php?id=" + purchase_order_id;
         }
 
         $('#category').change(function() {

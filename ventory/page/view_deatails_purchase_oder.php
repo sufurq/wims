@@ -127,8 +127,9 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                                     <td class="text-center"><?= htmlspecialchars($row->unit_price); ?></td>
                                     <td class="text-center"><?= htmlspecialchars($row->amount); ?></td>
                                     <td class="text-center">
-                                    <a href="../crud_form/edit_pod.php?id=<?= $row->id ?>" class="btn btn-primary btn-sm">Edit</a>  
-                                    <a href="../logic/delete_pod_items.php?id=<?= $row->id ?>" class="btn btn-danger btn-sm">Delete</a>
+                                    <a href="../crud_form/edit_pod.php?id=<?= $row->id ?>&purchase_order_id=<?= $row->purchase_order_id ?>" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="../logic/delete_pod_items.php?id=<?= $row->id ?>&purchase_order_id=<?= $purchase_order_id ?>" class="btn btn-danger btn-sm">Delete</a>
+
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
