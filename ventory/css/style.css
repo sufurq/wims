@@ -110,7 +110,7 @@ header {
 }
 
 .sub-menu h1 {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Roboto', serif;
     font-size: 48px;
     color: black;
     margin-bottom: 20px;
@@ -121,6 +121,7 @@ header {
 }
 
 .sub-menu ul li {
+    color: black;
     font-size: 18px;
     padding: 10px 0;
 }
@@ -144,7 +145,7 @@ header {
 
 /* Adjust other items in the menu */
 .sub-menu ul li:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #415EF6; /* Darker blue on hover */
     color: white; /* Text color on hover */
 }
 
@@ -374,11 +375,11 @@ bottom:-30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 3px;
     position: fixed;
     bottom: 10px;
-    right: 30px;
-    font-family: Arial, sans-serif;
+    right: 20px;
+    font-family: 'Roboto', serif;
     margin-top: 50px;
 }
 
