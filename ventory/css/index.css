@@ -2,12 +2,13 @@
     background-color: #007bff; /* Blue background */
     color: white;
     position: absolute;
-    left: 1490px;
+    left: 1300px;
     top: 290px;
     padding: 10px 20px;
     border: none;
     border-radius: 25px; /* Curved corners */
     font-size: 16px;
+    font-family: 'Roboto', serif;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -211,7 +212,7 @@ button:focus {
 .search-container {
     position: relative;
     display: inline-block;
-    width: 100%;
+    width: 270px;
     max-width: 400px;
 }
 

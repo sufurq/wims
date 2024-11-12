@@ -50,7 +50,7 @@ $display = $db->display_value_all_purchase();
                     <li><a href="pod.php">Dashboard</a></li>
                 </center>
                 <center>
-                    <li class="selected"><a href="index.php">Purchase Order</a></li>
+                    <li class="selected"><a href="index.php" style="color: white">Purchase Order</a></li>
                 </center>
                 <center>
                     <li><a href="#">Delivery Receipt</a></li>
@@ -68,9 +68,16 @@ $display = $db->display_value_all_purchase();
                     <li><a href="#">Reports</a></li>
                 </center>
                 <hr>
-                <center>
-                    <li><a href="#">Master Pages</a></li>
-                </center>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#">Site</a>
+                        <a href="#">Item Category</a>
+                        <a href="#">Item</a>
+                        <a href="#">Supplier</a>
+                        <a href="#">Settings</a>
+                    </div>
+                    </div>
                 <hr>
                 <center>
                     <li><a href="#">Log Out</a></li>
@@ -101,13 +108,13 @@ $display = $db->display_value_all_purchase();
             <!-- Search field for filtering entries -->
             <div class="search-container">
                 <i class="fa fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search purchase orders..." id="search-input">
+                <input type="text" class="search-input" placeholder="Search..." id="search-input">
             </div>
 
             <!-- Dropdown to select the number of entries to display -->
-            <div class="dropdown-container" style="position:relative; left:-620px;">
+            <div class="dropdown-container-alt">
                 <h4>Show&nbsp;</h4>
-                <select class="status-dropdown" style="width:100px;">
+                <select class="status-dropdown-alt">
                     <?php for ($i = 1; $i <= 10; $i++) : ?>
                         <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
                     <?php endfor; ?>
@@ -200,3 +207,4 @@ $display = $db->display_value_all_purchase();
         }
     </script>
 </body>
+</html>
