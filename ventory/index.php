@@ -209,4 +209,4 @@ $display = $db->display_value_all_purchase();
     </script>
 </body>
 
-</html> 
+</html>
