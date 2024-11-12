@@ -14,25 +14,23 @@ if (isset($_POST["submit"])) {
     $delivery_date = $_POST['delivery_date'];
     $terms_delivery = $_POST['terms_delivery'];
   
-    // Check if required fields are not empty
     if (!empty(trim($purchase_order_number)) && !empty(trim($po_date)) && !empty(trim($procurement_model)) && !empty(trim($procurement_number)) && !empty(trim($procurement_date)) && !empty(trim($delivery_place)) && !empty(trim($delivery_date)) && !empty(trim($terms_delivery))) {
         
-        // Update record with supplier_Id and purchase_order_id as conditions
-        $updatePod = $db->updateRecord(
+        $updatePod = $db->updateRecords(
             "purchase_orders",
             [
                 "purchase_order_number" => $purchase_order_number,
-                "order_date" => $po_date, // Fixed variable name
-                "mode_of_procurement" => $procurement_model, // Ensure this matches your database column
+                "order_date" => $po_date,
+                "mode_of_procurement" => $procurement_model,
                 "procurement_number" => $procurement_number,
                 "procurement_date" => $procurement_date,
                 "place_of_delivery" => $delivery_place,
                 "delivery_date" => $delivery_date,
                 "term_of_delivery" => $terms_delivery
             ], 
-            
+            "supplier_Id = $supplier_Id AND purchase_order_id = $purchase_order_id"
         );
-
+        
         // Redirect based on the update result
         if ($updatePod > 0) {
             header("Location: ../index.php");
