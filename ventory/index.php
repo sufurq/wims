@@ -13,6 +13,7 @@ $display = $db->display_value_all_purchase();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie-edge,safari,chrome">
     <title>Purchase Order Page</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
@@ -50,7 +51,7 @@ $display = $db->display_value_all_purchase();
                     <li><a href="pod.php">Dashboard</a></li>
                 </center>
                 <center>
-                    <li class="selected"><a href="index.php">Purchase Order</a></li>
+                    <li class="selected"><a href="index.php" style="color: white;">Purchase Order</a></li>
                 </center>
                 <center>
                     <li><a href="#">Delivery Receipt</a></li>
@@ -68,12 +69,19 @@ $display = $db->display_value_all_purchase();
                     <li><a href="#">Reports</a></li>
                 </center>
                 <hr>
-                <center>
-                    <li><a href="#">Master Pages</a></li>
-                </center>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#">Site</a>
+                        <a href="#">Item Category</a>
+                        <a href="#">Item</a>
+                        <a href="#">Supplier</a>
+                        <a href="#">Settings</a>
+                    </div>
+                    </div>
                 <hr>
                 <center>
-                    <li><a href="./logic/logout.php">Log Out</a></li>
+                    <li><a href="#">Log Out</a></li>
                 </center>
             </ul>
         </aside>
@@ -101,7 +109,7 @@ $display = $db->display_value_all_purchase();
             <!-- Search field for filtering entries -->
             <div class="search-container">
                 <i class="fa fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search purchase orders..." id="search-input">
+                <input type="text" class="search-input" placeholder="Search" id="search-input">
             </div>
 
             <!-- Dropdown to select the number of entries to display -->
@@ -146,7 +154,7 @@ $display = $db->display_value_all_purchase();
 
                             <tr class="details-row" style="display:none;">
                                 <td colspan="7">
-                                    <div class="details-container p-3 bg-light">
+                                    <div class="details-container p-3 bg-light larger-font">
                                         <p><strong>Procurement Model:</strong> <?= htmlspecialchars($row->mode_of_procurement); ?></p>
                                         <p><strong>Procurement Date:</strong> <?= htmlspecialchars($row->procurement_date); ?></p>
                                         <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
@@ -155,8 +163,8 @@ $display = $db->display_value_all_purchase();
                                         <p><strong>Status:</strong> <?= htmlspecialchars($row->status); ?></p>
                                         <br>
                                         <div class="action-buttons mt-3">
-                                        <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
-                                        <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id;?>'">Details</button>
+                                            <button class="edit-btn btn btn-warning btn-sm" onclick="editRecord(<?= $row->id; ?>)">Edit</button>
+                                            <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
 
                                             <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
 
@@ -201,4 +209,4 @@ $display = $db->display_value_all_purchase();
     </script>
 </body>
 
-</html>
+</html> 
