@@ -69,7 +69,7 @@ class DbHelper
         $this->conn->query($sql);
         return $this->conn->affected_rows;
     }
-
+//Update single
     public function updateRecord($table, $args)
     {
         $keys = array_keys($args);
@@ -83,6 +83,23 @@ class DbHelper
         $this->conn->query($sql);
         return $this->conn->affected_rows;
     }
+//update more data 
+
+public function updateRecords($table, $data, $conditions) {
+    $set = [];
+    foreach ($data as $column => $value) {
+        $set[] = "$column = ?";
+    }
+    $set = implode(", ", $set);
+    $query = "UPDATE $table SET $set WHERE $conditions";
+    
+    // Prepare and execute the query
+    $stmt = $this->conn->prepare($query);
+    $params = array_values($data);
+    $stmt->bind_param(str_repeat("s", count($params)), ...$params);
+    
+    return $stmt->execute();
+}
 
     //pagenion
 
