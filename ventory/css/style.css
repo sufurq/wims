@@ -384,13 +384,13 @@ bottom:-30px;
 
 /* Styling for the buttons */
 .nav-btn {
-    padding: 10px 20px;
+    padding: 10px 15px;
     background-color: #007BFF;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
     transition: background-color 0.3s ease;
 }
 
