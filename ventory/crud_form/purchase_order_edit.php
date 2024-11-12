@@ -32,6 +32,10 @@ while ($row = $result->fetch_assoc()) {
 
 $supplier_id = isset($_GET['supplier_id']) ? $_GET['supplier_id'] : null;
 $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_id'] : null;
+require_once "../util/dbhelper.php";
+$db = new DbHelper();
+
+$value = $db->getRecord("purchase_orders", ["purchase_order_id" => $_GET["purchase_order_id"]]);
 ?>
 
 <!DOCTYPE html>
@@ -241,35 +245,35 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                     
                         <div class="form-group">
                             <label for="po-number">P.O #:</label>
-                            <input type="text" id="po-number" name="po_number" placeholder="Enter P.O number" required>
+                            <input type="text" id="po-number" name="po_number" value="<?php echo htmlspecialchars($value["purchase_order_number"] );?>" required>
                         </div>
                         <div class="form-group">
                             <label for="po-date">Date:</label>
-                            <input type="date" id="po-date" name="po_date" required>
+                            <input type="date" id="po-date" name="po_date" value="<?php echo htmlspecialchars($value["order_date"]); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="procurement-model">Model of Procurement:</label>
-                            <input type="text" id="procurement-model" name="procurement_model" placeholder="Enter procurement model">
+                            <input type="text" id="procurement-model" name="procurement_model" value="<?php echo htmlspecialchars($value["mode_of_procurement"]); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="procurement-number">Procurement #:</label>
-                            <input type="text" id="procurement-number" name="procurement_number" placeholder="Enter procurement number">
+                            <input type="text" id="procurement-number" name="procurement_number" value="<?php echo htmlspecialchars($value["procurement_number"]); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="procurement-date">Procurement Date:</label>
-                            <input type="date" id="procurement-date" name="procurement_date">
+                            <input type="date" id="procurement-date" name="procurement_date" value="<?php echo htmlspecialchars($value["procurement_date"]); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="delivery-place">Place Of Delivery:</label>
-                            <input type="text" id="delivery-place" name="delivery_place" placeholder="Enter place of delivery">
+                            <input type="text" id="delivery-place" name="delivery_place" value="<?php echo htmlspecialchars($value["place_of_delivery"]); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="delivery-date">Date Of Delivery:</label>
-                            <input type="date" id="delivery-date" name="delivery_date">
+                            <input type="date" id="delivery-date" name="delivery_date" value="<?php echo htmlentities($value["delivery_date"]); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="terms-delivery">Terms of Delivery:</label>
-                            <input type="text" id="terms-delivery" name="terms_delivery" placeholder="Enter terms of delivery">
+                            <input type="text" id="terms-delivery" name="terms_delivery" value="<?php echo htmlspecialchars($value["term_of_delivery"]); ?>" required>
                         </div>
                         <div class="form-group full-width">
                             <div class="form-actions">
