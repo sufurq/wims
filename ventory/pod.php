@@ -205,7 +205,7 @@ $conn->close();
             const userConfirmed = confirm("Are you sure you want to Edit?");
             if (userConfirmed) {
                 alert("You chose to edit.");
-                window.location.href = './crud_form/edit_pod.php?id=' + id;
+                window.location.href = './crud_form/edit_pod_dashboard.php?id=' + id;
             } else {
                 alert("You chose not to edit.");
             }
