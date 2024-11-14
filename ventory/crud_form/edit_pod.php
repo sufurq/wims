@@ -64,6 +64,8 @@ include "../shared/navbar_admin.php";
             <form action="../logic/edit.php" method="post">
                 <div class="form-grid">
                     <input type="hidden" name="id" value="<?php echo $pod["id"] ?>">
+                    <input type="hidden" name="purchase_order_id" value="<?php echo $purchase_order_id; ?>">
+
 
                     <div class="form-group">
                         <label for="category">Item Category:</label>
