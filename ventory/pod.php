@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("iisssidd", $supplier_Id, $purchase_order_id, $category, $item_description, $unit_of_measure, $quantity, $unit_price, $amount);
         
         if ($stmt->execute()) {
-            header("Location: pod.php");
+            header("Location: ./page/view_deatails_purchase_oder.php?id=$purchase_order_id");
             exit();
         } else {
             echo "Error: " . $stmt->error;
@@ -216,7 +216,7 @@ $conn->close();
             const userConfirmed = confirm("Are you sure you want to Delete?");
             if (userConfirmed) {
                 alert("You chose to delete.");
-                window.location.href = './logic/delete_pod_items.php?id=' + id;
+                window.location.href = './crud_form/delete_pod_dashboard.php?id=' + id;
             } else {
                 alert("You chose not to Delete.");
             }
