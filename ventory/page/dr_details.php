@@ -5,74 +5,121 @@ $db = new DbHelper();
 
 if (isset($_GET['purchase_order_id'])) {
     $purchase_order_id = intval($_GET['purchase_order_id']);
-    
     $purchase_order_details = $db->get_purchase_order_details($purchase_order_id);
-    
+
     if (!empty($purchase_order_details)) {
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchase Order Page</title>
+    <title>Purchase Order Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h2 {
+            color: #2e3d56;
+        }
+        p {
+            margin: 5px 0;
+        }
+        .new-record-btn {
+            background-color: #2e3d56;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .new-record-btn:hover {
+            background-color: #1f2b3a;
+        }
+        hr {
+            border: 1px solid #ccc;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
-        <body>
+<body>
 
-            <h2>Order Information</h2>
-    <?php foreach ($purchase_order_details as $row) : ?>
-    <h2>Supplier Information</h2>
-    <p><strong>Supplier:</strong> <?= htmlspecialchars($row->description); ?></p>
-    <p><strong>Address:</strong> <?= htmlspecialchars($row->address); ?></p>
-    <p><strong>Order Date:</strong> <?= htmlspecialchars($row->order_date); ?></p>
-    <p><strong>Mode of Procurement:</strong> <?= htmlspecialchars($row->mode_of_procurement); ?></p>
-    <p><strong>Procurement Number:</strong> <?= htmlspecialchars($row->procurement_number); ?></p>
-    <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
-    <p><strong>Delivery Date:</strong> <?= htmlspecialchars($row->delivery_date); ?></p>
-    <p><strong>Term of Delivery:</strong> <?= htmlspecialchars($row->term_of_delivery); ?></p>
-    <?php break; ?>
-    <?php endforeach; ?>
-    <a href="#"><button class="new-record-btn"><b>New Delivery</b></button></a>
+    <h2>Delivery Receipts</h2>
+    <?php
+    $receiptsDisplayed = [];
+    foreach ($purchase_order_details as $row) : 
+        if (!in_array($row->dr_id, $receiptsDisplayed) && !empty($row->dr_id)) :
+            $receiptsDisplayed[] = $row->dr_id;
+    ?>
+        <p><strong>Delivery Receipt Number:</strong> <?= htmlspecialchars($row->receipt_number); ?></p>
+        <p><strong>Sales Representative:</strong> <?= htmlspecialchars($row->sales_representative); ?></p>
+        <p><strong>Checked By:</strong> <?= htmlspecialchars($row->checked_by); ?></p>
+        <p><strong>Created At:</strong> <?= htmlspecialchars($row->created_at); ?></p>
+        <hr>
+    <?php 
+        endif;
+    endforeach; 
 
-    <h2>Purchase Order</h2>
-            <?php if (!empty($purchase_order_details)) : ?>
-                <table border="1" cellpadding="10">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Description</th>
-                            <th>Unit of Measure</th>
-                            <th>Quantity</th>
-                            <th>Unit Cost</th>
-                            <th>Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($purchase_order_details as $item) : ?>
-                            <tr>
-                                <td><?php echo $item->category; ?></td>
-                                <td><?php echo $item->item_description; ?></td>
-                                <td><?php echo $item->unit_of_measure; ?></td>
-                                <td><?php echo $item->quantity; ?></td>
-                                <td><?php echo $item->unit_price; ?></td>
-                                <td><?php echo $item->amount; ?></td>
-                                <td>
-                                <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= $rows['id'] ?>">
-                                                Deliveries
-                                            </button>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            <?php else : ?>
-                <p>No items found for this purchase order.</p>
-            <?php endif; ?>
+    if (empty($receiptsDisplayed)) : ?>
+        <p>No delivery receipts available for this purchase order.</p>
+    <?php endif; ?>
 
-        </body>
-        </html>
+    <h2>Purchase Order Items</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Description</th>
+                <th>Quantity</th>
+                <th>Unit of Measure</th>
+                <th>Serial ID</th>
+                <th>Date of Expiry</th>
+                <th>Unit Cost</th>
+                <th>Amount</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($purchase_order_details as $item) : ?>
+                <tr>
+                    <td><?= htmlspecialchars($item->category); ?></td>
+                    <td><?= htmlspecialchars($item->item_description); ?></td>
+                    <td><?= htmlspecialchars($item->quantity); ?></td>
+                    <td><?= htmlspecialchars($item->unit_of_measure); ?></td>
+                    <td></td>
+                    <td></td>
+                    <td><?= htmlspecialchars($item->unit_price); ?></td>
+                    <td><?= htmlspecialchars($item->amount); ?></td>
+                    <td>
+                        <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= $item->id ?>">
+                            Deliveries
+                        </button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <a href="create_delivery.php?purchase_order_id=<?= $purchase_order_id; ?>">
+        <button class="new-record-btn"><b>New Delivery</b></button>
+    </a>
+</body>
+</html>
 <?php
     } else {
         echo "<p>Purchase Order not found.</p>";
