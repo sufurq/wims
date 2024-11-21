@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 07, 2024 at 03:22 AM
+-- Generation Time: Nov 21, 2024 at 07:53 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -155,6 +155,31 @@ INSERT INTO `construction` (`id`, `description`, `category`, `reorder_level`, `r
 (1, 'Wood Planks', 'Construction', 50, 100, 'Pending shipment'),
 (2, 'Concrete Mix', 'Construction', 100, 200, 'Stock sufficient for a month'),
 (3, 'Steel Rods', 'Construction', 40, 80, 'Low supply warning');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `delivery_receipts`
+--
+
+CREATE TABLE `delivery_receipts` (
+  `dr_id` int(11) NOT NULL,
+  `receipt_number` varchar(50) NOT NULL,
+  `sales_representative` varchar(100) NOT NULL,
+  `checked_by` varchar(100) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `delivery_receipts`
+--
+
+INSERT INTO `delivery_receipts` (`dr_id`, `receipt_number`, `sales_representative`, `checked_by`, `created_at`) VALUES
+(1, 'm,', 'mm', ' mn', '2024-11-20 07:26:35'),
+(2, 'd', 'd', 'd', '2024-11-20 07:54:27'),
+(3, 'dd', 'dd', 'dd', '2024-11-20 07:57:09'),
+(4, 'xsd', 'sf', 'dsf', '2024-11-20 07:58:46'),
+(5, 's', 's', 's', '2024-11-20 08:00:59');
 
 -- --------------------------------------------------------
 
@@ -339,8 +364,18 @@ CREATE TABLE `pod_items` (
   `unit_of_measure` varchar(50) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `unit_price` decimal(10,2) DEFAULT NULL,
-  `amount` decimal(10,2) DEFAULT NULL
+  `amount` decimal(10,2) DEFAULT NULL,
+  `serial_Id` int(50) NOT NULL,
+  `date_expiry` datetime(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `pod_items`
+--
+
+INSERT INTO `pod_items` (`id`, `supplier_Id`, `purchase_order_id`, `category`, `item_description`, `unit_of_measure`, `quantity`, `unit_price`, `amount`, `serial_Id`, `date_expiry`) VALUES
+(25, 5, 14, 'Office Equipment', 'Office Chairs', '1000000000', 89, '56.00', '4984.00', 111000, '2024-11-12 00:00:00.000000'),
+(26, 5, 14, 'Reserved Item', 'Sound System', 'jk', 89, '89.00', '7921.00', 9, '2024-11-27 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -367,7 +402,9 @@ CREATE TABLE `purchase_orders` (
 --
 
 INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `purchase_order_number`, `order_date`, `mode_of_procurement`, `procurement_number`, `procurement_date`, `place_of_delivery`, `delivery_date`, `term_of_delivery`, `status`) VALUES
-(13, 1, '787878', '2024-11-15', 'Gling', '3535', '2024-11-25', 'lahug', '2024-11-12', 'gg', 'Pending');
+(14, 5, '790', '2024-11-19', '901', '901', '2024-11-21', '901', '2024-11-12', 'jkjkszpj', 'Pending'),
+(15, 6, '100', '2024-11-12', '9090', '9090', '2024-11-12', 'Roda Liboo', '2024-11-13', 'Good quality', 'Pending'),
+(16, 4, '45', '2024-11-14', 'f', '324', '2024-11-06', 'Ronda', '2024-11-15', 'okay', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -557,6 +594,12 @@ ALTER TABLE `construction`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `delivery_receipts`
+--
+ALTER TABLE `delivery_receipts`
+  ADD PRIMARY KEY (`dr_id`);
+
+--
 -- Indexes for table `electrical`
 --
 ALTER TABLE `electrical`
@@ -690,6 +733,12 @@ ALTER TABLE `construction`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `delivery_receipts`
+--
+ALTER TABLE `delivery_receipts`
+  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT for table `electrical`
 --
 ALTER TABLE `electrical`
@@ -735,13 +784,13 @@ ALTER TABLE `plumbing`
 -- AUTO_INCREMENT for table `pod_items`
 --
 ALTER TABLE `pod_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `reserved_items`
