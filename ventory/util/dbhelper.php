@@ -70,19 +70,21 @@ class DbHelper
         return $this->conn->affected_rows;
     }
 //Update single
-    public function updateRecord($table, $args)
-    {
-        $keys = array_keys($args);
-        $values = array_values($args);
-        $condition = [];
-        for ($i = 1; $i < count($keys); $i++) {
-            $condition[] = "`" . $keys[$i] . "` = '" . $values[$i] . "'";
-        }
-        $sets = implode(", ", $condition);
-        $sql = "UPDATE `$table` SET $sets WHERE `$keys[0]` = '$values[0]'";
-        $this->conn->query($sql);
-        return $this->conn->affected_rows;
+public function updateRecord($table, $args)
+{
+    $keys = array_keys($args);
+    $values = array_values($args);
+    $condition = [];
+    for ($i = 1; $i < count($keys); $i++) {
+        $condition[] = "`" . $keys[$i] . "` = '" . $values[$i] . "'";
     }
+    $sets = implode(", ", $condition);
+    $sql = "UPDATE `$table` SET $sets WHERE `$keys[0]` = '$values[0]'";
+    $this->conn->query($sql);
+    return $this->conn->affected_rows;
+}
+
+    
 //update more data 
 
 public function updateRecords($table, $data, $conditions) {

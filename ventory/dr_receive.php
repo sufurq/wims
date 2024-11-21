@@ -14,31 +14,6 @@ $db = new DbHelper();
 $display_data = $db->dr_receive($id);
 
 
-
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-$receipt_number = isset($_POST['receipt_number']) ? $_POST['receipt_number'] : null;
-$sales_representative = isset($_POST['sales_representative']) ? $_POST['sales_representative'] : null;
-$checked_by = isset($_POST['checked_by']) ? $_POST['checked_by'] : null;
-
-if ($receipt_number && $sales_representative && $checked_by) {
-    $stmt = $conn->prepare("INSERT INTO delivery_receipts (receipt_number, sales_representative, checked_by) VALUES (?, ?, ?)");
-    $stmt->bind_param("sss", $receipt_number, $sales_representative, $checked_by);
-
-    if ($stmt->execute()) {
-        echo "Delivery receipt submitted successfully!";
-    } else {
-        echo "Error: " . $stmt->error;
-    }
-}
-
-$conn->close();
-
 ?>
 
 <!DOCTYPE html>
@@ -97,7 +72,7 @@ $conn->close();
 
 <body>
     <h1>New Delivery Receipt</h1>
-    <form action="dr_receive.php" method="post">
+    <form action="./logic/receipt_process.php" method="post">
         <label for="receipt_number">Receipt Number:</label>
         <input type="text" id="receipt_number" name="receipt_number" required>
 
@@ -109,7 +84,7 @@ $conn->close();
 
         <div class="form-group full-width">
             <div class="form-actions">
-                <button type="submit" class="submit-btn">Submit</button>
+                <button type="submit" name="submit" class="submit-btn">Submit</button>
             </div>
         </div>
     </form>
@@ -129,8 +104,6 @@ $conn->close();
         <tbody>
             <?php foreach ($display_data as $row) : ?>
                 <tr>
-
-
                     <td class="text-center"><?= htmlspecialchars($row->id); ?></td>
                     <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
                     <td class="text-center"><?= htmlspecialchars($row->unit_of_measure); ?></td>
@@ -138,44 +111,9 @@ $conn->close();
                     <td class="text-center"><?= htmlspecialchars($row->unit_price); ?></td>
                     <td class="text-center"><?= htmlspecialchars($row->amount); ?></td>
                     <td class="text-center">
-                        <!-- Edit Button -->
-                        <button class="btn btn-primary btn-sm edit-button" data-id="<?= htmlspecialchars($row->id); ?>" data-description="<?= htmlspecialchars($row->item_description); ?>" data-category="<?= htmlspecialchars($row->category); ?>" data-unit="<?= htmlspecialchars($row->unit_of_measure); ?>" data-toggle="modal" data-target="#editModal">
-                            Edit
-                        </button>
-                        </button>
-
-                        <!-- Modal for Editing POD Item -->
-                        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <form action="../crud_form/edit_pod.php" method="post">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="editModalLabel">Edit POD Item</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <input type="hidden" id="edit_id" name="id">
-
-                                            <div class="form-group">
-                                                <label for="edit_category">Category</label>
-                                                <input type="text" id="edit_category" name="category" class="form-control" readonly>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="edit_unit">Unit of Measure</label>
-                                                <input type="text" id="edit_unit" name="unit" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="submit" name="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        <a href="./crud_form/edit_pod_items_receipt.php?id=<?= urlencode($row->id); ?>" class="btn btn-primary btn-sm">Edit</a>
+                    </td>
+                </tr>
 
 
                 </tr>
@@ -183,22 +121,8 @@ $conn->close();
         </tbody>
     </table>
 
-    <script>
-        $(document).on('click', '.edit-button', function() {
-            // Get data attributes from the clicked button
-            const id = $(this).data('id');
-            const description = $(this).data('description');
-            const category = $(this).data('category');
-            const unit = $(this).data('unit');
 
-            // Set the data into modal inputs
-            $('#edit_id').val(id);
-            $('#edit_category').val(category);
-            $('#edit_description').val(description);
-            $('#edit_unit').val(unit);
-        });
     </script>
-
 </body>
 
 </html>

@@ -144,7 +144,7 @@ $display = $db->display_value_all_purchase();
                                 <td><?= htmlspecialchars($row->status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
-                                    <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='dr_receive.php?id=<?= $row->id; ?>'">Receive</button>
+                                    <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
                                 </td>
                             </tr>
 
