@@ -73,6 +73,7 @@ $display_data = $db->dr_receive($id);
 <body>
     <h1>New Delivery Receipt</h1>
     <form action="./logic/receipt_process.php" method="post">
+    <input type="hidden" name="purchase_order_id" value="<?php echo $id; ?>">
         <label for="receipt_number">Receipt Number:</label>
         <input type="text" id="receipt_number" name="receipt_number" required>
 

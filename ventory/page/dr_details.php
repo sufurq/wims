@@ -1,14 +1,16 @@
 <?php
 require_once "../util/dbhelper.php";
-
 $db = new DbHelper();
 
-if (isset($_GET['purchase_order_id'])) {
-    $purchase_order_id = intval($_GET['purchase_order_id']);
-    $purchase_order_details = $db->get_purchase_order_details($purchase_order_id);
+if (isset($_GET["id"])) {
+    $id = $_GET["id"];
+} else {
+    die("ID NOT SET");
+}
 
-    if (!empty($purchase_order_details)) {
+$display = $db->display_receipt($id);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,22 +63,14 @@ if (isset($_GET['purchase_order_id'])) {
 <body>
 
     <h2>Delivery Receipts</h2>
-    <?php
-    $receiptsDisplayed = [];
-    foreach ($purchase_order_details as $row) : 
-        if (!in_array($row->dr_id, $receiptsDisplayed) && !empty($row->dr_id)) :
-            $receiptsDisplayed[] = $row->dr_id;
-    ?>
-        <p><strong>Delivery Receipt Number:</strong> <?= htmlspecialchars($row->receipt_number); ?></p>
-        <p><strong>Sales Representative:</strong> <?= htmlspecialchars($row->sales_representative); ?></p>
-        <p><strong>Checked By:</strong> <?= htmlspecialchars($row->checked_by); ?></p>
-        <p><strong>Created At:</strong> <?= htmlspecialchars($row->created_at); ?></p>
-        <hr>
-    <?php 
-        endif;
-    endforeach; 
-
-    if (empty($receiptsDisplayed)) : ?>
+    <?php if (!empty($display)): ?>
+        <?php foreach ($display as $row): ?>
+            <p><strong>Delivery Receipt Number:</strong> <?= htmlspecialchars($row->receipt_number); ?></p>
+            <p><strong>Sales Representative:</strong> <?= htmlspecialchars($row->sales_representative); ?></p>
+            <p><strong>Checked By:</strong> <?= htmlspecialchars($row->checked_by); ?></p>
+            <hr>
+        <?php endforeach; ?>
+    <?php else: ?>
         <p>No delivery receipts available for this purchase order.</p>
     <?php endif; ?>
 
@@ -96,35 +90,34 @@ if (isset($_GET['purchase_order_id'])) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($purchase_order_details as $item) : ?>
+            <?php if (!empty($display)): ?>
+                <?php foreach ($display as $row): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($row->category); ?></td>
+                        <td><?= htmlspecialchars($row->item_description); ?></td>
+                        <td><?= htmlspecialchars($row->quantity); ?></td>
+                        <td><?= htmlspecialchars($row->unit_of_measure); ?></td>
+                        <td><?= htmlspecialchars($row->serial_Id); ?></td>
+                        <td><?= htmlspecialchars($row->date_expiry); ?></td>
+                        <td><?= htmlspecialchars($row->unit_price); ?></td>
+                        <td><?= htmlspecialchars($row->amount); ?></td>
+                        <td>
+                            <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= htmlspecialchars($item->id); ?>">
+                                Deliveries
+                            </button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
                 <tr>
-                    <td><?= htmlspecialchars($item->category); ?></td>
-                    <td><?= htmlspecialchars($item->item_description); ?></td>
-                    <td><?= htmlspecialchars($item->quantity); ?></td>
-                    <td><?= htmlspecialchars($item->unit_of_measure); ?></td>
-                    <td></td>
-                    <td></td>
-                    <td><?= htmlspecialchars($item->unit_price); ?></td>
-                    <td><?= htmlspecialchars($item->amount); ?></td>
-                    <td>
-                        <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= $item->id ?>">
-                            Deliveries
-                        </button>
-                    </td>
+                    <td colspan="9">No items found for this purchase order.</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
-    <a href="create_delivery.php?purchase_order_id=<?= $purchase_order_id; ?>">
+
+    <a href="create_delivery.php?purchase_order_id=<?= htmlspecialchars($id); ?>">
         <button class="new-record-btn"><b>New Delivery</b></button>
     </a>
 </body>
 </html>
-<?php
-    } else {
-        echo "<p>Purchase Order not found.</p>";
-    }
-} else {
-    echo "<p>Purchase Order ID not specified.</p>";
-}
-?>

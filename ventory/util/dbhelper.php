@@ -544,6 +544,75 @@ WHERE
     return $p_order; 
 }
 
+//Join_for_display_receipt
+
+public function display_receipt($id)
+{
+    $sql = "SELECT DISTINCT
+    dr.receipt_number,
+    dr.sales_representative,
+    dr.checked_by,
+    po.purchase_order_id,
+    po.supplier_id,
+    po.purchase_order_number,
+    po.order_date,
+    po.mode_of_procurement,
+    po.procurement_number,
+    po.procurement_date,
+    po.place_of_delivery,
+    po.delivery_date,
+    po.term_of_delivery,
+    po.status,
+    s.description AS supplier_description,
+    s.abbreviation AS supplier_abbreviation,
+    s.address,
+    pod.item_description,
+    pod.quantity,
+    pod.unit_price,
+    pod.supplier_Id,
+    pod.category,
+    pod.unit_of_measure,
+    pod.amount,
+    pod.serial_Id,
+    pod.date_expiry
+FROM 
+    delivery_receipts dr
+LEFT JOIN 
+    purchase_orders po ON dr.purchase_order_id = po.purchase_order_id
+LEFT JOIN 
+    suppliers s ON po.supplier_id = s.supplier_id
+LEFT JOIN 
+    pod_items pod ON po.purchase_order_id = pod.purchase_order_id
+WHERE 
+    po.purchase_order_id = ?";
+
+
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $this->conn->error);
+    }
+
+    $stmt->bind_param("i", $id);
+
+    if (!$stmt->execute()) {
+        die('Execute error: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    if ($result === false) {
+        die('Get result error: ' . $stmt->error);
+    }
+
+    $p_order = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_order[] = (object) $row;
+    }
+
+    $stmt->close();
+
+    return $p_order; 
+}
+
 
 }
 

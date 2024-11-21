@@ -152,7 +152,7 @@ $display = $db->display_value_all_purchase();
                                 <td colspan="7">
                                     <div class="details-container p-3 bg-light">
                                         <div class="action-buttons mt-3">
-                                        <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/dr_details.php?purchase_order_id=<?= $row->purchase_order_id ?>'">Details</button>
+                                        <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/dr_details.php?id=<?= $row->purchase_order_id ?>'">Details</button>
 
                                         </div>
                                     </div>
