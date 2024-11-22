@@ -233,7 +233,6 @@ public function display_value_all_purchase()
     purchase_orders.status,
     suppliers.description,
     suppliers.supplier_id,
-    pod_items.id,
     COALESCE(SUM(pod_items.amount), 0) AS Total_Amount
 FROM 
     purchase_orders
@@ -242,7 +241,6 @@ LEFT JOIN
 LEFT JOIN
     suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
 GROUP BY 
-    pod_items.id,
     purchase_orders.purchase_order_id, 
     purchase_orders.purchase_order_number,
     purchase_orders.order_date,
@@ -255,7 +253,6 @@ GROUP BY
     purchase_orders.status,
     suppliers.description,
     suppliers.supplier_id;
-    
 
     ";
 
