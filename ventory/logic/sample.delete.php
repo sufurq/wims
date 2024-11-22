@@ -9,11 +9,11 @@ if (isset($_GET['id'])) {
     $result = $db->deleteRecordFromPOders($id); // Call the delete function
 
     // Redirect back to the main page with a message
-    header("Location: ./index.php?message=" . urlencode($result));
+    header("Location: ../index.php?message=" . urlencode($result));
     exit();
 } else {
     // Redirect back with an error message if no ID is provided
-    header("Location: ./index.php?message=" . urlencode("Invalid ID provided for deletion."));
+    header("Location: ../index.php?message=" . urlencode("Invalid ID provided for deletion."));
     exit();
 }
 ?>
