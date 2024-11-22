@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 02:49 AM
+-- Generation Time: Nov 22, 2024 at 07:13 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -176,7 +176,7 @@ CREATE TABLE `delivery_receipts` (
 --
 
 INSERT INTO `delivery_receipts` (`dr_id`, `purchase_order_id`, `receipt_number`, `sales_representative`, `checked_by`, `created_at`) VALUES
-(9, 17, '12-2', 'Kevin', 'Libato', '2024-11-21 08:50:04');
+(10, 21, '123-12', 'Shane', 'Micheal', '2024-11-22 05:29:58');
 
 -- --------------------------------------------------------
 
@@ -371,8 +371,11 @@ CREATE TABLE `pod_items` (
 --
 
 INSERT INTO `pod_items` (`id`, `supplier_Id`, `purchase_order_id`, `category`, `item_description`, `unit_of_measure`, `quantity`, `unit_price`, `amount`, `serial_Id`, `date_expiry`) VALUES
-(27, 5, 17, 'Sports Apparel And Accessories', 'Sneakers', '9pcs', 10, '89.00', '801.00', 12000, '2024-11-16 00:00:00.000000'),
-(28, 5, 17, 'Office Equipment', 'Computers', '90pcs', 89, '89.00', '7921.00', 0, '0000-00-00 00:00:00.000000');
+(33, 4, 21, 'Sports Apparel And Accessories', 'Sneakers', 'Pcss', 89, '87.00', '7743.00', 11, '2024-11-04 00:00:00.000000'),
+(34, 4, 21, 'Sports Awards', 'Certificates', '9pcs', 89, '7.00', '623.00', 0, '0000-00-00 00:00:00.000000'),
+(35, 6, 22, 'Sports Awards', 'Trophies', '9pcs', 90, '90.00', '8100.00', 0, '0000-00-00 00:00:00.000000'),
+(36, 4, 21, 'Sports Awards', 'Trophies', '89', 89, '90.00', '8010.00', 0, '0000-00-00 00:00:00.000000'),
+(37, 4, 21, 'Plumbing', 'Faucets', 'hahah', 89, '89.00', '7921.00', 0, '0000-00-00 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -399,7 +402,8 @@ CREATE TABLE `purchase_orders` (
 --
 
 INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `purchase_order_number`, `order_date`, `mode_of_procurement`, `procurement_number`, `procurement_date`, `place_of_delivery`, `delivery_date`, `term_of_delivery`, `status`) VALUES
-(17, 5, '12-22', '2024-11-05', '1234', '12', '2024-11-19', 'Ronda', '2024-11-23', 'he', 'Pending');
+(21, 4, '1234', '2024-11-12', '89', '12', '2024-11-27', 'Ronda', '2024-11-13', 'Good quality', 'Pending'),
+(22, 6, '67', '2024-11-12', '90', '456', '2024-11-18', 'Lahug', '2024-11-26', 'High quality', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -723,7 +727,7 @@ ALTER TABLE `construction`
 -- AUTO_INCREMENT for table `delivery_receipts`
 --
 ALTER TABLE `delivery_receipts`
-  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `electrical`
@@ -771,13 +775,13 @@ ALTER TABLE `plumbing`
 -- AUTO_INCREMENT for table `pod_items`
 --
 ALTER TABLE `pod_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `reserved_items`
