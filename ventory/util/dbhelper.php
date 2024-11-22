@@ -548,44 +548,71 @@ WHERE
 
 public function display_receipt($id)
 {
-    $sql = "SELECT DISTINCT
-    dr.receipt_number,
-    dr.sales_representative,
-    dr.checked_by,
-    po.purchase_order_id,
-    po.supplier_id,
-    po.purchase_order_number,
-    po.order_date,
-    po.mode_of_procurement,
-    po.procurement_number,
-    po.procurement_date,
-    po.place_of_delivery,
-    po.delivery_date,
-    po.term_of_delivery,
-    po.status,
-    s.description AS supplier_description,
-    s.abbreviation AS supplier_abbreviation,
-    s.address,
-    pod.item_description,
-    pod.quantity,
-    pod.unit_price,
-    pod.supplier_Id,
-    pod.category,
-    pod.unit_of_measure,
-    pod.amount,
-    pod.serial_Id,
-    pod.date_expiry
-FROM 
-    delivery_receipts dr
-LEFT JOIN 
-    purchase_orders po ON dr.purchase_order_id = po.purchase_order_id
-LEFT JOIN 
-    suppliers s ON po.supplier_id = s.supplier_id
-LEFT JOIN 
-    pod_items pod ON po.purchase_order_id = pod.purchase_order_id
-WHERE 
-    po.purchase_order_id = ?";
-
+    $sql = "SELECT 
+        CONCAT(
+            'Delivery Receipt Number: ', dr.receipt_number, '\n',
+            'Sales Representative: ', dr.sales_representative, '\n',
+            'Checked By: ', dr.checked_by
+        ) AS delivery_info,
+        po.purchase_order_id,
+        po.supplier_id,
+        po.purchase_order_number,
+        po.order_date,
+        po.mode_of_procurement,
+        po.procurement_number,
+        po.procurement_date,
+        po.place_of_delivery,
+        po.delivery_date,
+        po.term_of_delivery,
+        po.status,
+        pod.id AS pod_id,
+        pod.item_description,
+        pod.quantity,
+        pod.unit_price,
+        pod.unit_of_measure,
+        pod.amount,
+        pod.date_expiry,
+        pod.serial_Id,
+        s.description AS supplier_description,
+        s.abbreviation AS supplier_abbreviation,
+        s.address,
+        GROUP_CONCAT(DISTINCT pod.item_description ORDER BY pod.item_description SEPARATOR ', ') AS item_descriptions,
+        GROUP_CONCAT(DISTINCT pod.quantity ORDER BY pod.item_description SEPARATOR ', ') AS quantities,
+        GROUP_CONCAT(DISTINCT pod.unit_price ORDER BY pod.item_description SEPARATOR ', ') AS unit_prices,
+        GROUP_CONCAT(DISTINCT pod.category ORDER BY pod.item_description SEPARATOR ', ') AS categories,
+        GROUP_CONCAT(DISTINCT pod.unit_of_measure ORDER BY pod.item_description SEPARATOR ', ') AS units_of_measure,
+        GROUP_CONCAT(DISTINCT pod.amount ORDER BY pod.item_description SEPARATOR ', ') AS amounts
+    FROM 
+        purchase_orders po
+    LEFT JOIN 
+        suppliers s ON po.supplier_id = s.supplier_id
+    LEFT JOIN 
+        pod_items pod ON po.purchase_order_id = pod.purchase_order_id
+    LEFT JOIN 
+        delivery_receipts dr ON dr.purchase_order_id = po.purchase_order_id
+    WHERE 
+        po.purchase_order_id = ?
+    GROUP BY 
+        po.purchase_order_id, 
+        po.supplier_id,
+        po.purchase_order_number,
+        po.order_date,
+        po.mode_of_procurement,
+        po.procurement_number,
+        po.procurement_date,
+        po.place_of_delivery,
+        po.delivery_date,
+        po.term_of_delivery,
+        po.status,
+        s.description,
+        s.abbreviation,
+        s.address,
+        dr.receipt_number,
+        dr.sales_representative,
+        dr.checked_by,
+        pod.id 
+    ORDER BY 
+        pod.item_description";
 
     $stmt = $this->conn->prepare($sql);
     if ($stmt === false) {
@@ -612,6 +639,8 @@ WHERE
 
     return $p_order; 
 }
+
+
 
 
 }

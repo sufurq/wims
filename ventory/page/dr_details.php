@@ -2,12 +2,14 @@
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
+// Check if the ID is set
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 } else {
     die("ID NOT SET");
 }
 
+// Fetch the data
 $display = $db->display_receipt($id);
 ?>
 
@@ -64,12 +66,15 @@ $display = $db->display_receipt($id);
 
     <h2>Delivery Receipts</h2>
     <?php if (!empty($display)): ?>
+        <!-- Display Delivery Information -->
+        <p><strong>Delivery Information:</strong></p>
         <?php foreach ($display as $row): ?>
-            <p><strong>Delivery Receipt Number:</strong> <?= htmlspecialchars($row->receipt_number); ?></p>
-            <p><strong>Sales Representative:</strong> <?= htmlspecialchars($row->sales_representative); ?></p>
-            <p><strong>Checked By:</strong> <?= htmlspecialchars($row->checked_by); ?></p>
-            <hr>
+            <?php if (!empty($row->delivery_info)): ?>
+                <p><?= nl2br(htmlspecialchars($row->delivery_info)); ?></p>
+            <?php break; // Display only once since it's grouped by purchase order ?>
+            <?php endif; ?>
         <?php endforeach; ?>
+        <hr>
     <?php else: ?>
         <p>No delivery receipts available for this purchase order.</p>
     <?php endif; ?>
@@ -78,7 +83,7 @@ $display = $db->display_receipt($id);
     <table>
         <thead>
             <tr>
-                <th>Category</th>
+                
                 <th>Description</th>
                 <th>Quantity</th>
                 <th>Unit of Measure</th>
@@ -91,9 +96,9 @@ $display = $db->display_receipt($id);
         </thead>
         <tbody>
             <?php if (!empty($display)): ?>
+                <!-- Display Each Item -->
                 <?php foreach ($display as $row): ?>
                     <tr>
-                        <td><?= htmlspecialchars($row->category); ?></td>
                         <td><?= htmlspecialchars($row->item_description); ?></td>
                         <td><?= htmlspecialchars($row->quantity); ?></td>
                         <td><?= htmlspecialchars($row->unit_of_measure); ?></td>
@@ -102,7 +107,8 @@ $display = $db->display_receipt($id);
                         <td><?= htmlspecialchars($row->unit_price); ?></td>
                         <td><?= htmlspecialchars($row->amount); ?></td>
                         <td>
-                            <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" data-id="<?= htmlspecialchars($item->id); ?>">
+                            <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" 
+                                data-id="<?= htmlspecialchars($row->serial_Id); ?>">
                                 Deliveries
                             </button>
                         </td>
@@ -116,6 +122,7 @@ $display = $db->display_receipt($id);
         </tbody>
     </table>
 
+    <!-- Button for Creating a New Delivery -->
     <a href="create_delivery.php?purchase_order_id=<?= htmlspecialchars($id); ?>">
         <button class="new-record-btn"><b>New Delivery</b></button>
     </a>
