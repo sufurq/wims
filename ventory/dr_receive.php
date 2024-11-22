@@ -39,11 +39,7 @@ $display_data = $db->dr_receive($id);
 
         label {
             display: block;
-            margin-top: 10px;
-            font-weight: bold;
-        }
 
-        input[type="text"] {
             width: 100%;
             padding: 8px;
             margin: 5px 0 15px;

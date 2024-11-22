@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 21, 2024 at 07:53 AM
+-- Generation Time: Nov 22, 2024 at 02:49 AM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -164,6 +164,7 @@ INSERT INTO `construction` (`id`, `description`, `category`, `reorder_level`, `r
 
 CREATE TABLE `delivery_receipts` (
   `dr_id` int(11) NOT NULL,
+  `purchase_order_id` int(11) NOT NULL,
   `receipt_number` varchar(50) NOT NULL,
   `sales_representative` varchar(100) NOT NULL,
   `checked_by` varchar(100) NOT NULL,
@@ -174,12 +175,8 @@ CREATE TABLE `delivery_receipts` (
 -- Dumping data for table `delivery_receipts`
 --
 
-INSERT INTO `delivery_receipts` (`dr_id`, `receipt_number`, `sales_representative`, `checked_by`, `created_at`) VALUES
-(1, 'm,', 'mm', ' mn', '2024-11-20 07:26:35'),
-(2, 'd', 'd', 'd', '2024-11-20 07:54:27'),
-(3, 'dd', 'dd', 'dd', '2024-11-20 07:57:09'),
-(4, 'xsd', 'sf', 'dsf', '2024-11-20 07:58:46'),
-(5, 's', 's', 's', '2024-11-20 08:00:59');
+INSERT INTO `delivery_receipts` (`dr_id`, `purchase_order_id`, `receipt_number`, `sales_representative`, `checked_by`, `created_at`) VALUES
+(9, 17, '12-2', 'Kevin', 'Libato', '2024-11-21 08:50:04');
 
 -- --------------------------------------------------------
 
@@ -374,8 +371,8 @@ CREATE TABLE `pod_items` (
 --
 
 INSERT INTO `pod_items` (`id`, `supplier_Id`, `purchase_order_id`, `category`, `item_description`, `unit_of_measure`, `quantity`, `unit_price`, `amount`, `serial_Id`, `date_expiry`) VALUES
-(25, 5, 14, 'Office Equipment', 'Office Chairs', '1000000000', 89, '56.00', '4984.00', 111000, '2024-11-12 00:00:00.000000'),
-(26, 5, 14, 'Reserved Item', 'Sound System', 'jk', 89, '89.00', '7921.00', 9, '2024-11-27 00:00:00.000000');
+(27, 5, 17, 'Sports Apparel And Accessories', 'Sneakers', '9pcs', 10, '89.00', '801.00', 12000, '2024-11-16 00:00:00.000000'),
+(28, 5, 17, 'Office Equipment', 'Computers', '90pcs', 89, '89.00', '7921.00', 0, '0000-00-00 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -402,9 +399,7 @@ CREATE TABLE `purchase_orders` (
 --
 
 INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `purchase_order_number`, `order_date`, `mode_of_procurement`, `procurement_number`, `procurement_date`, `place_of_delivery`, `delivery_date`, `term_of_delivery`, `status`) VALUES
-(14, 5, '790', '2024-11-19', '901', '901', '2024-11-21', '901', '2024-11-12', 'jkjkszpj', 'Pending'),
-(15, 6, '100', '2024-11-12', '9090', '9090', '2024-11-12', 'Roda Liboo', '2024-11-13', 'Good quality', 'Pending'),
-(16, 4, '45', '2024-11-14', 'f', '324', '2024-11-06', 'Ronda', '2024-11-15', 'okay', 'Pending');
+(17, 5, '12-22', '2024-11-05', '1234', '12', '2024-11-19', 'Ronda', '2024-11-23', 'he', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -420,15 +415,6 @@ CREATE TABLE `reserved_items` (
   `reorder_quantity` int(11) DEFAULT NULL,
   `remarks` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `reserved_items`
---
-
-INSERT INTO `reserved_items` (`id`, `description`, `category`, `reorder_level`, `reorder_quantity`, `remarks`) VALUES
-(1, 'Projector', 'Reserved Item', 2, 5, 'Reserved for upcoming event'),
-(2, 'Sound System', 'Reserved Item', 1, 2, 'Reserved for conference'),
-(3, 'Whiteboard', 'Reserved Item', 3, 5, 'Reserved for meetings');
 
 -- --------------------------------------------------------
 
@@ -597,7 +583,8 @@ ALTER TABLE `construction`
 -- Indexes for table `delivery_receipts`
 --
 ALTER TABLE `delivery_receipts`
-  ADD PRIMARY KEY (`dr_id`);
+  ADD PRIMARY KEY (`dr_id`),
+  ADD KEY `purchase_order_id` (`purchase_order_id`);
 
 --
 -- Indexes for table `electrical`
@@ -736,7 +723,7 @@ ALTER TABLE `construction`
 -- AUTO_INCREMENT for table `delivery_receipts`
 --
 ALTER TABLE `delivery_receipts`
-  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `electrical`
@@ -784,19 +771,19 @@ ALTER TABLE `plumbing`
 -- AUTO_INCREMENT for table `pod_items`
 --
 ALTER TABLE `pod_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `reserved_items`
 --
 ALTER TABLE `reserved_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sports_apparel_and_accessories`
@@ -839,6 +826,12 @@ ALTER TABLE `connect_purchase_order_pod`
   ADD CONSTRAINT `connect_purchase_order_pod_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`supplier_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `connect_purchase_order_pod_ibfk_3` FOREIGN KEY (`purchase_order_id`) REFERENCES `reserved_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `connect_purchase_order_pod_ibfk_4` FOREIGN KEY (`pod_id`) REFERENCES `pod_items` (`id`);
+
+--
+-- Constraints for table `delivery_receipts`
+--
+ALTER TABLE `delivery_receipts`
+  ADD CONSTRAINT `delivery_receipts_ibfk_1` FOREIGN KEY (`purchase_order_id`) REFERENCES `purchase_orders` (`purchase_order_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pod_items`
