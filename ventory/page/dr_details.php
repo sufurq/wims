@@ -10,7 +10,7 @@ if (isset($_GET["id"])) {
 }
 
 // Fetch the data
-$display = $db->display_receipt($id);
+$display = $db->display_checker($id);
 $display3 = $db->display_receipt($id);
 ?>
 
@@ -89,10 +89,11 @@ $display3 = $db->display_receipt($id);
     <?php if (!empty($display)): ?>
         <p><strong>Delivery Information:</strong></p>
         <?php foreach ($display as $row): ?>
-            <?php if (!empty($row->delivery_info)): ?>
-                <p><?= nl2br(htmlspecialchars($row->delivery_info)); ?></p>
+                <p><?= nl2br(htmlspecialchars($row->receipt_number)); ?></p>
+                <p><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
+                <p><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
+
             <?php break; ?>
-            <?php endif; ?>
         <?php endforeach; ?>
         <hr>
     <?php else: ?>

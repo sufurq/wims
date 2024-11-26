@@ -559,12 +559,7 @@ public function display_receipt($id)
     po.term_of_delivery,
     po.status,
     pod.id AS pod_id,
-    dr.dr_id,
-    dr.purchase_order_id,
-    dr.receipt_number,
-    dr.sales_representative,
-    dr.checked_by,
-    dr.created_at,
+   
     CASE
         WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.item_description
         ELSE NULL
@@ -627,12 +622,59 @@ GROUP BY
     s.description,
     s.abbreviation,
     s.address,
-    dr.receipt_number,
-    dr.sales_representative,
-    dr.checked_by,
     pod.id 
 ORDER BY 
     pod.item_description;
+";
+
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $this->conn->error);
+    }
+
+    $stmt->bind_param("i", $id);
+
+    if (!$stmt->execute()) {
+        die('Execute error: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    if ($result === false) {
+        die('Get result error: ' . $stmt->error);
+    }
+
+    $p_order = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_order[] = (object) $row;
+    }
+
+    $stmt->close();
+
+    return $p_order; 
+}
+
+
+// display_receipt_checker
+public function display_checker($id)
+{
+    $sql = "SELECT 
+
+    delivery_receipts.dr_id,
+    delivery_receipts.purchase_order_id,
+    delivery_receipts.receipt_number,
+    delivery_receipts.sales_representative,
+    delivery_receipts.checked_by,
+    delivery_receipts.created_at
+    
+    FROM 
+    
+    delivery_receipts
+    
+    LEFT JOIN
+    
+    purchase_orders ON delivery_receipts.purchase_order_id = purchase_orders.purchase_order_id
+    
+    WHERE purchase_orders.purchase_order_id = ?
 ";
 
     $stmt = $this->conn->prepare($sql);
