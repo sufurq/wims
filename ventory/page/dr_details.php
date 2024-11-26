@@ -87,12 +87,10 @@ $display3 = $db->display_receipt($id);
 
     <h2>Delivery Receipts</h2>
     <?php if (!empty($display)): ?>
-        <p><strong>Delivery Information:</strong></p>
         <?php foreach ($display as $row): ?>
-                <p><?= nl2br(htmlspecialchars($row->receipt_number)); ?></p>
-                <p><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
-                <p><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
-
+            <p><strong>Delivery Receipt Number:</strong><?= nl2br(htmlspecialchars($row->receipt_number)); ?></p>
+            <p><strong>Sales Representative:</strong><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
+            <p><strong>Checked By:</strong><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
             <?php break; ?>
         <?php endforeach; ?>
         <hr>
@@ -100,21 +98,17 @@ $display3 = $db->display_receipt($id);
         <p>No delivery receipts available for this purchase order.</p>
     <?php endif; ?>
 
-    
-   
-    <!-- Button for Creating a New Delivery -->
-    <a href="create_delivery.php?purchase_order_id=<?= htmlspecialchars($id); ?>">
-        <button class="new-record-btn"><b>New Delivery</b></button>
-    </a>
-
+<center>
+<h2>DELIVERIES</h2>
+</center>
     <table id="itemsTable">
     <thead>
         <tr>
             <th>Description</th>
             <th>Quantity</th>
+            <th>Unit of Measure</th>
             <th>Serial Id</th>
             <th>Date Expiry</th>
-            <th>Unit of Measure</th>
             <th>Unit Cost</th>
             <th>Amount</th>
             <th>Action</th>
@@ -128,17 +122,11 @@ $display3 = $db->display_receipt($id);
                     <tr>
                         <td><?= htmlspecialchars($row->item_descriptions); ?></td>
                         <td><?= htmlspecialchars($row->quantities); ?></td>
-                        <td><?= htmlspecialchars($row->serial_Id); ?></td>
-                        <td><?= htmlspecialchars($row->date_expiry); ?></td>
                         <td><?= htmlspecialchars($row->units_of_measure); ?></td>
+                        <td><?= htmlspecialchars($row->serial_Id); ?></td>
+                        <td><?= htmlspecialchars(date("m-d-Y", strtotime($row->date_expiry))); ?></td>
                         <td><?= htmlspecialchars($row->unit_prices); ?></td>
                         <td><?= htmlspecialchars($row->amounts); ?></td>
-                        <td>
-                            <button onclick="showAlertEdit(this);" class="btn btn-primary btn-sm" 
-                                data-id="<?= htmlspecialchars($row->serial_Id); ?>">
-                                Deliveries
-                            </button>
-                        </td>
                     </tr>
                 <?php endif; ?>
             <?php endforeach; ?>

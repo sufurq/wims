@@ -91,10 +91,7 @@ $display_data = $db->dr_receive($id);
             <tr>
                 <th class="text-center">Item Id</th>
                 <th class="text-center">Description</th>
-                <th class="text-center">Unit Of Issue</th>
-                <th class="text-center">Quantity</th>
-                <th class="text-center">Unit Cost</th>
-                <th class="text-center">Amount</th>
+                <th class="text-center">PO Details</th>
                 <th class="text-center">Action</th>
             </tr>
         </thead>
@@ -103,10 +100,7 @@ $display_data = $db->dr_receive($id);
                 <tr>
                     <td class="text-center"><?= htmlspecialchars($row->id); ?></td>
                     <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row->unit_of_measure); ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row->quantity); ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row->unit_price); ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row->amount); ?></td>
+                    <td class="text-center"><?= htmlspecialchars($row->quantity) . " " . htmlspecialchars($row->unit_of_measure); ?></td>
                     <td class="text-center">
                         <a href="./crud_form/edit_pod_items_receipt.php?id=<?= urlencode($row->id); ?>" class="btn btn-primary btn-sm">+</a>
                     </td>

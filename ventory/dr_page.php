@@ -124,7 +124,7 @@ $display = $db->display_value_all_purchase();
                 <table class="custom-table">
                     <thead>
                         <tr>
-                        
+                            <th>P.O. ID</th>
                             <th>P.O. #</th>
                             <th>Supplier</th>
                             <th>Procurement No</th>
@@ -144,7 +144,6 @@ $display = $db->display_value_all_purchase();
                                 <td><?= htmlspecialchars($row->status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
-                                    <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
                                 </td>
                             </tr>
 
@@ -152,8 +151,8 @@ $display = $db->display_value_all_purchase();
                                 <td colspan="7">
                                     <div class="details-container p-3 bg-light">
                                         <div class="action-buttons mt-3">
+                                        <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
                                         <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/dr_details.php?id=<?= $row->purchase_order_id ?>'">Details</button>
-
                                         </div>
                                     </div>
                                 </td>
