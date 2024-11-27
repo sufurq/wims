@@ -92,14 +92,13 @@ $display = $db->display_status();
             </center>
             <br>
             <center>
-                <div class="dropdown-container">
-                    <select class="status-dropdown">
-                        <option value="deleted">Deleted</option>
-                        <option value="pending" selected>Pending</option>
-                        <option value="partial">Partial</option>
-                        <option value="fully-delivered">Fully Delivered</option>
-                    </select>
-                </div>
+            <div class="dropdown-container">
+        <select class="status-dropdown" onchange="window.location.href = this.value;">
+            <option value="dr_status/pending.php" selected>Pending</option>
+            <option value="dr_status/partial.php">Partial</option>
+            <option value="dr_status/fully_delivered.php">Fully Delivered</option>
+        </select>
+    </div>
             </center>
             <br>
 
