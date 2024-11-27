@@ -780,6 +780,11 @@ public function display_status()
     return $p_order; 
 }
 
+//get connection
+public function getConnection() {
+    return $this->conn;
+}
+
 }
 
 
