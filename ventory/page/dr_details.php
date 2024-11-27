@@ -112,7 +112,7 @@ $display3 = $db->display_receipt($id);
             <th>Unit Cost</th>
             <th>Amount</th>
             <th>Action</th>
-        </tr>
+        </tr> 
     </thead>
 
     <tbody>

@@ -2,7 +2,7 @@
 
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
-$display = $db->display_value_all_purchase();
+$display = $db->display_status();
 
 
 ?>
@@ -138,10 +138,10 @@ $display = $db->display_value_all_purchase();
                             <tr>
                                 <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
-                                <td><?= htmlspecialchars($row->description); ?></td>
+                                <td><?= htmlspecialchars($row->supplier_description); ?></td>
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->delivery_date); ?></td>
-                                <td><?= htmlspecialchars($row->status); ?></td>
+                                <td><?= htmlspecialchars($row->delivery_status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
                                 </td>

@@ -703,8 +703,82 @@ public function display_checker($id)
     return $p_order; 
 }
 
+//display status with receipt
 
+public function display_status()
+{
+    $sql = "SELECT 
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.mode_of_procurement,
+        purchase_orders.procurement_number,
+        purchase_orders.procurement_date,
+        purchase_orders.place_of_delivery,
+        purchase_orders.delivery_date,
+        purchase_orders.term_of_delivery,
+        purchase_orders.status AS purchase_order_status,
+        suppliers.description AS supplier_description,
+        suppliers.supplier_id,
+        COALESCE(SUM(pod_items.amount), 0) AS Total_Amount,
+        delivery_receipts.dr_id,
+        delivery_receipts.receipt_number,
+        delivery_receipts.sales_representative,
+        delivery_receipts.checked_by,
+        delivery_receipts.created_at AS dr_created_at,
+        delivery_receipts.status AS delivery_status
+    FROM 
+        purchase_orders
+    LEFT JOIN 
+        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+    LEFT JOIN
+        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+    LEFT JOIN
+        delivery_receipts ON purchase_orders.purchase_order_id = delivery_receipts.purchase_order_id
+    GROUP BY 
+        purchase_orders.purchase_order_id, 
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.mode_of_procurement,
+        purchase_orders.procurement_number,
+        purchase_orders.procurement_date,
+        purchase_orders.place_of_delivery,
+        purchase_orders.delivery_date,
+        purchase_orders.term_of_delivery,
+        purchase_orders.status,
+        suppliers.description,
+        suppliers.supplier_id,
+        delivery_receipts.dr_id,
+        delivery_receipts.receipt_number,
+        delivery_receipts.sales_representative,
+        delivery_receipts.checked_by,
+        delivery_receipts.created_at,
+        delivery_receipts.status;
+    ";
 
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $this->conn->error);
+    }
+
+    if (!$stmt->execute()) {
+        die('Execute error: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    if ($result === false) {
+        die('Get result error: ' . $stmt->error);
+    }
+
+    $p_order = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_order[] = (object) $row;
+    }
+
+    $stmt->close();
+
+    return $p_order; 
+}
 
 }
 
