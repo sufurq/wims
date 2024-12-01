@@ -77,7 +77,7 @@ try {
         <!-- Section for Pending Deliveries -->
         <section class="purchase-order">
             <center>
-                <h2>Pending Deliveries</h2>
+                <h2>Partial Deliveries</h2>
             </center>
             <div class="dropdown-container">
     <select class="status-dropdown" onchange="redirectToPage(this)">
