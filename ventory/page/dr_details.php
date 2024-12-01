@@ -2,7 +2,7 @@
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
-// Check if the ID is set
+
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 } else {
