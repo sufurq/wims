@@ -9,7 +9,7 @@ if (isset($_GET["id"])) {
 } else {
     die("ID NOT SET");
 }
-require_once "./util/dbhelper.php";
+require_once "../util/dbhelper.php";
 $db = new DbHelper();
 $display_data = $db->dr_receive($id);
 

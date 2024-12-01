@@ -2,8 +2,6 @@
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
-<<<<<<< HEAD
-=======
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_status'])) {
     $dr_status = $_POST['dr_status'];
     $dr_id = $_POST['dr_id'];
@@ -30,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_status'])) {
 
     $stmt->close();
 }
->>>>>>> 20d06e7f7a5cf3077baf58c5f939583913daca0e
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
@@ -122,23 +119,12 @@ $displayStatus = $db->display_status($id, $conn);
         <p><strong>Delivery Receipt Number:</strong><?= nl2br(htmlspecialchars($row->receipt_number)); ?></p>
         <p><strong>Sales Representative:</strong><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
         <p><strong>Checked By:</strong><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
-        <form method="POST" action="">
-            <label for="dr_status"><strong>Status:</strong></label>
-            <select name="dr_status" id="dr_status">
-                <option value="Pending" <?= $row->dr_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="Partial" <?= $row->dr_status == 'Partial' ? 'selected' : '' ?>>Partial</option>
-                <option value="Fully Delivered" <?= $row->dr_status == 'Fully Delivered' ? 'selected' : '' ?>>Fully Delivered</option>
-            </select>
-            <input type="hidden" name="dr_id" value="<?= htmlspecialchars($row->dr_id); ?>">
-            <button type="submit" name="confirm_status" class="new-record-btn">Confirm</button>
-        </form>
         <?php break; ?>
     <?php endforeach; ?>
     <hr>
 <?php else: ?>
     <p>No delivery receipts available for this purchase order.</p>
 <?php endif; ?>
-
 <center><h2>DELIVERIES</h2></center>
 <table id="itemsTable">
 <thead>

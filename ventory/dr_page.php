@@ -2,8 +2,7 @@
 
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
-$display = $db->display_value_all_purchase();
-
+$display = $db->display_status();
 
 ?>
 
@@ -92,14 +91,13 @@ $display = $db->display_value_all_purchase();
             </center>
             <br>
             <center>
-                <div class="dropdown-container">
-                    <select class="status-dropdown">
-                        <option value="deleted">Deleted</option>
-                        <option value="pending" selected>Pending</option>
-                        <option value="partial">Partial</option>
-                        <option value="fully-delivered">Fully Delivered</option>
-                    </select>
-                </div>
+            <div class="dropdown-container">
+    <select class="status-dropdown" onchange="redirectToPage(this)">
+        <option value="dr_status/pending.php" <?= basename($_SERVER['PHP_SELF']) === 'pending.php' ? 'selected' : ''; ?>>Pending</option>
+        <option value="dr_status/partial.php" <?= basename($_SERVER['PHP_SELF']) === 'partial.php' ? 'selected' : ''; ?>>Partial</option>
+        <option value="dr_status/fully_delivered.php" <?= basename($_SERVER['PHP_SELF']) === 'fully_delivered.php' ? 'selected' : ''; ?>>Fully Delivered</option>
+    </select>
+</div
             </center>
             <br>
 
@@ -124,7 +122,7 @@ $display = $db->display_value_all_purchase();
                 <table class="custom-table">
                     <thead>
                         <tr>
-                        
+                            <th>P.O. ID</th>
                             <th>P.O. #</th>
                             <th>Supplier</th>
                             <th>Procurement No</th>
@@ -138,13 +136,12 @@ $display = $db->display_value_all_purchase();
                             <tr>
                                 <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
-                                <td><?= htmlspecialchars($row->description); ?></td>
+                                <td><?= htmlspecialchars($row->supplier_description); ?></td>
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->delivery_date); ?></td>
-                                <td><?= htmlspecialchars($row->status); ?></td>
+                                <td><?= htmlspecialchars($row->dr_status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
-                                    <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
                                 </td>
                             </tr>
 
@@ -152,8 +149,8 @@ $display = $db->display_value_all_purchase();
                                 <td colspan="7">
                                     <div class="details-container p-3 bg-light">
                                         <div class="action-buttons mt-3">
+                                        <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
                                         <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/dr_details.php?id=<?= $row->purchase_order_id ?>'">Details</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -189,5 +186,11 @@ $display = $db->display_value_all_purchase();
             }
         }
     </script>
+    <script>
+    function redirectToPage(selectElement) {
+        const selectedPage = selectElement.value;
+        window.location.href = selectedPage;
+    }
+</script>
 </body>
 </html>
