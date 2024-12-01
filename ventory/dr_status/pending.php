@@ -103,37 +103,35 @@ try {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if (!empty($display)) : ?>
-                            <?php foreach ($display as $row) : ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
-                                    <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
-                                    <td><?= htmlspecialchars($row->supplier_description); ?></td>
-                                    <td><?= htmlspecialchars($row->procurement_number); ?></td>
-                                    <td><?= htmlspecialchars($row->delivery_date); ?></td>
-                                    <td><?= htmlspecialchars($row->dr_status); ?></td>
-                                    <td>
-                                        <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
-                                    </td>
-                                </tr>
+    <?php if (!empty($display)) : ?>
+        <?php foreach ($display as $row) : ?>
+            <tr>
+                <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
+                <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
+                <td><?= htmlspecialchars($row->supplier_description); ?></td>
+                <td><?= htmlspecialchars($row->procurement_number); ?></td>
+                <td><?= htmlspecialchars($row->delivery_date); ?></td>
+                <td><?= htmlspecialchars($row->dr_status); ?></td>
+                <td>
+                    <!-- Action Buttons -->
+                    <button class="edit-btn btn btn-warning btn-sm" 
+                        onclick="window.location.href='status_receive.php?id=<?= htmlspecialchars($row->purchase_order_id); ?>'">
+                        Receive
+                    </button>
+                    <button class="details-btn btn btn-info btn-sm" 
+                        onclick="window.location.href='status_details.php?id=<?= htmlspecialchars($row->purchase_order_id); ?>'">
+                        Details
+                    </button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else : ?>
+        <tr>
+            <td colspan="7" style="text-align: center;">No pending deliveries found.</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
 
-                                <tr class="details-row" style="display:none;">
-                                    <td colspan="7">
-                                        <div class="details-container p-3 bg-light">
-                                            <div class="action-buttons mt-3">
-                                                <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='../dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
-                                                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../page/dr_details.php?id=<?= $row->purchase_order_id ?>'">Details</button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        <?php else : ?>
-                            <tr>
-                                <td colspan="7" style="text-align: center;">No pending deliveries found.</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
                 </table>
             </div>
         </section>
