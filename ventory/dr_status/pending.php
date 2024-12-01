@@ -1,49 +1,157 @@
 <?php
+
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
-$conn = $db->getConnection();
+$dr_status = "Pending";
 
-// Get all records with 'Pending' status
-$sql = "SELECT * FROM delivery_receipts WHERE status = 'Pending'";
-$result = $conn->query($sql);
-
+try {
+    $display = $db->display_status2($dr_status);
+} catch (Exception $e) {
+    die("Error fetching data: " . $e->getMessage());
+}
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pending Deliveries</title>
-    <style>
-        /* Add your styles here */
-    </style>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <script defer src="../script/script.js"></script>
 </head>
+
 <body>
+    <!-- Header -->
+    <header>
+        <div class="logo-title">
+            <img src="../img/coclogo.png" width="300" alt="Company Logo">
+        </div>
+    </header>
 
-<h2>Pending Deliveries</h2>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li>Home</li>
+            <li>Groups</li>
+            <li>Users</li>
+        </ul>
+        <div class="profile-section">
+            <img src="../img/avatar.png" alt="Profile" class="profile-avatar">
+            <span>Jcolonia</span>
+        </div>
+    </nav>
 
-<?php if ($result->num_rows > 0): ?>
-    <table>
-        <tr>
-            <th>Delivery Receipt Number</th>
-            <th>Sales Representative</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-        <?php while ($row = $result->fetch_assoc()): ?>
-            <tr>
-                <td><?= htmlspecialchars($row['receipt_number']); ?></td>
-                <td><?= htmlspecialchars($row['sales_representative']); ?></td>
-                <td><?= htmlspecialchars($row['status']); ?></td>
-                <td><button onclick="window.location.href='dr_page.php?id=<?= urlencode($row['dr_id']); ?>'">View Details</button></td>
-            </tr>
-        <?php endwhile; ?>
-    </table>
-<?php else: ?>
-    <p>No pending deliveries found.</p>
-<?php endif; ?>
+    <!-- Main Section -->
+    <div class="container">
+        <aside class="sub-menu">
+            <ul>
+                <li><a href="../pod.php">Dashboard</a></li>
+                <li><a href="../index.php">Purchase Order</a></li>
+                <li><a href="../dr_page.php">Delivery Receipt</a></li>
+                <li><a href="#">POWE</a></li>
+                <li><a href="#">RIS</a></li>
+                <li><a href="#">Audit</a></li>
+                <li><a href="#">Reports</a></li>
+                <hr>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#">Site</a>
+                        <a href="#">Item Category</a>
+                        <a href="#">Item</a>
+                        <a href="#">Supplier</a>
+                        <a href="#">Settings</a>
+                    </div>
+                </div>
+                <hr>
+                <li><a href="#">Log Out</a></li>
+            </ul>
+        </aside>
+
+        <!-- Section for Pending Deliveries -->
+        <section class="purchase-order">
+            <center>
+                <h2>Pending Deliveries</h2>
+            </center>
+            <div class="dropdown-container">
+    <select class="status-dropdown" onchange="redirectToPage(this)">
+        <option value="../dr_status/pending.php" <?= basename($_SERVER['PHP_SELF']) === 'pending.php' ? 'selected' : ''; ?>>Pending</option>
+        <option value="../dr_status/partial.php" <?= basename($_SERVER['PHP_SELF']) === 'partial.php' ? 'selected' : ''; ?>>Partial</option>
+        <option value="../dr_status/fully_delivered.php" <?= basename($_SERVER['PHP_SELF']) === 'fully_delivered.php' ? 'selected' : ''; ?>>Fully Delivered</option>
+    </select>
+</div>
+
+
+            <!-- Table Content -->
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>P.O. ID</th>
+                            <th>P.O. #</th>
+                            <th>Supplier</th>
+                            <th>Procurement No</th>
+                            <th>Delivery Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (!empty($display)) : ?>
+                            <?php foreach ($display as $row) : ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
+                                    <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
+                                    <td><?= htmlspecialchars($row->supplier_description); ?></td>
+                                    <td><?= htmlspecialchars($row->procurement_number); ?></td>
+                                    <td><?= htmlspecialchars($row->delivery_date); ?></td>
+                                    <td><?= htmlspecialchars($row->dr_status); ?></td>
+                                    <td>
+                                        <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
+                                    </td>
+                                </tr>
+
+                                <tr class="details-row" style="display:none;">
+                                    <td colspan="7">
+                                        <div class="details-container p-3 bg-light">
+                                            <div class="action-buttons mt-3">
+                                                <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='../dr_receive.php?id=<?= $row->purchase_order_id; ?>'">Receive</button>
+                                                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../page/dr_details.php?id=<?= $row->purchase_order_id ?>'">Details</button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else : ?>
+                            <tr>
+                                <td colspan="7" style="text-align: center;">No pending deliveries found.</td>
+                            </tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function toggleDetails(button) {
+            const detailsRow = button.closest("tr").nextElementSibling;
+            detailsRow.style.display = detailsRow.style.display === "none" ? "table-row" : "none";
+        }
+    </script>
+     <script>
+    function redirectToPage(selectElement) {
+        const selectedPage = selectElement.value; // Get the selected page's URL
+        window.location.href = selectedPage; // Redirect to the selected page
+    }
+</script>
 
 </body>
+
 </html>

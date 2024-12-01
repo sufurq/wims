@@ -3,22 +3,22 @@ require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_status'])) {
-    $status = $_POST['status'];
+    $dr_status = $_POST['dr_status'];
     $dr_id = $_POST['dr_id'];
 
-    $status = htmlspecialchars(trim($status));
+    $dr_status = htmlspecialchars(trim($dr_status));
     $dr_id = intval($dr_id);
 
     $conn = $db->getConnection();  
 
-    $sql = "UPDATE delivery_receipts SET status = ? WHERE dr_id = ?";
+    $sql = "UPDATE delivery_receipts SET dr_status = ? WHERE dr_id = ?";
     $stmt = $conn->prepare($sql);
 
     if ($stmt === false) {
         die('Prepare failed: ' . $conn->error);
     }
 
-    $stmt->bind_param("si", $status, $dr_id);
+    $stmt->bind_param("si", $dr_status, $dr_id);
 
     if ($stmt->execute()) {
         echo "<p>Status updated successfully.</p>";
@@ -120,11 +120,11 @@ $displayStatus = $db->display_status($id, $conn);
         <p><strong>Sales Representative:</strong><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
         <p><strong>Checked By:</strong><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
         <form method="POST" action="">
-            <label for="status"><strong>Status:</strong></label>
-            <select name="status" id="status">
-                <option value="Pending" <?= $row->delivery_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="Partial" <?= $row->delivery_status == 'Partial' ? 'selected' : '' ?>>Partial</option>
-                <option value="Fully Delivered" <?= $row->delivery_status == 'Fully Delivered' ? 'selected' : '' ?>>Fully Delivered</option>
+            <label for="dr_status"><strong>Status:</strong></label>
+            <select name="dr_status" id="dr_status">
+                <option value="Pending" <?= $row->dr_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
+                <option value="Partial" <?= $row->dr_status == 'Partial' ? 'selected' : '' ?>>Partial</option>
+                <option value="Fully Delivered" <?= $row->dr_status == 'Fully Delivered' ? 'selected' : '' ?>>Fully Delivered</option>
             </select>
             <input type="hidden" name="dr_id" value="<?= htmlspecialchars($row->dr_id); ?>">
             <button type="submit" name="confirm_status" class="new-record-btn">Confirm</button>

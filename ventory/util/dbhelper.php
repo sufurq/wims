@@ -664,6 +664,7 @@ public function display_checker($id)
     delivery_receipts.receipt_number,
     delivery_receipts.sales_representative,
     delivery_receipts.checked_by,
+    delivery_receipts.dr_status,
     delivery_receipts.created_at
     
     FROM 
@@ -726,7 +727,7 @@ public function display_status()
         delivery_receipts.sales_representative,
         delivery_receipts.checked_by,
         delivery_receipts.created_at AS dr_created_at,
-        delivery_receipts.status AS delivery_status
+        delivery_receipts.dr_status AS dr_status
     FROM 
         purchase_orders
     LEFT JOIN 
@@ -753,7 +754,7 @@ public function display_status()
         delivery_receipts.sales_representative,
         delivery_receipts.checked_by,
         delivery_receipts.created_at,
-        delivery_receipts.status;
+        delivery_receipts.dr_status;
     ";
 
     $stmt = $this->conn->prepare($sql);
@@ -784,6 +785,102 @@ public function display_status()
 public function getConnection() {
     return $this->conn;
 }
+
+//display 2
+
+public function display_status2($dr_status = null)
+{
+    $conn = $this->getConnection();
+
+    // Query with JOIN between purchase_orders and delivery_receipts
+    $sql = "
+        SELECT 
+            purchase_orders.purchase_order_id,
+            purchase_orders.purchase_order_number,
+            purchase_orders.order_date,
+            purchase_orders.mode_of_procurement,
+            purchase_orders.procurement_number,
+            purchase_orders.procurement_date,
+            purchase_orders.place_of_delivery,
+            purchase_orders.delivery_date,
+            purchase_orders.term_of_delivery,
+            purchase_orders.status AS purchase_order_status,
+            suppliers.description AS supplier_description,
+            suppliers.supplier_id,
+            COALESCE(SUM(pod_items.amount), 0) AS Total_Amount,
+            delivery_receipts.dr_id,
+            delivery_receipts.receipt_number,
+            delivery_receipts.sales_representative,
+            delivery_receipts.checked_by,
+            delivery_receipts.created_at AS dr_created_at,
+            delivery_receipts.dr_status
+        FROM 
+            purchase_orders
+        LEFT JOIN 
+            pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+        LEFT JOIN
+            suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+        LEFT JOIN
+            delivery_receipts ON purchase_orders.purchase_order_id = delivery_receipts.purchase_order_id
+    ";
+
+    // Append WHERE clause if $dr_status is provided
+    if ($dr_status) {
+        $sql .= " WHERE delivery_receipts.dr_status = ?";
+    }
+
+    $sql .= "
+        GROUP BY 
+            purchase_orders.purchase_order_id,
+            purchase_orders.purchase_order_number,
+            purchase_orders.order_date,
+            purchase_orders.mode_of_procurement,
+            purchase_orders.procurement_number,
+            purchase_orders.procurement_date,
+            purchase_orders.place_of_delivery,
+            purchase_orders.delivery_date,
+            purchase_orders.term_of_delivery,
+            purchase_orders.status,
+            suppliers.description,
+            suppliers.supplier_id,
+            delivery_receipts.dr_id,
+            delivery_receipts.receipt_number,
+            delivery_receipts.sales_representative,
+            delivery_receipts.checked_by,
+            delivery_receipts.created_at,
+            delivery_receipts.dr_status
+    ";
+
+    // Prepare the statement
+    $stmt = $conn->prepare($sql);
+
+    if (!$stmt) {
+        die("Query preparation failed: " . $conn->error);
+    }
+
+    // Bind parameter if $dr_status is provided
+    if ($dr_status) {
+        $stmt->bind_param("s", $dr_status);
+    }
+
+    // Execute the query
+    if (!$stmt->execute()) {
+        die("Query execution failed: " . $stmt->error);
+    }
+
+    // Fetch results
+    $result = $stmt->get_result();
+
+    // Process and return data
+    $data = [];
+    while ($row = $result->fetch_object()) {
+        $data[] = $row;
+    }
+
+    $stmt->close();
+    return $data;
+}
+
 
 }
 

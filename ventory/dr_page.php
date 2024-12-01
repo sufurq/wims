@@ -4,7 +4,6 @@ require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $display = $db->display_status();
 
-
 ?>
 
 <!DOCTYPE html>
@@ -93,12 +92,12 @@ $display = $db->display_status();
             <br>
             <center>
             <div class="dropdown-container">
-        <select class="status-dropdown" onchange="window.location.href = this.value;">
-            <option value="dr_status/pending.php" selected>Pending</option>
-            <option value="dr_status/partial.php">Partial</option>
-            <option value="dr_status/fully_delivered.php">Fully Delivered</option>
-        </select>
-    </div>
+    <select class="status-dropdown" onchange="redirectToPage(this)">
+        <option value="dr_status/pending.php" <?= basename($_SERVER['PHP_SELF']) === 'pending.php' ? 'selected' : ''; ?>>Pending</option>
+        <option value="dr_status/partial.php" <?= basename($_SERVER['PHP_SELF']) === 'partial.php' ? 'selected' : ''; ?>>Partial</option>
+        <option value="dr_status/fully_delivered.php" <?= basename($_SERVER['PHP_SELF']) === 'fully_delivered.php' ? 'selected' : ''; ?>>Fully Delivered</option>
+    </select>
+</div
             </center>
             <br>
 
@@ -140,7 +139,7 @@ $display = $db->display_status();
                                 <td><?= htmlspecialchars($row->supplier_description); ?></td>
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->delivery_date); ?></td>
-                                <td><?= htmlspecialchars($row->delivery_status); ?></td>
+                                <td><?= htmlspecialchars($row->dr_status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
                                 </td>
@@ -187,5 +186,11 @@ $display = $db->display_status();
             }
         }
     </script>
+    <script>
+    function redirectToPage(selectElement) {
+        const selectedPage = selectElement.value;
+        window.location.href = selectedPage;
+    }
+</script>
 </body>
 </html>
