@@ -2,8 +2,7 @@
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
-<<<<<<< HEAD
-=======
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_status'])) {
     $dr_status = $_POST['dr_status'];
     $dr_id = $_POST['dr_id'];
@@ -30,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_status'])) {
 
     $stmt->close();
 }
->>>>>>> 20d06e7f7a5cf3077baf58c5f939583913daca0e
+
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
@@ -165,6 +164,10 @@ $displayStatus = $db->display_status($id, $conn);
                     <td><?= htmlspecialchars(date("m-d-Y", strtotime($row->date_expiry))); ?></td>
                     <td><?= htmlspecialchars($row->unit_prices); ?></td>
                     <td><?= htmlspecialchars($row->amounts); ?></td>
+                    <td>
+                    <a href="../crud_form/edit_pod_items_receipt.php?id=<?= urlencode($row->pod_id); ?>" class="btn btn-primary btn-sm">Update</a>
+                        <a href="../crud_form/edit_pod_items_receipt.php<?= urlencode($row->pod_id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                    </td>
                 </tr>
             <?php endif; ?>
         <?php endforeach; ?>
@@ -174,6 +177,7 @@ $displayStatus = $db->display_status($id, $conn);
         </tr>
     <?php endif; ?>
 </tbody>
+
 </table>
 
 <!-- Pagination Controls -->
