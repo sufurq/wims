@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 22, 2024 at 07:13 AM
+-- Generation Time: Dec 03, 2024 at 06:27 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -159,6 +159,37 @@ INSERT INTO `construction` (`id`, `description`, `category`, `reorder_level`, `r
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `deliveries`
+--
+
+CREATE TABLE `deliveries` (
+  `id` int(11) NOT NULL,
+  `pod_Id` int(11) NOT NULL,
+  `items` varchar(100) NOT NULL,
+  `uom` varchar(100) NOT NULL,
+  `quantity` varchar(100) NOT NULL,
+  `serial_Id` varchar(100) NOT NULL,
+  `date_of_exp` datetime(4) NOT NULL,
+  `unit_cost` varchar(50) NOT NULL,
+  `amount` varchar(50) NOT NULL,
+  `status` enum('Pending','Fullydelivered','Partial','') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `deliveries`
+--
+
+INSERT INTO `deliveries` (`id`, `pod_Id`, `items`, `uom`, `quantity`, `serial_Id`, `date_of_exp`, `unit_cost`, `amount`, `status`) VALUES
+(12, 42, 'Tennis Rackets', 'pcs', '10', '223', '2024-12-19 00:00:00.0000', '10.00', '200.00', 'Pending'),
+(13, 42, 'Tennis Rackets', 'pcs', '10', '23', '2024-12-26 00:00:00.0000', '10.00', '200.00', 'Pending'),
+(14, 43, 'Mortar Mix', 'pcs', '20', '12', '2024-12-28 00:00:00.0000', '90.00', '5400.00', 'Pending'),
+(15, 43, 'Mortar Mix', 'pcs', '20', '12', '2024-12-24 00:00:00.0000', '90.00', '5400.00', 'Pending'),
+(16, 43, 'Mortar Mix', 'pcs', '20', '13', '2024-12-30 00:00:00.0000', '90.00', '5400.00', 'Pending'),
+(17, 44, 'Faucets', 'pcs', '5', '12', '2024-12-18 00:00:00.0000', '3.00', '30.00', 'Pending');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `delivery_receipts`
 --
 
@@ -168,15 +199,17 @@ CREATE TABLE `delivery_receipts` (
   `receipt_number` varchar(50) NOT NULL,
   `sales_representative` varchar(100) NOT NULL,
   `checked_by` varchar(100) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dr_status` enum('Pending','Partial','Fully Delivered') NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `delivery_receipts`
 --
 
-INSERT INTO `delivery_receipts` (`dr_id`, `purchase_order_id`, `receipt_number`, `sales_representative`, `checked_by`, `created_at`) VALUES
-(10, 21, '123-12', 'Shane', 'Micheal', '2024-11-22 05:29:58');
+INSERT INTO `delivery_receipts` (`dr_id`, `purchase_order_id`, `receipt_number`, `sales_representative`, `checked_by`, `created_at`, `dr_status`) VALUES
+(20, 25, '1221', 'Shane', 'Anuada', '2024-12-03 16:54:39', 'Pending'),
+(21, 26, '1221', 'Pude', 'Gamboa', '2024-12-03 17:14:06', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -371,11 +404,9 @@ CREATE TABLE `pod_items` (
 --
 
 INSERT INTO `pod_items` (`id`, `supplier_Id`, `purchase_order_id`, `category`, `item_description`, `unit_of_measure`, `quantity`, `unit_price`, `amount`, `serial_Id`, `date_expiry`) VALUES
-(33, 4, 21, 'Sports Apparel And Accessories', 'Sneakers', 'Pcss', 89, '87.00', '7743.00', 11, '2024-11-04 00:00:00.000000'),
-(34, 4, 21, 'Sports Awards', 'Certificates', '9pcs', 89, '7.00', '623.00', 0, '0000-00-00 00:00:00.000000'),
-(35, 6, 22, 'Sports Awards', 'Trophies', '9pcs', 90, '90.00', '8100.00', 0, '0000-00-00 00:00:00.000000'),
-(36, 4, 21, 'Sports Awards', 'Trophies', '89', 89, '90.00', '8010.00', 0, '0000-00-00 00:00:00.000000'),
-(37, 4, 21, 'Plumbing', 'Faucets', 'hahah', 89, '89.00', '7921.00', 0, '0000-00-00 00:00:00.000000');
+(42, 4, 25, 'Sports Equipment', 'Tennis Rackets', 'pcs', 20, '10.00', '200.00', 0, '0000-00-00 00:00:00.000000'),
+(43, 5, 26, 'Masonry', 'Mortar Mix', 'pcs', 60, '90.00', '5400.00', 0, '0000-00-00 00:00:00.000000'),
+(44, 5, 26, 'Plumbing', 'Faucets', 'pcs', 10, '3.00', '30.00', 0, '0000-00-00 00:00:00.000000');
 
 -- --------------------------------------------------------
 
@@ -394,7 +425,7 @@ CREATE TABLE `purchase_orders` (
   `place_of_delivery` varchar(255) NOT NULL,
   `delivery_date` date NOT NULL,
   `term_of_delivery` varchar(100) DEFAULT NULL,
-  `status` enum('Pending','Cancelled','Accepted','') NOT NULL
+  `status` enum('Pending','Partial','Fully Delivered','Deleted') NOT NULL DEFAULT 'Pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -402,8 +433,8 @@ CREATE TABLE `purchase_orders` (
 --
 
 INSERT INTO `purchase_orders` (`purchase_order_id`, `supplier_id`, `purchase_order_number`, `order_date`, `mode_of_procurement`, `procurement_number`, `procurement_date`, `place_of_delivery`, `delivery_date`, `term_of_delivery`, `status`) VALUES
-(21, 4, '1234', '2024-11-12', '89', '12', '2024-11-27', 'Ronda', '2024-11-13', 'Good quality', 'Pending'),
-(22, 6, '67', '2024-11-12', '90', '456', '2024-11-18', 'Lahug', '2024-11-26', 'High quality', 'Pending');
+(25, 4, '12', '2024-12-09', '1.1 Define requirements', '789', '2024-12-15', 'Ronda', '2024-12-24', 'Delivered at Place', 'Pending'),
+(26, 5, '1.3', '2024-12-11', '111-222', '111', '2024-12-09', 'Liboo', '2024-12-22', 'Good Delivery', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -510,10 +541,10 @@ CREATE TABLE `suppliers` (
 --
 
 INSERT INTO `suppliers` (`supplier_id`, `description`, `abbreviation`, `address`) VALUES
-(1, 'Kugihan', 'kug', 'lorega'),
-(4, 'kfdflkjsafda', 'kjdsmndskvjsa', 'busay'),
-(5, 'Lalamove', 'Ericson', 'Lorege'),
-(6, 'Ongkingking', 'Jeremy', 'Doljo');
+(1, 'Shoppee', 'SHP', 'lorega'),
+(4, 'Lazada', 'laz', 'busay'),
+(5, 'Shein', 'shn', 'Lorege'),
+(6, 'Temu', 'temu', 'Doljo');
 
 -- --------------------------------------------------------
 
@@ -582,6 +613,13 @@ ALTER TABLE `connect_purchase_order_pod`
 --
 ALTER TABLE `construction`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `deliveries`
+--
+ALTER TABLE `deliveries`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pod_Id` (`pod_Id`);
 
 --
 -- Indexes for table `delivery_receipts`
@@ -724,10 +762,16 @@ ALTER TABLE `construction`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `deliveries`
+--
+ALTER TABLE `deliveries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
 -- AUTO_INCREMENT for table `delivery_receipts`
 --
 ALTER TABLE `delivery_receipts`
-  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `dr_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `electrical`
@@ -775,13 +819,13 @@ ALTER TABLE `plumbing`
 -- AUTO_INCREMENT for table `pod_items`
 --
 ALTER TABLE `pod_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `purchase_orders`
 --
 ALTER TABLE `purchase_orders`
-  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `purchase_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `reserved_items`
@@ -830,6 +874,12 @@ ALTER TABLE `connect_purchase_order_pod`
   ADD CONSTRAINT `connect_purchase_order_pod_ibfk_2` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`supplier_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `connect_purchase_order_pod_ibfk_3` FOREIGN KEY (`purchase_order_id`) REFERENCES `reserved_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `connect_purchase_order_pod_ibfk_4` FOREIGN KEY (`pod_id`) REFERENCES `pod_items` (`id`);
+
+--
+-- Constraints for table `deliveries`
+--
+ALTER TABLE `deliveries`
+  ADD CONSTRAINT `deliveries_ibfk_1` FOREIGN KEY (`pod_Id`) REFERENCES `pod_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `delivery_receipts`
