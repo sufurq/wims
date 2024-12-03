@@ -3,6 +3,8 @@ require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
 $edit_receipt = $db->getRecord("pod_items", ["id" => $_GET["id"]]);
+
+$formattedDate = !empty($edit_receipt["date_of_expiry"]) ? date("Y-m-d", strtotime($edit_receipt["date_of_expiry"])) : "";
 ?>
 
 <!DOCTYPE html>
@@ -20,41 +22,39 @@ $edit_receipt = $db->getRecord("pod_items", ["id" => $_GET["id"]]);
     <div class="container mt-5">
         <h2>Edit Pod Item</h2>
         <form action="../logic/edit_pod_items_receipt_side.php" method="post">
-            <input type="hidden" name="id" value="<?php echo $edit_receipt["id"]; ?>">
-
-            <div class="form-group">
-                <label for="item_description">Description</label>
-                <input type="text" id="item_description" name="item_description" class="form-control" value="<?php echo $edit_receipt["item_description"]; ?>" readonly>
+        <input type="hidden" name="pod_Id" value="<?= htmlspecialchars($edit_receipt['id']); ?>">            <div class="form-group">
+                <label for="items">Description</label>
+                <input type="text" id="items" name="items" class="form-control" value="<?= htmlspecialchars($edit_receipt["item_description"]); ?>" readonly>
             </div>
 
             <div class="form-group">
                 <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quantity" class="form-control" value="<?php echo $edit_receipt["quantity"]; ?>" required>
+                <input type="number" id="quantity" name="quantity" class="form-control" value="<?= htmlspecialchars($edit_receipt["quantity"]); ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="unit_of_measure">Unit of Measure</label>
-                <input type="text" id="unit_of_measure" name="unit_of_measure" class="form-control" value="<?php echo $edit_receipt["unit_of_measure"]; ?>" required>
+                <label for="uom">Unit of Measure</label>
+                <input type="text" id="uom" name="uom" class="form-control" value="<?= htmlspecialchars($edit_receipt["unit_of_measure"]); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="serial_Id">Serial ID</label>
-                <input type="number" id="serial_Id" name="serial_Id" class="form-control" value="<?php echo $edit_receipt["serial_Id"]; ?>" required>
+                <input type="number" id="serial_Id" name="serial_Id" class="form-control" value="<?= htmlspecialchars($edit_receipt["serial_Id"]); ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="unit_price">Unit Cost</label>
-                <input type="number" id="unit_price" name="unit_price" class="form-control" value="<?php echo $edit_receipt["unit_price"]; ?>" required>
+                <label for="unit_cost">Unit Cost</label>
+                <input type="number" id="unit_cost" name="unit_cost" step="0.01" class="form-control" value="<?= htmlspecialchars($edit_receipt["unit_price"]); ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="date_expiry">Date of Expiry</label>
-                <input type="date" id="date_expiry" name="date_expiry" class="form-control" value="<?php echo $formattedDate; ?>" required>
+                <label for="date_of_exp">Date of Expiry</label>
+                <input type="date" id="date_of_exp" name="date_of_exp" class="form-control" value="<?= htmlspecialchars($formattedDate); ?>" required>
             </div>
 
             <div class="form-group">
                 <label for="amount">Amount</label>
-                <input type="number" id="amount" name="amount" class="form-control" value="<?php echo $edit_receipt["amount"]; ?>" required>
+                <input type="number" id="amount" name="amount" step="0.01" class="form-control" value="<?= htmlspecialchars($edit_receipt["amount"]); ?>" required>
             </div>
 
             <div class="form-group text-center">

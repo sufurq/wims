@@ -53,7 +53,7 @@ $display = $db->display_value_all_purchase();
                     <li class="selected"><a href="index.php" style="color: white">Purchase Order</a></li>
                 </center>
                 <center>
-                    <li><a href="#">Delivery Receipt</a></li>
+                    <li><a href="dr_page.php">Delivery Receipt</a></li>
                 </center>
                 <center>
                     <li><a href="#">POWE</a></li>
@@ -77,7 +77,7 @@ $display = $db->display_value_all_purchase();
                         <a href="#">Supplier</a>
                         <a href="#">Settings</a>
                     </div>
-                    </div>
+                </div>
                 <hr>
                 <center>
                     <li><a href="#">Log Out</a></li>
@@ -144,7 +144,7 @@ $display = $db->display_value_all_purchase();
                                 <td><?= htmlspecialchars($row->order_date); ?></td>
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->description); ?></td>
-                                <td><?= htmlspecialchars($row->Total_Amount);?></td>
+                                <td><?= htmlspecialchars($row->Total_Amount); ?></td>
                                 <td><?= htmlspecialchars($row->status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
@@ -202,4 +202,5 @@ $display = $db->display_value_all_purchase();
         }
     </script>
 </body>
+
 </html>

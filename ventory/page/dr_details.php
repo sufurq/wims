@@ -2,35 +2,6 @@
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm_status'])) {
-    $dr_status = $_POST['dr_status'];
-    $dr_id = $_POST['dr_id'];
-
-    $dr_status = htmlspecialchars(trim($dr_status));
-    $dr_id = intval($dr_id);
-
-    $conn = $db->getConnection();  
-
-    $sql = "UPDATE delivery_receipts SET dr_status = ? WHERE dr_id = ?";
-    $stmt = $conn->prepare($sql);
-
-    if ($stmt === false) {
-        die('Prepare failed: ' . $conn->error);
-    }
-
-    $stmt->bind_param("si", $dr_status, $dr_id);
-
-    if ($stmt->execute()) {
-        echo "<p>Status updated successfully.</p>";
-    } else {
-        echo "<p>Error updating status: " . $stmt->error . "</p>";
-    }
-
-    $stmt->close();
-}
-
-
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 } else {
@@ -39,9 +10,9 @@ if (isset($_GET["id"])) {
 
 $conn = $db->getConnection();  
 
-$display = $db->display_checker($id, $conn);
-$display3 = $db->display_receipt($id, $conn);
-$displayStatus = $db->display_status($id, $conn);
+$display = $db->display_checker($id);
+$display3 = $db->display_receipt($id);
+
 ?>
 
 <!DOCTYPE html>
@@ -121,16 +92,7 @@ $displayStatus = $db->display_status($id, $conn);
         <p><strong>Delivery Receipt Number:</strong><?= nl2br(htmlspecialchars($row->receipt_number)); ?></p>
         <p><strong>Sales Representative:</strong><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
         <p><strong>Checked By:</strong><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
-        <form method="POST" action="">
-            <label for="dr_status"><strong>Status:</strong></label>
-            <select name="dr_status" id="dr_status">
-                <option value="Pending" <?= $row->dr_status == 'Pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="Partial" <?= $row->dr_status == 'Partial' ? 'selected' : '' ?>>Partial</option>
-                <option value="Fully Delivered" <?= $row->dr_status == 'Fully Delivered' ? 'selected' : '' ?>>Fully Delivered</option>
-            </select>
-            <input type="hidden" name="dr_id" value="<?= htmlspecialchars($row->dr_id); ?>">
-            <button type="submit" name="confirm_status" class="new-record-btn">Confirm</button>
-        </form>
+
         <?php break; ?>
     <?php endforeach; ?>
     <hr>
@@ -149,25 +111,20 @@ $displayStatus = $db->display_status($id, $conn);
         <th>Date Expiry</th>
         <th>Unit Cost</th>
         <th>Amount</th>
-        <th>Action</th>
     </tr> 
 </thead>
 <tbody>
     <?php if (!empty($display3)): ?>
         <?php foreach ($display3 as $row): ?>
-            <?php if (!empty($row->serial_Id) && $row->serial_Id != 0 && !empty($row->date_expiry)): ?>
+            <?php if (!empty($row->delivery_receipts_dr_id) && $row->delivery_serial_id != 0 && !empty($row->delivery_date_of_exp)): ?>
                 <tr>
-                    <td><?= htmlspecialchars($row->item_descriptions); ?></td>
-                    <td><?= htmlspecialchars($row->quantities); ?></td>
-                    <td><?= htmlspecialchars($row->units_of_measure); ?></td>
-                    <td><?= htmlspecialchars($row->serial_Id); ?></td>
-                    <td><?= htmlspecialchars(date("m-d-Y", strtotime($row->date_expiry))); ?></td>
-                    <td><?= htmlspecialchars($row->unit_prices); ?></td>
-                    <td><?= htmlspecialchars($row->amounts); ?></td>
-                    <td>
-                    <a href="../crud_form/edit_pod_items_receipt.php?id=<?= urlencode($row->pod_id); ?>" class="btn btn-primary btn-sm">Update</a>
-                        <a href="../crud_form/edit_pod_items_receipt.php<?= urlencode($row->pod_id); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
-                    </td>
+                    <td><?= htmlspecialchars($row->delivery_items); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_quantity); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_uom); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_serial_id); ?></td>
+                    <td><?= htmlspecialchars(date("m-d-Y", strtotime($row->delivery_date_of_exp))); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_unit_cost); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_amount); ?></td>
                 </tr>
             <?php endif; ?>
         <?php endforeach; ?>

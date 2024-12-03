@@ -135,11 +135,11 @@ $display = $db->display_status();
                         <?php foreach ($display as $row) : ?>
                             <tr>
                                 <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
-                                <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
-                                <td><?= htmlspecialchars($row->supplier_description); ?></td>
-                                <td><?= htmlspecialchars($row->procurement_number); ?></td>
-                                <td><?= htmlspecialchars($row->delivery_date); ?></td>
-                                <td><?= htmlspecialchars($row->dr_status); ?></td>
+                                <td><?= htmlspecialchars($row->purchase_orders_numbers); ?></td>
+                                <td><?= htmlspecialchars($row->suppliers_des); ?></td>
+                                <td><?= htmlspecialchars($row->purchase_orders_pn); ?></td>
+                                <td><?= htmlspecialchars($row->purchase_orders_d_date); ?></td>
+                                <td><?= htmlspecialchars($row->delivery_status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
                                 </td>

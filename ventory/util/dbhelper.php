@@ -545,86 +545,34 @@ WHERE
 
 public function display_receipt($id)
 {
-    $sql = "SELECT DISTINCT
-    
-    po.purchase_order_id,
-    po.supplier_id,
-    po.purchase_order_number,
-    po.order_date,
-    po.mode_of_procurement,
-    po.procurement_number,
-    po.procurement_date,
-    po.place_of_delivery,
-    po.delivery_date,
-    po.term_of_delivery,
-    po.status,
-    pod.id AS pod_id,
-   
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.item_description
-        ELSE NULL
-    END AS item_description,
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.quantity
-        ELSE NULL
-    END AS quantity,
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.unit_price
-        ELSE NULL
-    END AS unit_price,
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.unit_of_measure
-        ELSE NULL
-    END AS unit_of_measure,
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.amount
-        ELSE NULL
-    END AS amount,
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.date_expiry
-        ELSE NULL
-    END AS date_expiry,
-    CASE
-        WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.serial_Id
-        ELSE NULL
-    END AS serial_Id,
-    s.description AS supplier_description,
-    s.abbreviation AS supplier_abbreviation,
-    s.address,
-    GROUP_CONCAT(DISTINCT CASE WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.item_description END ORDER BY pod.item_description SEPARATOR ', ') AS item_descriptions,
-    GROUP_CONCAT(DISTINCT CASE WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.quantity END ORDER BY pod.item_description SEPARATOR ', ') AS quantities,
-    GROUP_CONCAT(DISTINCT CASE WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.unit_price END ORDER BY pod.item_description SEPARATOR ', ') AS unit_prices,
-    GROUP_CONCAT(DISTINCT CASE WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.category END ORDER BY pod.item_description SEPARATOR ', ') AS categories,
-    GROUP_CONCAT(DISTINCT CASE WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.unit_of_measure END ORDER BY pod.item_description SEPARATOR ', ') AS units_of_measure,
-    GROUP_CONCAT(DISTINCT CASE WHEN pod.serial_Id != 0 AND pod.serial_Id IS NOT NULL THEN pod.amount END ORDER BY pod.item_description SEPARATOR ', ') AS amounts
+    $sql = "SELECT 
+    COALESCE(delivery_receipts.dr_id, 'No Receipt') AS delivery_receipts_dr_id,
+    suppliers.supplier_id AS supplier_id,
+    pod_items.quantity AS pod_item_quantity,
+    purchase_orders.purchase_order_id,
+    deliveries.pod_Id AS delivery_pod_id,
+    deliveries.id AS delivery_id,
+    deliveries.items AS delivery_items,
+    deliveries.uom AS delivery_uom,
+    deliveries.quantity AS delivery_quantity,
+    deliveries.serial_Id AS delivery_serial_id,
+    deliveries.date_of_exp AS delivery_date_of_exp,
+    deliveries.unit_cost AS delivery_unit_cost,
+    deliveries.amount AS delivery_amount,
+    deliveries.status AS delivery_status
 FROM 
-    purchase_orders po
+    deliveries
 LEFT JOIN 
-    suppliers s ON po.purchase_order_id = s.supplier_id
+    pod_items ON deliveries.pod_Id = pod_items.id
 LEFT JOIN 
-    pod_items pod ON po.purchase_order_id = pod.purchase_order_id
+    purchase_orders ON pod_items.purchase_order_id = purchase_orders.purchase_order_id
+LEFT JOIN
+    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
 LEFT JOIN 
-    delivery_receipts dr ON po.purchase_order_id = dr.dr_id
+    delivery_receipts ON purchase_orders.purchase_order_id = delivery_receipts.purchase_order_id
 WHERE 
-    po.purchase_order_id = ?
-GROUP BY 
-    po.purchase_order_id, 
-    po.supplier_id,
-    po.purchase_order_number,
-    po.order_date,
-    po.mode_of_procurement,
-    po.procurement_number,
-    po.procurement_date,
-    po.place_of_delivery,
-    po.delivery_date,
-    po.term_of_delivery,
-    po.status,
-    s.description,
-    s.abbreviation,
-    s.address,
-    pod.id 
-ORDER BY 
-    pod.item_description;
+    purchase_orders.purchase_order_id = ?
+
 ";
 
     $stmt = $this->conn->prepare($sql);
@@ -709,58 +657,43 @@ public function display_checker($id)
 public function display_status()
 {
     $sql = "SELECT 
-        purchase_orders.purchase_order_id,
-        purchase_orders.purchase_order_number,
-        purchase_orders.order_date,
-        purchase_orders.mode_of_procurement,
-        purchase_orders.procurement_number,
-        purchase_orders.procurement_date,
-        purchase_orders.place_of_delivery,
-        purchase_orders.delivery_date,
-        purchase_orders.term_of_delivery,
-        purchase_orders.status AS purchase_order_status,
-        suppliers.description AS supplier_description,
-        suppliers.supplier_id,
-        COALESCE(SUM(pod_items.amount), 0) AS Total_Amount,
-        delivery_receipts.dr_id,
-        delivery_receipts.receipt_number,
-        delivery_receipts.sales_representative,
-        delivery_receipts.checked_by,
-        delivery_receipts.created_at AS dr_created_at,
-        delivery_receipts.dr_status AS dr_status
-    FROM 
-        purchase_orders
-    LEFT JOIN 
-        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
-    LEFT JOIN
-        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
-    LEFT JOIN
-        delivery_receipts ON purchase_orders.purchase_order_id = delivery_receipts.purchase_order_id
-    GROUP BY 
-        purchase_orders.purchase_order_id, 
-        purchase_orders.purchase_order_number,
-        purchase_orders.order_date,
-        purchase_orders.mode_of_procurement,
-        purchase_orders.procurement_number,
-        purchase_orders.procurement_date,
-        purchase_orders.place_of_delivery,
-        purchase_orders.delivery_date,
-        purchase_orders.term_of_delivery,
-        purchase_orders.status,
-        suppliers.description,
-        suppliers.supplier_id,
-        delivery_receipts.dr_id,
-        delivery_receipts.receipt_number,
-        delivery_receipts.sales_representative,
-        delivery_receipts.checked_by,
-        delivery_receipts.created_at,
-        delivery_receipts.dr_status;
-    ";
+    suppliers.description AS suppliers_des,
+    pod_items.quantity AS pod_item_quantity,
+    purchase_orders.purchase_order_id,
+    purchase_orders.purchase_order_number AS purchase_orders_numbers,
+    purchase_orders.order_date AS purchase_orders_date,
+    purchase_orders.procurement_number AS purchase_orders_pn,
+    purchase_orders.delivery_date AS purchase_orders_d_date,
+    SUM(deliveries.quantity) AS total_delivery_quantity,
+    CASE
+        WHEN SUM(deliveries.quantity) < pod_items.quantity THEN 'Partial'
+        WHEN SUM(deliveries.quantity) >= pod_items.quantity THEN 'Fully Delivered'
+        ELSE 'Pending'
+    END AS delivery_status
+FROM 
+    purchase_orders
+LEFT JOIN 
+    pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+LEFT JOIN 
+    deliveries ON pod_items.id = deliveries.pod_Id
+LEFT JOIN 
+    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+GROUP BY 
+    purchase_orders.purchase_order_id,
+    purchase_orders.purchase_order_number,
+    purchase_orders.order_date,
+    purchase_orders.procurement_number,
+    purchase_orders.delivery_date,
+    suppliers.description;
+
+";
 
     $stmt = $this->conn->prepare($sql);
     if ($stmt === false) {
         die('MySQL prepare error: ' . $this->conn->error);
     }
+
+    // Bind the parameter for the prepared statement
 
     if (!$stmt->execute()) {
         die('Execute error: ' . $stmt->error);
@@ -780,6 +713,7 @@ public function display_status()
 
     return $p_order; 
 }
+
 
 //get connection
 public function getConnection() {

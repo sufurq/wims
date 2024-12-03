@@ -3,24 +3,29 @@ require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
 if (isset($_POST["submit"])) {
-    $id = $_POST["id"];
-    $item_description = trim($_POST["item_description"]);
-    $quantity = $_POST["quantity"];
-    $unit_of_measure = trim($_POST["unit_of_measure"]);
+    $pod_Id = trim($_POST["pod_Id"]);
+    $items = trim($_POST["items"]);
+    $quantity = trim($_POST["quantity"]);
+    $uom = trim($_POST["uom"]);
     $serial_Id = trim($_POST["serial_Id"]);
-    $date_expiry = $_POST["date_expiry"];
-    $unit_price = $_POST["unit_price"];
-    $amount = $_POST["amount"];
+    $date_of_exp = trim($_POST["date_of_exp"]);
+    $unit_cost = trim($_POST["unit_cost"]);
+    $amount = trim($_POST["amount"]);
 
-    if (!empty($item_description) && !empty($quantity) && !empty($unit_price) && !empty($unit_of_measure) && !empty($amount) && !empty($serial_Id) && !empty($date_expiry)) {
-        $updatePod = $db->updateRecord("pod_items", [
-            "item_description" => $item_description,
+    if (!empty($items) && !empty($quantity) && !empty($uom) && !empty($serial_Id) && !empty($date_of_exp) && !empty($unit_cost) && !empty($amount)) {
+
+        $data = [
+            "pod_Id" => $pod_Id,  
+            "items" => $items,
             "quantity" => $quantity,
-            "unit_price" => $unit_price,
-            "unit_of_measure" => $unit_of_measure,
+            "unit_cost" => $unit_cost,
+            "uom" => $uom,
             "serial_Id" => $serial_Id,
-            "date_expiry" => $date_expiry,
-        ], "id = $id");
+            "date_of_exp" => $date_of_exp,
+            "amount" => $amount
+        ];
+
+        $updatePod = $db->addrecord("deliveries", $data);
 
         if ($updatePod > 0) {
             header("Location: ../dr_receive.php");
