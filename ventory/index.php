@@ -19,12 +19,11 @@ $display1 = $db->display_status();
 </head>
 
 <body>
-    <!-- Header -->
+
     <header>
         <div class="logo-title"><img src="img/coclogo.png" width="300" alt="Company Logo"></div>
     </header>
 
-    <!-- Navigation -->
     <nav class="main-nav">
         <ul>
             <li>Home</li>
@@ -37,9 +36,8 @@ $display1 = $db->display_status();
         </div>
     </nav>
 
-    <!-- Main Section -->
+
     <div class="container">
-        <!-- Sub Menu -->
         <aside class="sub-menu">
             <h1>
                 <center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
@@ -84,7 +82,6 @@ $display1 = $db->display_status();
             </ul>
         </aside>
 
-        <!-- Purchase Order Page -->
         <section class="purchase-order">
             <center>
                 <h2>Purchase Order</h2>
@@ -93,26 +90,25 @@ $display1 = $db->display_status();
 
             <br>
             <form method="GET" action="filter_purchase_orders.php">
-    <div class="dropdown-container">
-        <select class="status-dropdown" name="status" onchange="this.form.submit()">
-            <option value="deleted" <?= isset($_GET['status']) && $_GET['status'] == 'deleted' ? 'selected' : '' ?>>Deleted</option>
-            <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-            <option value="partial" <?= isset($_GET['status']) && $_GET['status'] == 'partial' ? 'selected' : '' ?>>Partial</option>
-            <option value="fully-delivered" <?= isset($_GET['status']) && $_GET['status'] == 'fully-delivered' ? 'selected' : '' ?>>Fully Delivered</option>
-        </select>
-    </div>
-</form>
+                <div class="dropdown-container">
+                    <select class="status-dropdown" name="status" onchange="this.form.submit()">
+                        <option value="deleted" <?= isset($_GET['status']) && $_GET['status'] == 'deleted' ? 'selected' : '' ?>>Deleted</option>
+                        <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                        <option value="partial" <?= isset($_GET['status']) && $_GET['status'] == 'partial' ? 'selected' : '' ?>>Partial</option>
+                        <option value="fully-delivered" <?= isset($_GET['status']) && $_GET['status'] == 'fully-delivered' ? 'selected' : '' ?>>Fully Delivered</option>
+                    </select>
+                </div>
+            </form>
 
 
             <br>
 
-            <!-- Search field for filtering entries -->
             <div class="search-container">
                 <i class="fa fa-search search-icon"></i>
                 <input type="text" class="search-input" placeholder="Search..." id="search-input">
             </div>
 
-            <!-- Dropdown to select the number of entries to display -->
+       
             <div class="dropdown-container-alt">
                 <h4>Show&nbsp;</h4>
                 <select class="status-dropdown-alt">
@@ -138,10 +134,8 @@ $display1 = $db->display_status();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($display as $row) : 
-                            // Default status if no matching status found
-                            $delivery_status = 'Pending'; 
-                            // Check delivery status for this specific purchase order
+                        <?php foreach ($display as $row) :
+                            $delivery_status = 'Pending';
                             foreach ($display1 as $row1) {
                                 if ($row1->purchase_order_id == $row->purchase_order_id) {
                                     $delivery_status = $row1->delivery_status;
@@ -156,13 +150,12 @@ $display1 = $db->display_status();
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->description); ?></td>
                                 <td><?= htmlspecialchars($row->Total_Amount); ?></td>
-                                <td><?= htmlspecialchars($delivery_status); ?></td> <!-- Correct delivery status for this order -->
+                                <td><?= htmlspecialchars($delivery_status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
                                 </td>
                             </tr>
 
-                            <!-- Row for purchase order details -->
                             <tr class="details-row" style="display:none;">
                                 <td colspan="7">
                                     <div class="details-container p-3 bg-light">
@@ -171,7 +164,7 @@ $display1 = $db->display_status();
                                         <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
                                         <p><strong>Date of Delivery:</strong> <?= htmlspecialchars($row->delivery_date); ?></p>
                                         <p><strong>Term of Delivery:</strong> <?= htmlspecialchars($row->term_of_delivery); ?></p>
-                                        <p><strong>Status:</strong> <?= htmlspecialchars($row->status); ?></p>
+                                        <p><strong>Status:</strong> <?= htmlspecialchars($delivery_status); ?></p>
                                         <br>
                                         <div class="action-buttons mt-3">
                                             <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
@@ -186,7 +179,7 @@ $display1 = $db->display_status();
                 </table>
             </div>
 
-            <!-- Pagination -->
+
             <div class="nav-container">
                 <button class="nav-btn" id="prev-btn">Previous</button>
                 <div class="number-box" id="number-display">1</div>
@@ -212,7 +205,7 @@ $display1 = $db->display_status();
         }
     </script>
 
-    
+
 </body>
 
 </html>

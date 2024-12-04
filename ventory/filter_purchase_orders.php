@@ -6,7 +6,7 @@ $db = new DbHelper();
 $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 
 // Fetch the filtered purchase orders
-
+$display1 = $db->display_value_all_purchase();
 $display = $db->status_fully_delivered($status);
 ?>
 
@@ -50,13 +50,27 @@ $display = $db->status_fully_delivered($status);
                 <center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
             </h1>
             <ul>
-                <center><li><a href="pod.php">Dashboard</a></li></center>
-                <center><li class="selected"><a href="index.php" style="color: white">Purchase Order</a></li></center>
-                <center><li><a href="dr_page.php">Delivery Receipt</a></li></center>
-                <center><li><a href="#">POWE</a></li></center>
-                <center><li><a href="#">RIS</a></li></center>
-                <center><li><a href="#">Audit</a></li></center>
-                <center><li><a href="#">Reports</a></li></center>
+                <center>
+                    <li><a href="pod.php">Dashboard</a></li>
+                </center>
+                <center>
+                    <li class="selected"><a href="index.php" style="color: white">Purchase Order</a></li>
+                </center>
+                <center>
+                    <li><a href="dr_page.php">Delivery Receipt</a></li>
+                </center>
+                <center>
+                    <li><a href="#">POWE</a></li>
+                </center>
+                <center>
+                    <li><a href="#">RIS</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Audit</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Reports</a></li>
+                </center>
                 <hr>
                 <div class="dropdown">
                     <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
@@ -69,7 +83,9 @@ $display = $db->status_fully_delivered($status);
                     </div>
                 </div>
                 <hr>
-                <center><li><a href="#">Log Out</a></li></center>
+                <center>
+                    <li><a href="#">Log Out</a></li>
+                </center>
             </ul>
         </aside>
 
@@ -82,7 +98,7 @@ $display = $db->status_fully_delivered($status);
             </a>
             <br>
             <center>
-                <form method="GET" action="index.php">
+                <form method="GET" action="filter_purchase_orders.php">
                     <div class="dropdown-container">
                         <select class="status-dropdown" name="status" onchange="this.form.submit()">
                             <option value="all" <?= $status == 'all' ? 'selected' : '' ?>>All</option>
@@ -109,32 +125,62 @@ $display = $db->status_fully_delivered($status);
                             <th>Actions</th>
                         </tr>
                     </thead>
+                    <?php
+
+                    $totalAmountMap = [];
+                    $detailsMap = [];
+                    foreach ($display1 as $row1) {
+                        $totalAmountMap[$row1->purchase_order_id] = $row1->Total_Amount;
+                        $detailsMap[$row1->purchase_order_id] = $row1;
+                    }
+                    ?>
+
                     <tbody>
-                        <?php foreach ($display as $row): ?>
+                        <?php foreach ($display as $row) : ?>
                             <tr>
                                 <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_orders_numbers); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_orders_date); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_orders_pn); ?></td>
                                 <td><?= htmlspecialchars($row->suppliers_des); ?></td>
-                                <td><?= htmlspecialchars($row->total_delivery_quantity); ?></td>
+                                <td>
+                                    <?= isset($totalAmountMap[$row->purchase_order_id])
+                                        ? htmlspecialchars($totalAmountMap[$row->purchase_order_id])
+                                        : 'N/A'; ?>
+                                </td>
                                 <td><?= htmlspecialchars($row->delivery_status); ?></td>
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
                                 </td>
                             </tr>
+
+                            <!-- Details Row -->
                             <tr class="details-row" style="display:none;">
                                 <td colspan="8">
                                     <div class="details-container p-3 bg-light">
-                                        <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
-                                        <p><strong>Date of Delivery:</strong> <?= htmlspecialchars($row->delivery_date); ?></p>
-                                        <p><strong>Term of Delivery:</strong> <?= htmlspecialchars($row->term_of_delivery); ?></p>
-                                        <p><strong>Status:</strong> <?= htmlspecialchars($row->delivery_status); ?></p>
+                                        <?php if (isset($detailsMap[$row->purchase_order_id])) :
+                                            $detail = $detailsMap[$row->purchase_order_id];
+                                        ?>
+                                            <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($detail->place_of_delivery); ?></p>
+                                            <p><strong>Date of Delivery:</strong> <?= htmlspecialchars($detail->delivery_date); ?></p>
+                                            <p><strong>Term of Delivery:</strong> <?= htmlspecialchars($detail->term_of_delivery); ?></p>
+                                            <p><strong>Status:</strong> <?= htmlspecialchars($row->delivery_status); ?></p>
+                                            <br>
+                                            <div class="action-buttons mt-3">
+                                                <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
+                                                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
+                                                <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
+                                            </div>
+                                        <?php else : ?>
+                                            <p>No details available for this purchase order.</p>
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
+
+
                 </table>
             </div>
 
