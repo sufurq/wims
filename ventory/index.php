@@ -3,7 +3,7 @@
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $display = $db->display_value_all_purchase();
-
+$display1 = $db->display_status();
 
 ?>
 
@@ -16,7 +16,6 @@ $display = $db->display_value_all_purchase();
     <title>Purchase Order Page</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
-    <script defer src="script/script.js"></script>
 </head>
 
 <body>
@@ -93,16 +92,18 @@ $display = $db->display_value_all_purchase();
             <a href="npo.php"><button class="new-record-btn"><b>New Record</b></button></a>
 
             <br>
-            <center>
-                <div class="dropdown-container">
-                    <select class="status-dropdown">
-                        <option value="deleted">Deleted</option>
-                        <option value="pending" selected>Pending</option>
-                        <option value="partial">Partial</option>
-                        <option value="fully-delivered">Fully Delivered</option>
-                    </select>
-                </div>
-            </center>
+            <form method="GET" action="filter_purchase_orders.php">
+    <div class="dropdown-container">
+        <select class="status-dropdown" name="status" onchange="this.form.submit()">
+            <option value="deleted" <?= isset($_GET['status']) && $_GET['status'] == 'deleted' ? 'selected' : '' ?>>Deleted</option>
+            <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+            <option value="partial" <?= isset($_GET['status']) && $_GET['status'] == 'partial' ? 'selected' : '' ?>>Partial</option>
+            <option value="fully-delivered" <?= isset($_GET['status']) && $_GET['status'] == 'fully-delivered' ? 'selected' : '' ?>>Fully Delivered</option>
+        </select>
+    </div>
+</form>
+
+
             <br>
 
             <!-- Search field for filtering entries -->
@@ -137,7 +138,17 @@ $display = $db->display_value_all_purchase();
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($display as $row) : ?>
+                        <?php foreach ($display as $row) : 
+                            // Default status if no matching status found
+                            $delivery_status = 'Pending'; 
+                            // Check delivery status for this specific purchase order
+                            foreach ($display1 as $row1) {
+                                if ($row1->purchase_order_id == $row->purchase_order_id) {
+                                    $delivery_status = $row1->delivery_status;
+                                    break;
+                                }
+                            }
+                        ?>
                             <tr>
                                 <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
                                 <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
@@ -145,12 +156,13 @@ $display = $db->display_value_all_purchase();
                                 <td><?= htmlspecialchars($row->procurement_number); ?></td>
                                 <td><?= htmlspecialchars($row->description); ?></td>
                                 <td><?= htmlspecialchars($row->Total_Amount); ?></td>
-                                <td><?= htmlspecialchars($row->status); ?></td>
+                                <td><?= htmlspecialchars($delivery_status); ?></td> <!-- Correct delivery status for this order -->
                                 <td>
                                     <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
                                 </td>
                             </tr>
 
+                            <!-- Row for purchase order details -->
                             <tr class="details-row" style="display:none;">
                                 <td colspan="7">
                                     <div class="details-container p-3 bg-light">
@@ -165,7 +177,6 @@ $display = $db->display_value_all_purchase();
                                             <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
                                             <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
                                             <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
-
                                         </div>
                                     </div>
                                 </td>
@@ -196,11 +207,12 @@ $display = $db->display_value_all_purchase();
 
         function deleteRecord(id) {
             if (confirm("Are you sure you want to delete this record?")) {
-
                 alert(`Record ID ${id} deleted.`);
             }
         }
     </script>
+
+    
 </body>
 
 </html>

@@ -815,6 +815,78 @@ public function display_status2($dr_status = null)
     return $data;
 }
 
+public function status_fully_delivered($status) {
+    $sql = "SELECT 
+        suppliers.description AS suppliers_des,
+        pod_items.quantity AS pod_item_quantity,
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number AS purchase_orders_numbers,
+        purchase_orders.order_date AS purchase_orders_date,
+        purchase_orders.procurement_number AS purchase_orders_pn,
+        purchase_orders.delivery_date AS purchase_orders_d_date,
+        SUM(deliveries.quantity) AS total_delivery_quantity,
+        CASE
+            WHEN SUM(deliveries.quantity) < pod_items.quantity THEN 'Partial'
+            WHEN SUM(deliveries.quantity) >= pod_items.quantity THEN 'Fully Delivered'
+            WHEN SUM(deliveries.quantity) = 0 THEN 'No Deliveries'
+            ELSE 'Pending'
+        END AS delivery_status
+    FROM 
+        purchase_orders
+    LEFT JOIN 
+        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+    LEFT JOIN 
+        deliveries ON pod_items.id = deliveries.pod_Id
+    LEFT JOIN 
+        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+    GROUP BY 
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        purchase_orders.procurement_number,
+        purchase_orders.delivery_date,
+        suppliers.description
+    HAVING 
+        1=1";
+
+    // Apply status filter
+    if ($status !== 'all') {
+        if ($status === 'fully-delivered') {
+            $sql .= " AND delivery_status = 'Fully Delivered'";
+        } elseif ($status === 'partial') {
+            $sql .= " AND delivery_status = 'Partial'";
+        } elseif ($status === 'pending') {
+            $sql .= " AND delivery_status = 'Pending'";
+        } elseif ($status === 'deleted') {
+            $sql .= " AND delivery_status = 'Deleted'";
+        }
+    }
+
+    $stmt = $this->conn->prepare($sql);
+    if ($stmt === false) {
+        die('MySQL prepare error: ' . $this->conn->error);
+    }
+
+    if (!$stmt->execute()) {
+        die('Execute error: ' . $stmt->error);
+    }
+
+    $result = $stmt->get_result();
+    if ($result === false) {
+        die('Get result error: ' . $stmt->error);
+    }
+
+    $p_order = array();
+    while ($row = $result->fetch_assoc()) {
+        $p_order[] = (object) $row;
+    }
+
+    $stmt->close();
+
+    return $p_order;
+}
+
+
 
 }
 
