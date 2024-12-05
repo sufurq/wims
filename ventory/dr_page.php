@@ -46,13 +46,13 @@ $display = $db->display_status();
             </h1>
             <ul>
                 <center>
-                    <li><a href="pod.php">Dashboard</a></li>
+                    <li><a href="./pod.php">Dashboard</a></li>
                 </center>
                 <center>
-                    <li class="selected"><a href="index.php" style="color: white">Purchase Order</a></li>
+                    <li class="selected"><a href="./index.php" style="color: white">Purchase Order</a></li>
                 </center>
                 <center>
-                    <li><a href="dr_page.php">Delivery Receipt</a></li>
+                    <li><a href="./dr_page.php">Delivery Receipt</a></li>
                 </center>
                 <center>
                     <li><a href="#">POWE</a></li>
@@ -91,13 +91,17 @@ $display = $db->display_status();
             </center>
             <br>
             <center>
-            <div class="dropdown-container">
-    <select class="status-dropdown" onchange="redirectToPage(this)">
-        <option value="dr_status/pending.php" <?= basename($_SERVER['PHP_SELF']) === 'pending.php' ? 'selected' : ''; ?>>Pending</option>
-        <option value="dr_status/partial.php" <?= basename($_SERVER['PHP_SELF']) === 'partial.php' ? 'selected' : ''; ?>>Partial</option>
-        <option value="dr_status/fully_delivered.php" <?= basename($_SERVER['PHP_SELF']) === 'fully_delivered.php' ? 'selected' : ''; ?>>Fully Delivered</option>
-    </select>
-</div
+            <form method="GET" action="./dr_status/filter_status.php">
+                <div class="dropdown-container">
+                    <select class="status-dropdown" name="status" onchange="this.form.submit()">
+                        <option value="deleted" <?= isset($_GET['status']) && $_GET['status'] == 'deleted' ? 'selected' : '' ?>>Deleted</option>
+                        <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
+                        <option value="partial" <?= isset($_GET['status']) && $_GET['status'] == 'partial' ? 'selected' : '' ?>>Partial</option>
+                        <option value="fully-delivered" <?= isset($_GET['status']) && $_GET['status'] == 'fully-delivered' ? 'selected' : '' ?>>Fully Delivered</option>
+                    </select>
+                </div>
+            </form>
+
             </center>
             <br>
 
