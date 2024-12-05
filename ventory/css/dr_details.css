@@ -1,0 +1,72 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f8f9fa;
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Receipt Container */
+.receipt-container {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.receipt-container h2 {
+    text-align: left;
+    color: #2e3d56;
+    margin-bottom: 10px;
+}
+
+.receipt-container p {
+    margin: 10px 0;
+    font-size: 14px;
+}
+
+.receipt-container hr {
+    margin-top: 20px;
+    border: none;
+    border-top: 1px solid #ddd;
+}
+
+/* Table Container */
+.table-container {
+    margin-top: 30px;
+}
+
+.table-container h2 {
+    color: #2e3d56;
+}
+
+/* Table Styles */
+#itemsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+}
+
+#itemsTable thead {
+    background-color: #2e3d56;
+    color: #fff;
+}
+
+#itemsTable th, #itemsTable td {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+#itemsTable tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#itemsTable tbody tr:hover {
+    background-color: #e6f7ff;
+}

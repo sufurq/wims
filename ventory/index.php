@@ -100,25 +100,6 @@ $display1 = $db->display_status();
                 </div>
             </form>
 
-
-            <br>
-
-            <div class="search-container">
-                <i class="fa fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search..." id="search-input">
-            </div>
-
-       
-            <div class="dropdown-container-alt">
-                <h4>Show&nbsp;</h4>
-                <select class="status-dropdown-alt">
-                    <?php for ($i = 1; $i <= 10; $i++) : ?>
-                        <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
-                    <?php endfor; ?>
-                </select>
-                <h4>&nbsp;Entries</h4>
-            </div>
-
             <div class="table-container">
                 <table class="custom-table">
                     <thead>
@@ -177,13 +158,6 @@ $display1 = $db->display_status();
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            </div>
-
-
-            <div class="nav-container">
-                <button class="nav-btn" id="prev-btn">Previous</button>
-                <div class="number-box" id="number-display">1</div>
-                <button class="nav-btn" id="next-btn">Next</button>
             </div>
         </section>
     </div>

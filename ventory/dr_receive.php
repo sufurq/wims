@@ -22,52 +22,84 @@ $display_data = $db->dr_receive($id);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Receipt Form</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f7f7f7;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        label {
-            display: block;
-
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .form-actions {
-            margin-top: 20px;
-        }
-
-        .submit-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .submit-btn:hover {
-            background-color: #45a049;
-        }
-    </style>
+    <title>Delivery Receipt Page</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/dr.css">
+    <script defer src="script/script.js"></script>
 </head>
-
 <body>
-    <h1>New Delivery Receipt</h1>
+    <!-- Header -->
+    <header>
+        <div class="logo-title"><img src="img/coclogo.png" width="300" alt="Company Logo"></div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li>Home</li>
+            <li>Groups</li>
+            <li>Users</li>
+        </ul>
+        <div class="profile-section">
+            <img src="img/avatar.png" alt="Profile" class="profile-avatar">
+            <span>Jcolonia</span>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <div class="container">
+        <!-- Sub Menu -->
+        <aside class="sub-menu">
+            <h1>
+                <center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
+            </h1>
+            <ul>
+                <center>
+                    <li><a href="pod.php">Dashboard</a></li>
+                </center>
+                <center>
+                <li><a href="index.php">Purchase Order</a></li>
+                </center>
+                <center>
+                <li class="selected"><a href="dr_page.php" style="color: white">Delivery Receipt</a></li>
+                </center>
+                <center>
+                    <li><a href="#">POWE</a></li>
+                </center>
+                <center>
+                    <li><a href="#">RIS</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Audit</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Reports</a></li>
+                </center>
+                <hr>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#">Site</a>
+                        <a href="#">Item Category</a>
+                        <a href="#">Item</a>
+                        <a href="#">Supplier</a>
+                        <a href="#">Settings</a>
+                    </div>
+                    </div>
+                <hr>
+                <center>
+                    <li><a href="#">Log Out</a></li>
+                </center>
+            </ul>
+        </aside>
+
+        <!-- Purchase Order Page -->
+        <section class="purchase-order">
+            <center>
+                <h2>New Delivery Receipt</h2>
+            </center>
+
     <form action="./logic/receipt_process.php" method="post">
     <input type="hidden" name="purchase_order_id" value="<?php echo $id; ?>">
         <label for="receipt_number">Receipt Number:</label>
@@ -85,35 +117,6 @@ $display_data = $db->dr_receive($id);
             </div>
         </div>
     </form>
-
-    <table class="table table-striped">
-        <thead class="thead-dark">
-            <tr>
-                <th class="text-center">Item Id</th>
-                <th class="text-center">Description</th>
-                <th class="text-center">PO Details</th>
-                <th class="text-center">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($display_data as $row) : ?>
-                <tr>
-                    <td class="text-center"><?= htmlspecialchars($row->id); ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
-                    <td class="text-center"><?= htmlspecialchars($row->quantity) . " " . htmlspecialchars($row->unit_of_measure); ?></td>
-                    <td class="text-center">
-                        <a href="./crud_form/edit_pod_items_receipt.php?id=<?= urlencode($row->id); ?>" class="btn btn-primary btn-sm">+</a>
-                    </td>
-                </tr>
-
-
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-
-
-    </script>
 </body>
 
 </html>

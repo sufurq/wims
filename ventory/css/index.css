@@ -1,17 +1,22 @@
 .new-record-btn {
-    background-color: #007bff; /* Blue background */
+    background-color: #007bff;
     color: white;
-    position: absolute;
-    left: 1300px;
-    top: 290px;
-    padding: 10px 20px;
+    width: 100%;
+    padding: 15px 0;
     border: none;
-    border-radius: 25px; /* Curved corners */
-    font-size: 16px;
+    border-radius: 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
     font-family: 'Roboto', serif;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    text-decoration: none;
 }
+.new-record-btn {
+    margin-bottom: 20px; 
+}
+
         /* Style for Edit Button */
 .edit-btn {
     background-color: green; /* Orange color */
@@ -238,5 +243,17 @@ button:focus {
     }
 }
 
+/*page*/
 
+.details-row {
+    display: none;
+    transition: all 0.3s ease;
+}
 
+.details-row.active {
+    display: table-row;
+}
+
+.action-buttons button {
+    margin-right: 5px;
+}

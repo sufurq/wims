@@ -22,20 +22,13 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Order Page</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" href="../css/pod.css">
     <script defer src="../script/script.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-
 <body>
     <!-- Header -->
     <header>
-        <div class="logo-title text-center my-3">
-        <img src="../img/coclogo.png" width="300" alt="Company Logo" style="margin-right: 87%;">
-
-        </div>
+        <div class="logo-title"><img src="../img/coclogo.png" width="300" alt="Company Logo"></div>
     </header>
 
     <!-- Navigation -->
@@ -46,56 +39,63 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             <li>Users</li>
         </ul>
         <div class="profile-section">
-        <div style="margin-right:87%; margin-top:10px;" class="logo-title text-center my-3">
-        <span>Jcolonia</span>
+            <img src="../img/avatar.png" alt="Profile" class="profile-avatar">
+            <span>Jcolonia</span>
         </div>
     </nav>
 
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sub Menu -->
-            <aside class="col-md-3 sub-menu bg-light p-3 d-flex flex-column align-items-center">
-                <h1 class="text-center mb-4">
-                    <img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io
-                </h1>
-                <ul class="nav flex-column w-100 text-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../pod.php">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link selected" href="../index.php">Purchase Order</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Delivery Receipt</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">POWE</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">RIS</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Audit</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Reports</a>
-                    </li>
-                    <hr class="w-100">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Master Pages</a>
-                    </li>
-                    <hr class="w-100">
-                    <li class="nav-item">
-                        <a class="nav-link text-danger" href="../logic/logout.php">Log Out</a>
-                    </li>
-                </ul>
-            </aside>
+    <!-- Main Section -->
+    <div class="container">
+        <!-- Sub Menu -->
+        <aside class="sub-menu">
+            <h1>
+                <center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
+            </h1>
+            <ul>
+                <center>
+                    <li><a href="../pod.php">Dashboard</a></li>
+                </center>
+                <center>
+                    <li class="selected"><a href="../index.php" style="color: white">Purchase Order</a></li>
+                </center>
+                <center>
+                    <li><a href="../dr_page.php">Delivery Receipt</a></li>
+                </center>
+                <center>
+                    <li><a href="#">POWE</a></li>
+                </center>
+                <center>
+                    <li><a href="#">RIS</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Audit</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Reports</a></li>
+                </center>
+                <hr>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#">Site</a>
+                        <a href="#">Item Category</a>
+                        <a href="#">Item</a>
+                        <a href="#">Supplier</a>
+                        <a href="#">Settings</a>
+                    </div>
+                </div>
+                <hr>
+                <center>
+                    <li><a href="#">Log Out</a></li>
+                </center>
+            </ul>
+        </aside>
 
             <!-- Content -->
             <div class="col-md-9 content-wrapper p-4">
                 <?php if (!empty($unique_id)) : ?>
                     <button class="details-btn btn btn-info btn-sm w-100 mb-3" style="height: 60px;" onclick="window.location.href='../cnpod.php?supplier_id=<?= urlencode($unique_id[0]->supplier_id); ?>&purchase_order_id=<?= urlencode($unique_id[0]->purchase_order_id); ?>'">
-                    <b>New Record</b>
+                    <b>Add New Item</b>
                     </button>
                 <?php endif; ?>
 
@@ -136,19 +136,8 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
                         </tbody>
                     </table>
                 <?php endif; ?>
-
-               
-    </script>
-
-                <!-- Pagination -->
-                <div class="d-flex justify-content-center mt-3">
-                    <button class="btn btn-outline-secondary" id="prev-btn">Previous</button>
-                    <span class="px-3" id="number-display">1</span>
-                    <button class="btn btn-outline-secondary" id="next-btn">Next</button>
-                </div>
             </div>
         </div>
     </div>
 </body>
-
 </html>
