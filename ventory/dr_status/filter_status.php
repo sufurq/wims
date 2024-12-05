@@ -54,7 +54,7 @@ $display = $db->status_fully_delivered($status);
                     <li><a href="../pod.php">Dashboard</a></li>
                 </center>
                 <center>
-                    <li class="selected"><a href="index.php" style="color: white">Purchase Order</a></li>
+                    <li class="selected"><a href="../index.php" style="color: white">Purchase Order</a></li>
                 </center>
                 <center>
                     <li><a href="../dr_page.php">Delivery Receipt</a></li>

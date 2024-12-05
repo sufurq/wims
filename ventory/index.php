@@ -4,8 +4,10 @@ require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $display = $db->display_value_all_purchase();
 $display1 = $db->display_status();
+include('./search/serach_pod_tables.php');
 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -91,6 +93,7 @@ $display1 = $db->display_status();
             <br>
             <form method="GET" action="filter_purchase_orders.php">
                 <div class="dropdown-container">
+
                     <select class="status-dropdown" name="status" onchange="this.form.submit()">
                         <option value="deleted" <?= isset($_GET['status']) && $_GET['status'] == 'deleted' ? 'selected' : '' ?>>Deleted</option>
                         <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
@@ -103,11 +106,10 @@ $display1 = $db->display_status();
 
             <br>
 
-            <div class="search-container">
-                <i class="fa fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search..." id="search-input">
-            </div>
-
+            <form method="GET" action="">
+    <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+    <button type="submit">Search</button>
+</form>
        
             <div class="dropdown-container-alt">
                 <h4>Show&nbsp;</h4>
