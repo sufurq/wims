@@ -103,90 +103,84 @@ include('./search/serach_pod_tables.php');
                 </div>
             </form>
 
+            <<<<<<< HEAD <br>
 
-            <br>
+                <form method="GET" action="">
+                    <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <button type="submit">Search</button>
+                </form>
 
-            <form method="GET" action="">
-    <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-    <button type="submit">Search</button>
-</form>
-       
-            <div class="dropdown-container-alt">
-                <h4>Show&nbsp;</h4>
-                <select class="status-dropdown-alt">
-                    <?php for ($i = 1; $i <= 10; $i++) : ?>
-                        <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
-                    <?php endfor; ?>
-                </select>
-                <h4>&nbsp;Entries</h4>
-            </div>
+                <div class="dropdown-container-alt">
+                    <h4>Show&nbsp;</h4>
+                    <select class="status-dropdown-alt">
+                        <?php for ($i = 1; $i <= 10; $i++) : ?>
+                            <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
+                        <?php endfor; ?>
+                    </select>
+                    <h4>&nbsp;Entries</h4>
+                </div>
 
-            <div class="table-container">
-                <table class="custom-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>P.O #</th>
-                            <th>Date Created</th>
-                            <th>Procurement No</th>
-                            <th>Supplier</th>
-                            <th>Total Amount</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($display as $row) :
-                            $delivery_status = 'Pending';
-                            foreach ($display1 as $row1) {
-                                if ($row1->purchase_order_id == $row->purchase_order_id) {
-                                    $delivery_status = $row1->delivery_status;
-                                    break;
-                                }
-                            }
-                        ?>
+                =======
+                >>>>>>> 5301d44c2ab462bd356b85291a4120e1967d3683
+                <div class="table-container">
+                    <table class="custom-table">
+                        <thead>
                             <tr>
-                                <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
-                                <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
-                                <td><?= htmlspecialchars($row->order_date); ?></td>
-                                <td><?= htmlspecialchars($row->procurement_number); ?></td>
-                                <td><?= htmlspecialchars($row->description); ?></td>
-                                <td><?= htmlspecialchars($row->Total_Amount); ?></td>
-                                <td><?= htmlspecialchars($delivery_status); ?></td>
-                                <td>
-                                    <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
-                                </td>
+                                <th>ID</th>
+                                <th>P.O #</th>
+                                <th>Date Created</th>
+                                <th>Procurement No</th>
+                                <th>Supplier</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($display as $row) :
+                                $delivery_status = 'Pending';
+                                foreach ($display1 as $row1) {
+                                    if ($row1->purchase_order_id == $row->purchase_order_id) {
+                                        $delivery_status = $row1->delivery_status;
+                                        break;
+                                    }
+                                }
+                            ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($row->purchase_order_id); ?></td>
+                                    <td><?= htmlspecialchars($row->purchase_order_number); ?></td>
+                                    <td><?= htmlspecialchars($row->order_date); ?></td>
+                                    <td><?= htmlspecialchars($row->procurement_number); ?></td>
+                                    <td><?= htmlspecialchars($row->description); ?></td>
+                                    <td><?= htmlspecialchars($row->Total_Amount); ?></td>
+                                    <td><?= htmlspecialchars($delivery_status); ?></td>
+                                    <td>
+                                        <button class="toggle-btn btn btn-info btn-sm" onclick="toggleDetails(this)">+</button>
+                                    </td>
+                                </tr>
 
-                            <tr class="details-row" style="display:none;">
-                                <td colspan="7">
-                                    <div class="details-container p-3 bg-light">
-                                        <p><strong>Procurement Model:</strong> <?= htmlspecialchars($row->mode_of_procurement); ?></p>
-                                        <p><strong>Procurement Date:</strong> <?= htmlspecialchars($row->procurement_date); ?></p>
-                                        <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
-                                        <p><strong>Date of Delivery:</strong> <?= htmlspecialchars($row->delivery_date); ?></p>
-                                        <p><strong>Term of Delivery:</strong> <?= htmlspecialchars($row->term_of_delivery); ?></p>
-                                        <p><strong>Status:</strong> <?= htmlspecialchars($delivery_status); ?></p>
-                                        <br>
-                                        <div class="action-buttons mt-3">
-                                            <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
-                                            <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
-                                            <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
+                                <tr class="details-row" style="display:none;">
+                                    <td colspan="7">
+                                        <div class="details-container p-3 bg-light">
+                                            <p><strong>Procurement Model:</strong> <?= htmlspecialchars($row->mode_of_procurement); ?></p>
+                                            <p><strong>Procurement Date:</strong> <?= htmlspecialchars($row->procurement_date); ?></p>
+                                            <p><strong>Place of Delivery:</strong> <?= htmlspecialchars($row->place_of_delivery); ?></p>
+                                            <p><strong>Date of Delivery:</strong> <?= htmlspecialchars($row->delivery_date); ?></p>
+                                            <p><strong>Term of Delivery:</strong> <?= htmlspecialchars($row->term_of_delivery); ?></p>
+                                            <p><strong>Status:</strong> <?= htmlspecialchars($delivery_status); ?></p>
+                                            <br>
+                                            <div class="action-buttons mt-3">
+                                                <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
+                                                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
+                                                <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-
-
-            <div class="nav-container">
-                <button class="nav-btn" id="prev-btn">Previous</button>
-                <div class="number-box" id="number-display">1</div>
-                <button class="nav-btn" id="next-btn">Next</button>
-            </div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
         </section>
     </div>
 

@@ -46,13 +46,13 @@ $display = $db->display_status();
             </h1>
             <ul>
                 <center>
-                    <li><a href="./pod.php">Dashboard</a></li>
+                    <li><a href="pod.php">Dashboard</a></li>
                 </center>
                 <center>
-                    <li class="selected"><a href="./index.php" style="color: white">Purchase Order</a></li>
+                <li><a href="index.php">Purchase Order</a></li>
                 </center>
                 <center>
-                    <li><a href="./dr_page.php">Delivery Receipt</a></li>
+                <li class="selected"><a href="dr_page.php" style="color: white">Delivery Receipt</a></li>
                 </center>
                 <center>
                     <li><a href="#">POWE</a></li>
@@ -91,36 +91,14 @@ $display = $db->display_status();
             </center>
             <br>
             <center>
-            <form method="GET" action="./dr_status/filter_status.php">
-                <div class="dropdown-container">
-                    <select class="status-dropdown" name="status" onchange="this.form.submit()">
-                        <option value="deleted" <?= isset($_GET['status']) && $_GET['status'] == 'deleted' ? 'selected' : '' ?>>Deleted</option>
-                        <option value="pending" <?= isset($_GET['status']) && $_GET['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                        <option value="partial" <?= isset($_GET['status']) && $_GET['status'] == 'partial' ? 'selected' : '' ?>>Partial</option>
-                        <option value="fully-delivered" <?= isset($_GET['status']) && $_GET['status'] == 'fully-delivered' ? 'selected' : '' ?>>Fully Delivered</option>
-                    </select>
-                </div>
-            </form>
-
+            <div class="dropdown-container">
+    <select class="status-dropdown" onchange="redirectToPage(this)">
+        <option value="dr_status/pending.php" <?= basename($_SERVER['PHP_SELF']) === 'pending.php' ? 'selected' : ''; ?>>Pending</option>
+        <option value="dr_status/partial.php" <?= basename($_SERVER['PHP_SELF']) === 'partial.php' ? 'selected' : ''; ?>>Partial</option>
+        <option value="dr_status/fully_delivered.php" <?= basename($_SERVER['PHP_SELF']) === 'fully_delivered.php' ? 'selected' : ''; ?>>Fully Delivered</option>
+    </select>
+</div
             </center>
-            <br>
-
-            <!-- Search field for filtering entries -->
-            <div class="search-container">
-                <i class="fa fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search..." id="search-input">
-            </div>
-
-            <!-- Dropdown to select the number of entries to display -->
-            <div class="dropdown-container-alt">
-                <h4>Show&nbsp;</h4>
-                <select class="status-dropdown-alt">
-                    <?php for ($i = 1; $i <= 10; $i++) : ?>
-                        <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
-                    <?php endfor; ?>
-                </select>
-                <h4>&nbsp;Entries</h4>
-            </div>
 
             <div class="table-container">
                 <table class="custom-table">
@@ -162,13 +140,6 @@ $display = $db->display_status();
                         <?php endforeach; ?>
                     </tbody>
                 </table>
-            </div>
-
-            <!-- Pagination -->
-            <div class="nav-container">
-                <button class="nav-btn" id="prev-btn">Previous</button>
-                <div class="number-box" id="number-display">1</div>
-                <button class="nav-btn" id="next-btn">Next</button>
             </div>
         </section>
     </div>
