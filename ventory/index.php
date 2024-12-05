@@ -103,7 +103,7 @@ include('./search/serach_pod_tables.php');
                 </div>
             </form>
 
-            <<<<<<< HEAD <br>
+            <br>
 
                 <form method="GET" action="">
                     <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
@@ -120,8 +120,6 @@ include('./search/serach_pod_tables.php');
                     <h4>&nbsp;Entries</h4>
                 </div>
 
-                =======
-                >>>>>>> 5301d44c2ab462bd356b85291a4120e1967d3683
                 <div class="table-container">
                     <table class="custom-table">
                         <thead>
