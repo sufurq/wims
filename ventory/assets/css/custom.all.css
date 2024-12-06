@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.fuchsia{
+    color: #EC1D87;
+}
+
+.bg-fuchsia{
+    background-color: #EC1D87;
+}
+
+.bg-fuchsia-hover:hover {
+    background-color: #EC1D87;
+    color: #FFF;
+}
+
+.lilac{
+    color: #A153A0;
+}
+
+.lilac-hover:hover {
+    color: #A153A0;
+}
+
+.bg-lilac {
+    background-color: #A153A0;
+    color: #FFF;
+}
+
+.bg-lilac-hover:hover {
+    background-color: #A153A0;
+    color: #FFF;
+}
+
+.bg-bubble-gum{
+    background-color: #FFC0CB;
+}
+
+.bubble-gum{
+    color: #FFC0CB;
+}

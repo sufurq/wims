@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
@@ -22,6 +23,7 @@ $display_data = $db->dr_receive($id);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Order Details</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -210,6 +212,11 @@ $display_data = $db->dr_receive($id);
     }
 
     renderTable();
+
+    
 </script>
+<?php require_once "./shared/layout.php"; ?>
+
+
 </body>
 </html>
