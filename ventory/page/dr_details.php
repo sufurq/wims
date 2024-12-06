@@ -117,7 +117,7 @@ $display_data = $db->dr_receive($id);
                     <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
                     <td class="text-center"><?= htmlspecialchars($row->quantity) . " " . htmlspecialchars($row->unit_of_measure); ?></td>
                     <td class="text-center">
-                        <a href="../crud_form/edit_pod_items_receipt.php? urlencode($row->id); ?>" class="btn btn-primary btn-sm">+</a>
+                    <a href="../crud_form/edit_pod_items_receipt.php?id=<?php echo urlencode($row->id); ?>" class="btn btn-primary btn-sm">+</a>
                     </td>
                 </tr>
 

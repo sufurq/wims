@@ -2,10 +2,8 @@
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 
-// Get the status from the dropdown or default to 'all'
 $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 
-// Fetch the filtered purchase orders
 $display1 = $db->display_value_all_purchase();
 $display = $db->status_fully_delivered($status);
 ?>

@@ -168,8 +168,8 @@ $display = $db->status_fully_delivered($status);
                                             <br>
                                             <div class="action-buttons mt-3">
                                                 <button class="edit-btn btn btn-warning btn-sm" onclick="window.location.href='./crud_form/purchase_order_edit.php?purchase_order_id=<?= $row->purchase_order_id; ?>&supplier_id=<?= $row->supplier_id; ?>'">Edit</button>
-                                                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='./page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
-                                                <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='./logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
+                                                <button class="details-btn btn btn-info btn-sm" onclick="window.location.href='../page/view_deatails_purchase_oder.php?id=<?= $row->purchase_order_id ?>'">Details</button>
+                                                <button class="delete-btn btn btn-danger btn-sm" onclick="window.location.href='../logic/sample.delete.php?id=<?= $row->purchase_order_id; ?>'">Delete</button>
                                             </div>
                                         <?php else : ?>
                                             <p>No details available for this purchase order.</p>
