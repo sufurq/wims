@@ -1,92 +1,107 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "inventory_management";
+require_once "../util/dbhelper.php";
+$db = new DbHelper();
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
 } else {
     die("ID NOT SET");
 }
-require_once "./util/dbhelper.php";
-$db = new DbHelper();
-$display_data = $db->dr_receive($id);
 
+$conn = $db->getConnection();  
+
+$display = $db->display_checker($id);
+$display3 = $db->display_receipt($id);
+$display_data = $db->dr_receive($id);
 
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Receipt Form</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Purchase Order Details</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            line-height: 1.6;
             margin: 20px;
-            background-color: #f7f7f7;
         }
-
-        h1 {
-            color: #333;
+        h2 {
+            color: #2e3d56;
         }
-
-        label {
-            display: block;
-
-            width: 100%;
-            padding: 8px;
-            margin: 5px 0 15px;
+        p {
+            margin: 5px 0;
+        }
+        .new-record-btn {
+            background-color: #2e3d56;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .new-record-btn:hover {
+            background-color: #1f2b3a;
+        }
+        hr {
             border: 1px solid #ccc;
-            border-radius: 4px;
+            margin: 20px 0;
         }
-
-        .form-actions {
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .pagination {
             margin-top: 20px;
+            text-align: center;
         }
-
-        .submit-btn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
+        .pagination button {
+            margin: 5px;
+            padding: 8px 16px;
+            background-color: #2e3d56;
             color: white;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
+            border-radius: 5px;
         }
-
-        .submit-btn:hover {
-            background-color: #45a049;
+        .pagination button:hover {
+            background-color: #1f2b3a;
+        }
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
     </style>
 </head>
-
 <body>
-    <h1>New Delivery Receipt</h1>
-    <form action="./logic/receipt_process.php" method="post">
-    <input type="hidden" name="purchase_order_id" value="<?php echo $id; ?>">
-        <label for="receipt_number">Receipt Number:</label>
-        <input type="text" id="receipt_number" name="receipt_number" required>
 
-        <label for="sales_representative">Sales Representative:</label>
-        <input type="text" id="sales_representative" name="sales_representative" required>
+<h2>Delivery Receipts</h2>
+<?php if (!empty($display)): ?>
+    <?php foreach ($display as $row): ?>
+        <p><strong>Delivery Receipt Number:</strong><?= nl2br(htmlspecialchars($row->receipt_number)); ?></p>
+        <p><strong>Sales Representative:</strong><?= nl2br(htmlspecialchars($row->sales_representative)); ?></p>
+        <p><strong>Checked By:</strong><?= nl2br(htmlspecialchars($row->checked_by)); ?></p>
 
-        <label for="checked_by">Checked By:</label>
-        <input type="text" id="checked_by" name="checked_by" required>
+        <?php break; ?>
+    <?php endforeach; ?>
+    <hr>
+<?php else: ?>
+    <p>No delivery receipts available for this purchase order.</p>
+<?php endif; ?>
 
-        <div class="form-group full-width">
-            <div class="form-actions">
-                <button type="submit" name="submit" class="submit-btn">Submit</button>
-            </div>
-        </div>
-    </form>
-
-    <table class="table table-striped">
+<table class="table table-striped">
         <thead class="thead-dark">
             <tr>
                 <th class="text-center">Item Id</th>
@@ -102,7 +117,7 @@ $display_data = $db->dr_receive($id);
                     <td class="text-center"><?= htmlspecialchars($row->item_description); ?></td>
                     <td class="text-center"><?= htmlspecialchars($row->quantity) . " " . htmlspecialchars($row->unit_of_measure); ?></td>
                     <td class="text-center">
-                        <a href="./crud_form/edit_pod_items_receipt.php?id=<?= urlencode($row->id); ?>" class="btn btn-primary btn-sm">+</a>
+                        <a href="../crud_form/edit_pod_items_receipt.php? urlencode($row->id); ?>" class="btn btn-primary btn-sm">+</a>
                     </td>
                 </tr>
 
@@ -112,8 +127,89 @@ $display_data = $db->dr_receive($id);
         </tbody>
     </table>
 
+<center><h2>DELIVERIES</h2></center>
+<table id="itemsTable">
+<thead>
+    <tr>
+        <th>Description</th>
+        <th>Quantity</th>
+        <th>Unit of Measure</th>
+        <th>Serial Id</th>
+        <th>Date Expiry</th>
+        <th>Unit Cost</th>
+        <th>Amount</th>
+    </tr> 
+</thead>
+<tbody>
+    <?php if (!empty($display3)): ?>
+        <?php foreach ($display3 as $row): ?>
+            <?php if (!empty($row->delivery_receipts_dr_id) && $row->delivery_serial_id != 0 && !empty($row->delivery_date_of_exp)): ?>
+                <tr>
+                    <td><?= htmlspecialchars($row->delivery_items); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_quantity); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_uom); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_serial_id); ?></td>
+                    <td><?= htmlspecialchars(date("m-d-Y", strtotime($row->delivery_date_of_exp))); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_unit_cost); ?></td>
+                    <td><?= htmlspecialchars($row->delivery_amount); ?></td>
+                </tr>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="8">No items found for this purchase order.</td>
+        </tr>
+    <?php endif; ?>
+</tbody>
 
-    </script>
+</table>
+
+<!-- Pagination Controls -->
+<div class="pagination" id="paginationControls"></div>
+
+<script>
+    const rowsPerPage = 4;
+    const table = document.getElementById('itemsTable');
+    const tbody = table.querySelector('tbody');
+    const rows = Array.from(tbody.rows);
+    const paginationControls = document.getElementById('paginationControls');
+
+    let currentPage = 1;
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    function renderTable() {
+        tbody.innerHTML = '';
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const rowsToDisplay = rows.slice(start, end);
+
+        rowsToDisplay.forEach(row => tbody.appendChild(row));
+        renderPaginationControls();
+    }
+
+    function renderPaginationControls() {
+        paginationControls.innerHTML = '';
+        const prevButton = document.createElement('button');
+        prevButton.textContent = 'Previous';
+        prevButton.disabled = currentPage === 1;
+        prevButton.addEventListener('click', () => {
+            currentPage--;
+            renderTable();
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.textContent = 'Next';
+        nextButton.disabled = currentPage === totalPages;
+        nextButton.addEventListener('click', () => {
+            currentPage++;
+            renderTable();
+        });
+
+        paginationControls.appendChild(prevButton);
+        paginationControls.appendChild(nextButton);
+    }
+
+    renderTable();
+</script>
 </body>
-
 </html>
