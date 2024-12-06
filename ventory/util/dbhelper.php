@@ -726,6 +726,7 @@ public function getConnection() {
 public function status_fully_delivered($status) {
     $sql = "SELECT 
         suppliers.description AS suppliers_des,
+        suppliers.supplier_id,
         pod_items.quantity AS pod_item_quantity,
         purchase_orders.purchase_order_id,
         purchase_orders.purchase_order_number AS purchase_orders_numbers,
