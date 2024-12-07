@@ -313,5 +313,6 @@ $value = $db->getRecord("purchase_orders", ["purchase_order_id" => $_GET["purcha
             $('#amount').val(amount.toFixed(2));
         });
     </script>
+    <?php require_once "../shared/layout.php";?>
 </body>
 </html>

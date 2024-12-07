@@ -36,7 +36,7 @@ $pod = $db->getRecord("pod_items", ["id" => $_GET["id"]]);
 
 
 
-include "../shared/navbar_admin.php";
+include "../admin/navbar_admin.php";
 ?>
 
 <!DOCTYPE html>
@@ -132,6 +132,7 @@ include "../shared/navbar_admin.php";
     </script>
 
     <script src="../assets/js/calculate_amount.js"></script>
+    <?php require_once "../shared/layout.php";?>
 </body>
 
 </html>

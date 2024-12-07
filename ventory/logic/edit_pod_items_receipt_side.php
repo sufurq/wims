@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
@@ -27,16 +28,18 @@ if (isset($_POST["submit"])) {
 
         $updatePod = $db->addrecord("deliveries", $data);
 
-        if ($updatePod > 0) {
-            header("Location: ../dr_receive.php");
+        if ($updatePod) {
+            $_SESSION["m"] = "Add Successful";
+            header("Location: ../crud_form/edit_pod_items_receipt.php?id=" . $pod_Id);
             exit();
         } else {
-            header("Location: ../?m=NO+DATA+WAS+UPDATED");
+            $_SESSION["m"] = "Error No Data was Added!";
+            header("Location: ../crud_form/edit_pod_items_receipt.php?id=" . $pod_Id);
             exit();
         }
     } else {
-        header("Location: ../?m=PLEASE+FILL+ALL+FIELDS");
-        exit();
+        $_SESSION["m"] = "Error Please Fill All Fields!";
+        header("Location: ../crud_form/edit_pod_items_receipt.php?id=" . $pod_Id);        exit();
     }
 }
 ?>

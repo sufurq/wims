@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
@@ -207,6 +208,7 @@ $display = $db->status_fully_delivered($status);
             }
         }
     </script>
+    <?php require_once "../shared/layout.php"; ?>
 </body>
 
 </html>

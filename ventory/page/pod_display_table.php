@@ -94,6 +94,7 @@
     </table>
 
     <script type="module" src="../assets/js/index_ventory.js"></script>
+    <?php require_once "../shared/layout.php";?>
 
 </body>
 

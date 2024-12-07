@@ -139,5 +139,6 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             </div>
         </div>
     </div>
+    <?php require_once "../shared/layout.php";?>
 </body>
 </html>

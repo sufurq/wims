@@ -1,4 +1,5 @@
-<?php 
+<?php
+session_start();
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 
@@ -63,5 +64,6 @@ $formattedDate = !empty($edit_receipt["date_of_expiry"]) ? date("Y-m-d", strtoti
             </div>
         </form>
     </div>
+    <?php require_once "../shared/layout.php" ?>
 </body>
 </html>

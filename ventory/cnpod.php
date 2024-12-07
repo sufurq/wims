@@ -316,5 +316,7 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             $('#amount').val(amount.toFixed(2));
         });
     </script>
+ 
+
 </body>
 </html>

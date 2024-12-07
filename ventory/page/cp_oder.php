@@ -63,5 +63,6 @@ $suppliers = $db->getAllRecords("suppliers");
     <input type="submit" name="submit" value="Submit">
 </form>
 
+<?php require_once "../shared/layout.php";?>
 </body>
 </html>
