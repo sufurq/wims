@@ -215,8 +215,6 @@ $display_data = $db->dr_receive($id);
 
     
 </script>
-<?php require_once "./shared/layout.php"; ?>
-
-
+<?php require_once "../shared/layout.php"; ?>
 </body>
 </html>

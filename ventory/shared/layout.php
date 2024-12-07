@@ -5,8 +5,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE-edge, chrome=1.0, safari">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="../assets/img/logo/yt_final1.png" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/sweetalert2.min.css">
     <link rel="stylesheet" href="../assets/css/loader.css">
     <?php echo (isset($styles)) ? $styles : "" ?>

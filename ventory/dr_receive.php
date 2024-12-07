@@ -1,4 +1,5 @@
 <?php
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -117,6 +118,6 @@ $display_data = $db->dr_receive($id);
             </div>
         </div>
     </form>
+    <?php require_once "./shared/layout.php" ?>
 </body>
-
 </html>
