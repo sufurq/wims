@@ -1,4 +1,6 @@
 <?php
+
+require_once "../shared/layout.php";
 $conn = new mysqli("localhost", "root", "", "inventory_management");
 
 if ($conn->connect_error) {
@@ -61,7 +63,7 @@ include "../admin/navbar_admin.php";
             <button class="close-btn" onclick="closeForm()">&#10006;</button>
 
             <h2>Edit Purchase Order Details</h2>
-            <form action="../logic/edit.php" method="post">
+            <form action="../logic/edit_pod_dashboard.php" method="post">
                 <div class="form-grid">
                     <input type="hidden" name="id" value="<?php echo $pod["id"] ?>">
 
@@ -77,7 +79,7 @@ include "../admin/navbar_admin.php";
 
                     <div class="form-group">
                         <label for="item">Item:</label>
-                        <select id="item" name="item" required>
+                        <select id="item" name="item" value="<?php echo $pod["item_description"] ?>" required>
                             <option value="">Select Item</option>
                         </select>
                     </div>
@@ -132,7 +134,6 @@ include "../admin/navbar_admin.php";
     </script>
 
     <script src="../assets/js/calculate_amount.js"></script>
-    <?php require_once "../shared/layout.php";?>
 </body>
 
 </html>

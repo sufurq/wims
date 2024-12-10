@@ -6,6 +6,7 @@ $status = isset($_GET['status']) ? $_GET['status'] : 'all';
 
 $display1 = $db->display_value_all_purchase();
 $display = $db->status_fully_delivered($status);
+include('./search/searc_receipt.php');
 ?>
 
 <!DOCTYPE html>
@@ -108,6 +109,12 @@ $display = $db->status_fully_delivered($status);
                     </div>
                 </form>
             </center>
+
+            <form method="GET" action="">
+                    <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <button type="submit">Search</button>
+                </form>
+
             <br>
             <div class="table-container">
                 <table class="custom-table">

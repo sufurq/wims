@@ -109,17 +109,7 @@ include('./search/serach_pod_tables.php');
                     <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                     <button type="submit">Search</button>
                 </form>
-
-                <div class="dropdown-container-alt">
-                    <h4>Show&nbsp;</h4>
-                    <select class="status-dropdown-alt">
-                        <?php for ($i = 1; $i <= 10; $i++) : ?>
-                            <option value="<?= $i ?>" <?= $i == 10 ? 'selected' : '' ?>><?= $i ?></option>
-                        <?php endfor; ?>
-                    </select>
-                    <h4>&nbsp;Entries</h4>
-                </div>
-
+    
                 <div class="table-container">
                     <table class="custom-table">
                         <thead>

@@ -69,39 +69,40 @@ class DbHelper
         $this->conn->query($sql);
         return $this->conn->affected_rows;
     }
-//Update single
-public function updateRecord($table, $args)
-{
-    $keys = array_keys($args);
-    $values = array_values($args);
-    $condition = [];
-    for ($i = 1; $i < count($keys); $i++) {
-        $condition[] = "`" . $keys[$i] . "` = '" . $values[$i] . "'";
+    //Update single
+    public function updateRecord($table, $args)
+    {
+        $keys = array_keys($args);
+        $values = array_values($args);
+        $condition = [];
+        for ($i = 1; $i < count($keys); $i++) {
+            $condition[] = "`" . $keys[$i] . "` = '" . $values[$i] . "'";
+        }
+        $sets = implode(", ", $condition);
+        $sql = "UPDATE `$table` SET $sets WHERE `$keys[0]` = '$values[0]'";
+        $this->conn->query($sql);
+        return $this->conn->affected_rows;
     }
-    $sets = implode(", ", $condition);
-    $sql = "UPDATE `$table` SET $sets WHERE `$keys[0]` = '$values[0]'";
-    $this->conn->query($sql);
-    return $this->conn->affected_rows;
-}
 
-    
-//update more data 
 
-public function updateRecords($table, $data, $conditions) {
-    $set = [];
-    foreach ($data as $column => $value) {
-        $set[] = "$column = ?";
+    //update more data 
+
+    public function updateRecords($table, $data, $conditions)
+    {
+        $set = [];
+        foreach ($data as $column => $value) {
+            $set[] = "$column = ?";
+        }
+        $set = implode(", ", $set);
+        $query = "UPDATE $table SET $set WHERE $conditions";
+
+        // Prepare and execute the query
+        $stmt = $this->conn->prepare($query);
+        $params = array_values($data);
+        $stmt->bind_param(str_repeat("s", count($params)), ...$params);
+
+        return $stmt->execute();
     }
-    $set = implode(", ", $set);
-    $query = "UPDATE $table SET $set WHERE $conditions";
-    
-    // Prepare and execute the query
-    $stmt = $this->conn->prepare($query);
-    $params = array_values($data);
-    $stmt->bind_param(str_repeat("s", count($params)), ...$params);
-    
-    return $stmt->execute();
-}
 
     //pagenion
 
@@ -165,13 +166,13 @@ public function updateRecords($table, $data, $conditions) {
         return $row['count'];
     }
 
-  
-// view_details_purchase_order
+
+    // view_details_purchase_order
 
 
-public function view_details_purchase_order($id)
-{
-    $sql = "
+    public function view_details_purchase_order($id)
+    {
+        $sql = "
         SELECT 
             pod_items.category,
             pod_items.item_description,
@@ -189,38 +190,38 @@ public function view_details_purchase_order($id)
         pod_items.supplier_id = ?
     ";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        // Bind the parameter (it should be an integer based on your earlier context)
+        $stmt->bind_param("i", $id); // Corrected the parameter type to "i" for integer
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
-    
-    // Bind the parameter (it should be an integer based on your earlier context)
-    $stmt->bind_param("i", $id); // Corrected the parameter type to "i" for integer
-
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-    
-    $result = $stmt->get_result();
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-    
-    $stmt->close();
-
-    return $p_order; 
-}
 
 
 
 
-//Display value
+    //Display value
 
 
-public function display_value_all_purchase()
-{
-    $sql = "SELECT 
+    public function display_value_all_purchase()
+    {
+        $sql = "SELECT 
     purchase_orders.purchase_order_id,
     purchase_orders.purchase_order_number,
     purchase_orders.order_date,
@@ -256,108 +257,109 @@ GROUP BY
 
     ";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
+    //Deletion for purchase_order
+
+    public function deleteRecordFromPOders($id)
+    {
+        $sql = "DELETE FROM purchase_orders WHERE purchase_order_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return "Record with supplier ID $id successfully deleted.";
+        } else {
+            $stmt->close();
+            return "Error deleting record with supplier ID $id: " . $this->conn->error;
+        }
     }
 
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
+    // Update Purchase_order
+
+    public function Edit_purchase_order($purchase_order_id, $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery)
+    {
+
+        $sql = "UPDATE purchase_orders SET purchase_order_number = ?, order_date = ?, mode_of_procurement = ?, procurement_number = ?, procurement_date = ?, place_of_delivery = ?, delivery_date = ?, term_of_delivery = ? WHERE purchase_order_id = ?";
+        $stmt = $this->conn->prepare($sql);
+
+        // Adjust the bind_param types if necessary based on your database schema
+        $stmt->bind_param("ssssssssi", $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery, $purchase_order_id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
     }
 
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
+    //Delete Record POD Items.
+
+    public function deletePod_Items($id)
+    {
+        $sql = " DELETE FROM pod_items WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return "Return with supplier ID $id: successfully deleted";
+        } else {
+            $stmt->close();
+            return "Error deleting record with pod_items ID $id: " . $this->conn->error;
+        }
+    }
+    // Update Pod_items_Dashboard
+
+    public function edit_pod_items($id, $category, $item, $quantity, $unit_price, $unit_of_measure, $amount)
+    {
+        $sql = "UPDATE pod_items SET category = ?, item_description = ?, quantity = ?, unit_price = ?, unit_of_measure = ?, amount = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+
+        $stmt->bind_param("sssdidsi", $category, $item, $quantity, $unit_price, $unit_of_measure, $amount, $id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
     }
 
-    $stmt->close();
-
-    return $p_order; 
-}
-
-//Deletion for purchase_order
-
-public function deleteRecordFromPOders($id) {
-    $sql = "DELETE FROM purchase_orders WHERE purchase_order_id = ?";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->bind_param("i", $id);
-
-    if ($stmt->execute()) {
-        $stmt->close();
-        return "Record with supplier ID $id successfully deleted.";
-    } else {
-        $stmt->close();
-        return "Error deleting record with supplier ID $id: " . $this->conn->error;
-    }
-
-    
-}
-
-// Update Purchase_order
-
-public function Edit_purchase_order($purchase_order_id, $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery) {
-  
-    $sql = "UPDATE purchase_orders SET purchase_order_number = ?, order_date = ?, mode_of_procurement = ?, procurement_number = ?, procurement_date = ?, place_of_delivery = ?, delivery_date = ?, term_of_delivery = ? WHERE purchase_order_id = ?";
-    $stmt = $this->conn->prepare($sql);
-
-    // Adjust the bind_param types if necessary based on your database schema
-    $stmt->bind_param("ssssssssi", $purchase_order_number, $order_date, $mode_of_procurement, $procurement_number, $procurement_date, $place_of_delivery, $delivery_date, $term_of_delivery, $purchase_order_id);
-
-    if ($stmt->execute()) {
-        $stmt->close();
-        return true;
-    } else {
-        $stmt->close();
-        return false;
-    }
-}
-
-//Delete Record POD Items.
-
-public function deletePod_Items($id) {
-    $sql = " DELETE FROM pod_items WHERE id = ?";
-    $stmt = $this->conn->prepare($sql);
-    $stmt-> bind_param("i", $id);
-
-    if ($stmt->execute()) {
-        $stmt->close();
-        return "Return with supplier ID $id: successfully deleted";
-    } else {
-        $stmt->close();
-        return "Error deleting record with pod_items ID $id: ". $this->conn->error;
-    }
-    
-}
-// Update Pod_items_Dashboard
-
-public function edit_pod_items($id, $category, $item, $quantity, $unit_price, $unit_of_measure, $amount) {
-    $sql = "UPDATE pod_items SET category = ?, item_description = ?, quantity = ?, unit_price = ?, unit_of_measure = ?, amount = ? WHERE id = ?";
-    $stmt = $this->conn->prepare($sql);
-
-    $stmt->bind_param("sssdidsi", $category, $item, $quantity, $unit_price, $unit_of_measure, $amount, $id);
-
-    if ($stmt->execute()) {
-        $stmt->close();
-        return true;
-    } else {
-        $stmt->close();
-        return false;
-    }
-}
 
 
 
+    //DISPLAY ALL POD_ITEMS
 
-//DISPLAY ALL POD_ITEMS
-
-public function display_all_pod_items_where_supplier_id($purchase_order_id)
-{
-    $sql = "SELECT 
+    public function display_all_pod_items_where_supplier_id($purchase_order_id)
+    {
+        $sql = "SELECT 
     purchase_orders.purchase_order_id,
     purchase_orders.purchase_order_number,
     purchase_orders.order_date,
@@ -386,37 +388,37 @@ LEFT JOIN
 WHERE 
     purchase_orders.purchase_order_id = ?";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $purchase_order_id);
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    $stmt->bind_param("i", $purchase_order_id);
+    // get_purchase_order_details
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order; 
-}
-
-// get_purchase_order_details
-
-public function get_purchase_order_details($id)
-{
-    $sql = "SELECT 
+    public function get_purchase_order_details($id)
+    {
+        $sql = "SELECT 
         purchase_orders.purchase_order_id,
         purchase_orders.purchase_order_number,
         purchase_orders.order_date,
@@ -453,39 +455,39 @@ public function get_purchase_order_details($id)
     WHERE 
         purchase_orders.purchase_order_id = ?";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    $stmt->bind_param("i", $id);
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order; 
-}
+    // Query for the Receive page
 
 
-// Query for the Receive page
-
-
-public function dr_receive($id)
-{
-    $sql = "SELECT 
+    public function dr_receive($id)
+    {
+        $sql = "SELECT 
     purchase_orders.purchase_order_id,
     purchase_orders.purchase_order_number,
     purchase_orders.order_date,
@@ -515,37 +517,37 @@ LEFT JOIN
 WHERE 
     purchase_orders.purchase_order_id = ?";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    $stmt->bind_param("i", $id);
+    //Join_for_display_receipt
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order; 
-}
-
-//Join_for_display_receipt
-
-public function display_receipt($id)
-{
-    $sql = "SELECT 
+    public function display_receipt($id)
+    {
+        $sql = "SELECT 
     COALESCE(delivery_receipts.dr_id, 'No Receipt') AS delivery_receipts_dr_id,
     suppliers.supplier_id AS supplier_id,
     pod_items.quantity AS pod_item_quantity,
@@ -575,37 +577,37 @@ WHERE
 
 ";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    $stmt->bind_param("i", $id);
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order; 
-}
-
-
-// display_receipt_checker
-public function display_checker($id)
-{
-    $sql = "SELECT 
+    // display_receipt_checker
+    public function display_checker($id)
+    {
+        $sql = "SELECT 
 
     delivery_receipts.dr_id,
     delivery_receipts.purchase_order_id,
@@ -626,37 +628,37 @@ public function display_checker($id)
     WHERE purchase_orders.purchase_order_id = ?
 ";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        $stmt->bind_param("i", $id);
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    $stmt->bind_param("i", $id);
+    //display status with receipt
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order; 
-}
-
-//display status with receipt
-
-public function display_status()
-{
-    $sql = "SELECT 
+    public function display_status()
+    {
+        $sql = "SELECT 
     suppliers.description AS suppliers_des,
     pod_items.quantity AS pod_item_quantity,
     purchase_orders.purchase_order_id,
@@ -664,6 +666,7 @@ public function display_status()
     purchase_orders.order_date AS purchase_orders_date,
     purchase_orders.procurement_number AS purchase_orders_pn,
     purchase_orders.delivery_date AS purchase_orders_d_date,
+    
     SUM(deliveries.quantity) AS total_delivery_quantity,
     CASE
         WHEN SUM(deliveries.quantity) < pod_items.quantity THEN 'Partial'
@@ -688,43 +691,45 @@ GROUP BY
 
 ";
 
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        // Bind the parameter for the prepared statement
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
 
-    // Bind the parameter for the prepared statement
 
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
+    //get connection
+    public function getConnection()
+    {
+        return $this->conn;
     }
 
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order; 
-}
-
-
-//get connection
-public function getConnection() {
-    return $this->conn;
-}
 
 
 
-
-public function status_fully_delivered($status) {
-    $sql = "SELECT 
+    public function status_fully_delivered($status)
+    {
+        $sql = "SELECT 
         suppliers.description AS suppliers_des,
         suppliers.supplier_id,
         pod_items.quantity AS pod_item_quantity,
@@ -758,43 +763,41 @@ public function status_fully_delivered($status) {
     HAVING 
         1=1";
 
-    // Apply status filter
-    if ($status !== 'all') {
-        if ($status === 'fully-delivered') {
-            $sql .= " AND delivery_status = 'Fully Delivered'";
-        } elseif ($status === 'partial') {
-            $sql .= " AND delivery_status = 'Partial'";
-        } elseif ($status === 'pending') {
-            $sql .= " AND delivery_status = 'Pending'";
-        } elseif ($status === 'deleted') {
-            $sql .= " AND delivery_status = 'Deleted'";
+        // Apply status filter
+        if ($status !== 'all') {
+            if ($status === 'fully-delivered') {
+                $sql .= " AND delivery_status = 'Fully Delivered'";
+            } elseif ($status === 'partial') {
+                $sql .= " AND delivery_status = 'Partial'";
+            } elseif ($status === 'pending') {
+                $sql .= " AND delivery_status = 'Pending'";
+            } elseif ($status === 'deleted') {
+                $sql .= " AND delivery_status = 'Deleted'";
+            }
         }
+
+        $stmt = $this->conn->prepare($sql);
+        if ($stmt === false) {
+            die('MySQL prepare error: ' . $this->conn->error);
+        }
+
+        if (!$stmt->execute()) {
+            die('Execute error: ' . $stmt->error);
+        }
+
+        $result = $stmt->get_result();
+        if ($result === false) {
+            die('Get result error: ' . $stmt->error);
+        }
+
+        $p_order = array();
+        while ($row = $result->fetch_assoc()) {
+            $p_order[] = (object) $row;
+        }
+
+        $stmt->close();
+
+        return $p_order;
     }
-
-    $stmt = $this->conn->prepare($sql);
-    if ($stmt === false) {
-        die('MySQL prepare error: ' . $this->conn->error);
-    }
-
-    if (!$stmt->execute()) {
-        die('Execute error: ' . $stmt->error);
-    }
-
-    $result = $stmt->get_result();
-    if ($result === false) {
-        die('Get result error: ' . $stmt->error);
-    }
-
-    $p_order = array();
-    while ($row = $result->fetch_assoc()) {
-        $p_order[] = (object) $row;
-    }
-
-    $stmt->close();
-
-    return $p_order;
-}
-
-
 
 }

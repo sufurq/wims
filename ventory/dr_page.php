@@ -3,6 +3,7 @@
 require_once "./util/dbhelper.php";
 $db = new DbHelper();
 $display = $db->display_status();
+include('./search/searc_receipt.php');
 
 ?>
 
@@ -103,6 +104,11 @@ $display = $db->display_status();
                 </div>
             </form>
             </center>
+
+            <form method="GET" action="">
+                    <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <button type="submit">Search</button>
+                </form>
 
             <div class="table-container">
                 <table class="custom-table">
