@@ -800,4 +800,59 @@ GROUP BY
         return $p_order;
     }
 
+    // Query for Report page
+    
+    public function report($id)
+    {
+        $sql = "SELECT 
+        pod_items.id,
+        pod_items.unit_of_measure,
+        pod_items.quantity,
+        pod_items.amount,
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        suppliers.description,
+        suppliers.supplier_id,
+        COALESCE(SUM(pod_items.amount), 0) AS Total_Amount
+    FROM 
+        purchase_orders
+    LEFT JOIN 
+        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+    LEFT JOIN
+        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+        WHERE purchase_orders.purchase_order_id = ?
+    GROUP BY 
+        purchase_orders.purchase_order_id, 
+        purchase_orders.purchase_order_number,
+        suppliers.description,
+        suppliers.supplier_id;
+
+    ";
+
+$stmt = $this->conn->prepare($sql);
+if ($stmt === false) {
+    die('MySQL prepare error: ' . $this->conn->error);
+}
+
+$stmt->bind_param("i", $id);
+
+if (!$stmt->execute()) {
+    die('Execute error: ' . $stmt->error);
+}
+
+$result = $stmt->get_result();
+if ($result === false) {
+    die('Get result error: ' . $stmt->error);
+}
+
+$p_order = array();
+while ($row = $result->fetch_assoc()) {
+    $p_order[] = (object) $row;
+}
+
+$stmt->close();
+
+return $p_order;
+}
 }
