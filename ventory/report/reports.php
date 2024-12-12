@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
                         <option value="" disabled>No Purchase Orders Found</option>
                     <?php endif; ?>
                 </select>
-                <button type="submit">Submit</button>
+                <button type="submit">Search</button>
             </form>
 
             <?php if (!empty($display)) : ?>
@@ -130,6 +130,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
                                     <td><?= htmlspecialchars($row->unit_of_measure); ?></td>
                                     <td><?= htmlspecialchars($row->quantity); ?></td>
                                     <td><?= htmlspecialchars($row->amount); ?></td>
+                                    <td><?= htmlspecialchars($row->uom);?></td>
+                                    <td><?= htmlspecialchars($row->del_quantity);?></td>
+                                    <td><?= htmlspecialchars($row->del_amount);?></td>
+                                    <td><?php echo "7878";?> </td>
+                                    <td> <?= htmlspecialchars($row->delivery_status);?></td> 
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
