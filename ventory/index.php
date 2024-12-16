@@ -106,8 +106,17 @@ include('./search/serach_pod_tables.php');
             <br>
 
                 <form method="GET" action="">
-                    <input type="text" name="search" placeholder="Search Purchase Orders" value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                    <button type="submit">Search</button>
+                    <div class="search-container">
+                        <i class="fa fa-search search-icon"></i>
+                        <input 
+                            type="text" 
+                            name="search" 
+                            class="search-input" 
+                            placeholder="Search Purchase Orders" 
+                            value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>"
+                        >
+                        <button type="submit">Search</button>
+                    </div>
                 </form>
     
                 <div class="table-container">

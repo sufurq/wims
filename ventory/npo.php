@@ -60,161 +60,61 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" conteant="width=device-width, initial-scale=1.0">
     <title>New Purchase Order</title>
-    <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/npo.css">
     <link rel="stylesheet" href="css/form.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<style>
-        /* General Body Styles */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #fff;
-    color: #333;
-    margin: 0;
-    padding: 0;
-}
-
-/* Form Container */
-.form-container {
-    max-width: 1200px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-}
-
-/* Form Title */
-.form-container h2 {
-    font-size: 24px;
-    color: #2e3d56;
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-/* Form Layout */
-.form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-    align-items: start;
-}
-
-/* Form Group */
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 8px;
-}
-
-.form-group input,
-.form-group select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #f9f9f9;
-    transition: border-color 0.3s ease;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #4a6fa1;
-    background-color: #fff;
-}
-
-/* Full Width Fields */
-.form-group.full-width {
-    grid-column: 1 / 3;
-}
-
-/* Button Styles */
-.form-actions {
-    margin-top: 20px;
-    text-align: left;
-}
-
-.form-actions button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.form-actions .submit-btn {
-    background-color: #4a6fa1;
-    transition: background-color 0.3s ease;
-}
-
-.form-actions .submit-btn:hover {
-    background-color: #2e3d56;
-}
-
-.form-actions .back-btn {
-    background-color: #d9534f;
-}
-
-.form-actions .back-btn:hover {
-    background-color: #c9302c;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .form-group.full-width {
-        grid-column: 1 / 2;
-    }
-}
-/* Close Button Styles */
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    background-color: transparent;
-    border: none;
-    font-size: 24px;
-    color: #333;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.close-btn:hover {
-    color: #d9534f;
-}
-
-/* Relative position for the form-container */
-.form-container {
-    position: relative;
-    max-width: 1200px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-}
-
-.sub-menu a {
-  text-decoration: none; /* Remove underline */
-}
-</style>
 <body>
+    <!-- Header -->
+    <header>
+        <div class="logo-title"><img src="img/coclogo.png" width="300" alt="Company Logo"></div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li>Home</li>
+            <li>Groups</li>
+            <li>Users</li>
+        </ul>
+        <div class="profile-section">
+            <img src="img/avatar.png" alt="Profile" class="profile-avatar">
+            <span>Jcolonia</span>
+        </div>
+    </nav>
+
+    <!-- Main Section -->
+    <div class="container">
+        <!-- Sub Menu -->
+        <aside class="sub-menu">
+            <h1><center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
+            <ul>
+                <center><li><a href="dashboard.php">Dashboard</a></li></center>
+                <center><li class="selected"><a href="index.php" style="color: white;">Purchase Order</a></li></center>
+                <center><li><a href="delivery_receipt.php">Delivery Receipt</a></li></center>
+                <center><li><a href="powe.php">POWE</a></li></center>
+                <center><li><a href="ris.php">RIS</a></li></center>
+                <center><li><a href="audit.php">Audit</a></li></center>
+                <center><li><a href="reports.php">Reports</a></li></center>
+                <hr>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                    <div class="dropdown-content">
+                        <a href="#">Site</a>
+                        <a href="#">Item Category</a>
+                        <a href="#">Item</a>
+                        <a href="#">Supplier</a>
+                        <a href="#">Settings</a>
+                    </div>
+                    </div>
+                <hr>
+                <center><li><a href="log_out.php">Log Out</a></li></center>
+            </ul>
+        </aside>
+
     <!-- Main Section -->
     <div class="container">
         <section class="purchase-order">
@@ -225,7 +125,7 @@ body {
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="supplier">Supplier:</label>
-                            <select id="supplier" name="supplier_id" required>
+                            <select id="supplier" name="supplier_id" required style="font-family: 'Roboto', serif;">
                                 <option value="">Select Supplier</option>
                                 <?php while ($supplier = $suppliers_result->fetch_assoc()): ?>
                                     <option value="<?php echo htmlspecialchars($supplier['supplier_id']); ?>">
@@ -236,35 +136,35 @@ body {
                         </div>
                         <div class="form-group">
                             <label for="po-number">P.O #:</label>
-                            <input type="text" id="po-number" name="po_number" placeholder="Enter P.O number" required>
+                            <input type="text" id="po-number" name="po_number" placeholder="Enter P.O number" required style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="po-date">Date:</label>
-                            <input type="date" id="po-date" name="po_date" required>
+                            <input type="date" id="po-date" name="po_date" required style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="procurement-model">Model of Procurement:</label>
-                            <input type="text" id="procurement-model" name="procurement_model" placeholder="Enter procurement model">
+                            <input type="text" id="procurement-model" name="procurement_model" placeholder="Enter procurement model" style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="procurement-number">Procurement #:</label>
-                            <input type="text" id="procurement-number" name="procurement_number" placeholder="Enter procurement number">
+                            <input type="text" id="procurement-number" name="procurement_number" placeholder="Enter procurement number" style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="procurement-date">Procurement Date:</label>
-                            <input type="date" id="procurement-date" name="procurement_date">
+                            <input type="date" id="procurement-date" name="procurement_date" style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="delivery-place">Place Of Delivery:</label>
-                            <input type="text" id="delivery-place" name="delivery_place" placeholder="Enter place of delivery">
+                            <input type="text" id="delivery-place" name="delivery_place" placeholder="Enter place of delivery" style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="delivery-date">Date Of Delivery:</label>
-                            <input type="date" id="delivery-date" name="delivery_date">
+                            <input type="date" id="delivery-date" name="delivery_date" style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group">
                             <label for="terms-delivery">Terms of Delivery:</label>
-                            <input type="text" id="terms-delivery" name="terms_delivery" placeholder="Enter terms of delivery">
+                            <input type="text" id="terms-delivery" name="terms_delivery" placeholder="Enter terms of delivery" style="font-family: 'Roboto', serif;">
                         </div>
                         <div class="form-group full-width">
                             <div class="form-actions">

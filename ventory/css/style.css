@@ -652,3 +652,5 @@ bottom:-30px;
   .larger-font {
     font-size: 20px; /* Adjust the font size as needed */
 }
+
+@import url('npo.css');
