@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
                                     <td><?= htmlspecialchars($row->uom);?></td>
                                     <td><?= htmlspecialchars($row->del_quantity);?></td>
                                     <td><?= htmlspecialchars($row->del_amount);?></td>
-                                    <td><?php echo "7878";?> </td>
+                                    <td><?= htmlspecialchars($row->remaining_quantity);?></td>
                                     <td> <?= htmlspecialchars($row->delivery_status);?></td> 
                                 </tr>
                             <?php endforeach; ?>

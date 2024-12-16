@@ -805,37 +805,43 @@ GROUP BY
     public function report($id)
     {
         $sql = "SELECT 
-		deliveries.quantity AS del_quantity,
-        deliveries.amount AS del_amount,
-        deliveries.uom,
-        pod_items.id,
-        pod_items.unit_of_measure,
-        pod_items.quantity,
-        pod_items.amount,
-        purchase_orders.purchase_order_id,
-        purchase_orders.purchase_order_number,
-        purchase_orders.order_date,
-        suppliers.description,
-        suppliers.supplier_id,
-        COALESCE(SUM(pod_items.amount), 0) AS Total_Amount,
-        sum(deliveries.quantity) AS total_delivery_quantity,
-        CASE
-            WHEN SUM(deliveries.quantity) < pod_items.quantity THEN 'Partial'
-            WHEN SUM(deliveries.quantity) >= pod_items.quantity THEN 'Fully Delivered'
-            WHEN SUM(deliveries.quantity) = 0 THEN 'No Deliveries'
-            ELSE 'Pending'
-        END AS delivery_status
-        
-    FROM 
-        purchase_orders
-    LEFT JOIN 
-        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
-    LEFT JOIN
-        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
-    LEFT JOIN 
-        deliveries ON pod_items.id = deliveries.pod_Id
-        
-        WHERE purchase_orders.purchase_order_id = ?
+    deliveries.quantity AS del_quantity,
+    deliveries.amount AS del_amount,
+    deliveries.uom,
+    pod_items.id,
+    pod_items.unit_of_measure,
+    pod_items.quantity,
+    pod_items.amount,
+    purchase_orders.purchase_order_id,
+    purchase_orders.purchase_order_number,
+    purchase_orders.order_date,
+    suppliers.description,
+    suppliers.supplier_id,
+    COALESCE(SUM(pod_items.amount) OVER (PARTITION BY pod_items.id), 0) AS Total_Amount, -- Total amount by pod item
+    SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) AS total_delivery_quantity, -- Total delivery quantity per pod item
+    (pod_items.quantity - COALESCE(SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id), 0)) AS remaining_quantity, -- Subtraction by row
+    CASE
+        WHEN SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) < pod_items.quantity THEN 'Partial'
+        WHEN SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) >= pod_items.quantity THEN 'Fully Delivered'
+        WHEN SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) = 0 THEN 'No Deliveries'
+        ELSE 'Pending'
+    END AS delivery_status
+FROM 
+    purchase_orders
+LEFT JOIN 
+    pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+LEFT JOIN
+    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+LEFT JOIN 
+    deliveries ON pod_items.id = deliveries.pod_Id
+WHERE 
+    purchase_orders.purchase_order_id = ?
+GROUP BY 
+    deliveries.quantity, deliveries.amount, deliveries.uom, 
+    pod_items.id, pod_items.unit_of_measure, pod_items.quantity, pod_items.amount, 
+    purchase_orders.purchase_order_id, purchase_orders.purchase_order_number, 
+    purchase_orders.order_date, suppliers.description, suppliers.supplier_id;
+
 
     ";
 
