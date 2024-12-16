@@ -32,3 +32,38 @@ th {
 .sub-header-green {
     background-color: #dff0d8;
 }
+
+@media print {
+    /* Hide navigation and other elements for a clean print */
+    header, nav, .sub-menu, .container .profile-section, .table-container {
+        display: none;
+    }
+
+    /* Make the table fill the page */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    /* Style table for better print appearance */
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Optional: Set a larger font size for print */
+    body {
+        font-size: 12pt;
+    }
+
+    /* Optional: Adjust page breaks */
+    body {
+        margin: 0;
+        padding: 0;
+    }
+}

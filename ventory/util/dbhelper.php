@@ -805,43 +805,50 @@ GROUP BY
     public function report($id)
     {
         $sql = "SELECT 
-    deliveries.quantity AS del_quantity,
-    deliveries.amount AS del_amount,
-    deliveries.uom,
-    pod_items.id,
-    pod_items.unit_of_measure,
-    pod_items.quantity,
-    pod_items.amount,
-    purchase_orders.purchase_order_id,
-    purchase_orders.purchase_order_number,
-    purchase_orders.order_date,
-    suppliers.description,
-    suppliers.supplier_id,
-    COALESCE(SUM(pod_items.amount) OVER (PARTITION BY pod_items.id), 0) AS Total_Amount, -- Total amount by pod item
-    SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) AS total_delivery_quantity, -- Total delivery quantity per pod item
-    (pod_items.quantity - COALESCE(SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id), 0)) AS remaining_quantity, -- Subtraction by row
-    CASE
-        WHEN SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) < pod_items.quantity THEN 'Partial'
-        WHEN SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) >= pod_items.quantity THEN 'Fully Delivered'
-        WHEN SUM(deliveries.quantity) OVER (PARTITION BY pod_items.id) = 0 THEN 'No Deliveries'
-        ELSE 'Pending'
-    END AS delivery_status
-FROM 
-    purchase_orders
-LEFT JOIN 
-    pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
-LEFT JOIN
-    suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
-LEFT JOIN 
-    deliveries ON pod_items.id = deliveries.pod_Id
-WHERE 
-    purchase_orders.purchase_order_id = ?
-GROUP BY 
-    deliveries.quantity, deliveries.amount, deliveries.uom, 
-    pod_items.id, pod_items.unit_of_measure, pod_items.quantity, pod_items.amount, 
-    purchase_orders.purchase_order_id, purchase_orders.purchase_order_number, 
-    purchase_orders.order_date, suppliers.description, suppliers.supplier_id;
-
+        deliveries.quantity AS del_quantity,
+        deliveries.amount AS del_amount,
+        deliveries.uom,
+        pod_items.id,
+        pod_items.unit_of_measure,
+        pod_items.quantity,
+        pod_items.amount,
+        purchase_orders.purchase_order_id,
+        purchase_orders.purchase_order_number,
+        purchase_orders.order_date,
+        suppliers.description,
+        suppliers.supplier_id,
+        pod_item_totals.Total_Amount, -- Total amount by pod item
+        pod_item_totals.total_delivery_quantity, -- Total delivery quantity per pod item
+        (pod_items.quantity - pod_item_totals.total_delivery_quantity) AS remaining_quantity, -- Subtraction by row
+        CASE
+            WHEN pod_item_totals.total_delivery_quantity < pod_items.quantity THEN 'Partial'
+            WHEN pod_item_totals.total_delivery_quantity >= pod_items.quantity THEN 'Fully Delivered'
+            WHEN pod_item_totals.total_delivery_quantity = 0 THEN 'No Deliveries'
+            ELSE 'Pending'
+        END AS delivery_status
+    FROM 
+        purchase_orders
+    LEFT JOIN 
+        pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+    LEFT JOIN
+        suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+    LEFT JOIN 
+        deliveries ON pod_items.id = deliveries.pod_Id
+    LEFT JOIN (
+        SELECT 
+            pod_items.id AS pod_id,
+            COALESCE(SUM(pod_items.amount), 0) AS Total_Amount,
+            COALESCE(SUM(deliveries.quantity), 0) AS total_delivery_quantity
+        FROM 
+            pod_items
+        LEFT JOIN 
+            deliveries ON pod_items.id = deliveries.pod_Id
+        GROUP BY 
+            pod_items.id
+    ) pod_item_totals ON pod_items.id = pod_item_totals.pod_id
+    WHERE 
+        purchase_orders.purchase_order_id = ?
+    
 
     ";
 
@@ -869,6 +876,66 @@ while ($row = $result->fetch_assoc()) {
 $stmt->close();
 
 return $p_order;
+}
+// printing excel
+
+public function display_value_all_purchas($purchaseOrderId) {
+    
+    if (!$this->conn) {
+        die("Database connection failed.");
+    }
+
+    $sql = "SELECT 
+                purchase_orders.purchase_order_id,
+                purchase_orders.purchase_order_number,
+                purchase_orders.order_date,
+                purchase_orders.mode_of_procurement,
+                purchase_orders.procurement_number,
+                purchase_orders.procurement_date,
+                purchase_orders.place_of_delivery,
+                purchase_orders.delivery_date,
+                purchase_orders.term_of_delivery,
+                purchase_orders.status,
+                suppliers.description,
+                suppliers.supplier_id,
+                COALESCE(SUM(pod_items.amount), 0) AS Total_Amount
+            FROM 
+                purchase_orders
+            LEFT JOIN 
+                pod_items ON purchase_orders.purchase_order_id = pod_items.purchase_order_id
+            LEFT JOIN
+                suppliers ON purchase_orders.supplier_id = suppliers.supplier_id
+            WHERE
+                purchase_orders.purchase_order_id = ?  -- Added condition for the purchaseOrderId
+            GROUP BY 
+                purchase_orders.purchase_order_id, 
+                purchase_orders.purchase_order_number,
+                purchase_orders.order_date,
+                purchase_orders.mode_of_procurement,
+                purchase_orders.procurement_number,
+                purchase_orders.procurement_date,
+                purchase_orders.place_of_delivery,
+                purchase_orders.delivery_date,
+                purchase_orders.term_of_delivery,
+                purchase_orders.status,
+                suppliers.description,
+                suppliers.supplier_id;";
+
+    $stmt = $this->conn->prepare($sql);
+    
+    if ($stmt === false) {
+        die("SQL preparation failed: " . $this->conn->error);
+    }
+
+    $stmt->bind_param("i", $purchaseOrderId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc();
+    } else {
+        return null;
+    }
 }
 
 
