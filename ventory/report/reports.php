@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "../util/dbhelper.php";
 $db = new DbHelper();
 $purchaseOrders = $db->getAllRecords("purchase_orders");
@@ -51,12 +52,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
             </h1>
             <ul>
                 <li><a href="pod.php">Dashboard</a></li>
-                <li class="selected"><a href="index.php" style="color: white;">Purchase Order</a></li>
-                <li><a href="dr_page.php">Delivery Receipt</a></li>
+                <li class="selected"><a href="../index.php" style="color: white;">Purchase Order</a></li>
+                <li><a href="../dr_page.php">Delivery Receipt</a></li>
                 <li><a href="#">POWE</a></li>
                 <li><a href="#">RIS</a></li>
                 <li><a href="#">Audit</a></li>
-                <li><a href="#">Reports</a></li>
+                <li><a href="reports.php">Reports</a></li>
                 <hr>
                 <div class="dropdown">
                     <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
@@ -145,6 +146,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
             <?php endif; ?>
         </section>
     </div>
+
+    <?php require_once "../shared/layout.php"?>
 </body>
 
 </html>
