@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
 
     <header>
         <div class="logo-title">
-            <img src="img/coclogo.png" width="300" alt="Company Logo">
+            <img src="../img/coclogo.png" width="300" alt="Company Logo">
         </div>
     </header>
 
@@ -41,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
             <li>Users</li>
         </ul>
         <div class="profile-section">
-            <img src="img/avatar.png" alt="Profile" class="profile-avatar">
+            <img src="../img/avatar.png" alt="Profile" class="profile-avatar">
             <span>Jcolonia</span>
         </div>
     </nav>
@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
     <div class="container">
         <aside class="sub-menu">
             <h1>
-                <center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
+                <center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
             </h1>
             <ul>
                 <li><a href="pod.php">Dashboard</a></li>
@@ -94,7 +94,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
     </select>
     <button type="submit">Search</button>
 </form>
-
+<br>
 
             <?php if (!empty($display)) : ?>
                 <div style="text-align: center; margin: 20px;">
