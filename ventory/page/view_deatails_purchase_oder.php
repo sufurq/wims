@@ -91,6 +91,11 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
             </ul>
         </aside>
 
+        <section class="purchase-order">
+            <center>
+                <h2>Purchase Order Details</h2>
+            </center>
+
             <!-- Content -->
             <div class="col-md-9 content-wrapper p-4">
                 <?php if (!empty($unique_id)) : ?>
