@@ -23,9 +23,7 @@ $display = $db->status_fully_delivered($status);
 <body>
     <!-- Header -->
     <header>
-        <div class="logo-title">
-            <img src="img/coclogo.png" width="300" alt="Company Logo">
-        </div>
+        <div class="logo-title"><img src="../img/coclogo.png" width="300" alt="Company Logo"></div>
     </header>
 
     <!-- Navigation -->
@@ -36,7 +34,7 @@ $display = $db->status_fully_delivered($status);
             <li>Users</li>
         </ul>
         <div class="profile-section">
-            <img src="img/avatar.png" alt="Profile" class="profile-avatar">
+            <img src="../img/avatar.png" alt="Profile" class="profile-avatar">
             <span>Jcolonia</span>
         </div>
     </nav>
@@ -46,7 +44,7 @@ $display = $db->status_fully_delivered($status);
         <!-- Sub Menu -->
         <aside class="sub-menu">
             <h1>
-                <center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
+                <center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
             </h1>
             <ul>
                 <center>
@@ -92,7 +90,7 @@ $display = $db->status_fully_delivered($status);
             <center>
                 <h2>Purchase Order</h2>
             </center>
-            <a href="npo.php">
+            <a href="../npo.php">
                 <button class="new-record-btn"><b>New Record</b></button>
             </a>
             <br>

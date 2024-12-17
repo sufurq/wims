@@ -211,13 +211,13 @@ $purchase_order_id = isset($_GET['purchase_order_id']) ? $_GET['purchase_order_i
         <aside class="sub-menu">
             <h1><center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
             <ul>
-                <center><li><a href="dashboard.php">Dashboard</a></li></center>
+                <center><li><a href="pod.php">Dashboard</a></li></center>
                 <center><li class="selected"><a href="index.php">Purchase Order</a></li></center>
-                <center><li><a href="delivery_receipt.php">Delivery Receipt</a></li></center>
+                <center><li><a href="dr_page.php">Delivery Receipt</a></li></center>
                 <center><li><a href="powe.php">POWE</a></li></center>
                 <center><li><a href="ris.php">RIS</a></li></center>
                 <center><li><a href="audit.php">Audit</a></li></center>
-                <center><li><a href="reports.php">Reports</a></li></center>
+                <center><li><a href="./report/reports.php">Reports</a></li></center>
                 <hr>
                 <center><li><a href="master_page.php">Master Pages</a></li></center>
                 <hr>

@@ -194,7 +194,7 @@ $value = $db->getRecord("purchase_orders", ["purchase_order_id" => $_GET["purcha
 <body>
     <!-- Header -->
     <header>
-        <div class="logo-title"><img src="img/coclogo.png" width="300" alt="Company Logo"></div>
+        <div class="logo-title"><img src="../img/coclogo.png" width="300" alt="Company Logo"></div>
     </header>
 
     <!-- Navigation -->
@@ -205,7 +205,7 @@ $value = $db->getRecord("purchase_orders", ["purchase_order_id" => $_GET["purcha
             <li>Users</li>
         </ul>
         <div class="profile-section">
-            <img src="img/avatar.png" alt="Profile" class="profile-avatar">
+            <img src="../img/avatar.png" alt="Profile" class="profile-avatar">
             <span>Jcolonia</span>
         </div>
     </nav>
@@ -214,7 +214,7 @@ $value = $db->getRecord("purchase_orders", ["purchase_order_id" => $_GET["purcha
     <div class="container">
         <!-- Sub Menu -->
         <aside class="sub-menu">
-            <h1><center><img src="img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
+            <h1><center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center></h1>
             <ul>
                 <center><li><a href="dashboard.php">Dashboard</a></li></center>
                 <center><li class="selected"><a href="index.php">Purchase Order</a></li></center>
