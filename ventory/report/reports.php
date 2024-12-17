@@ -52,26 +52,42 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
                 <center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
             </h1>
             <ul>
-                <li><a href="../pod.php">Dashboard</a></li>
-                <li class="selected"><a href="../index.php" style="color: white;">Purchase Order</a></li>
-                <li><a href="../dr_page.php">Delivery Receipt</a></li>
-                <li><a href="#">POWE</a></li>
-                <li><a href="#">RIS</a></li>
-                <li><a href="#">Audit</a></li>
-                <li><a href="reports.php">Reports</a></li>
-                <hr>
-                <div class="dropdown">
-                    <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
-                    <div class="dropdown-content">
-                        <a href="#">Site</a>
-                        <a href="#">Item Category</a>
-                        <a href="#">Item</a>
-                        <a href="#">Supplier</a>
-                        <a href="#">Settings</a>
+                <center>
+                    <li><a href="../pod.php">Dashboard</a></li>
+                </center>
+                <center>
+                    <li><a href="../index.php">Purchase Order</a></li>
+                </center>
+                <center>
+                    <li><a href="../dr_page.php">Delivery Receipt</a></li>
+                </center>
+                <center>
+                    <li><a href="#">POWE</a></li>
+                </center>
+                <center>
+                    <li><a href="#">RIS</a></li>
+                </center>
+                <center>
+                    <li><a href="#">Audit</a></li>
+                </center>
+                <center>
+                    <li class="selected"><a href="reports.php" style="color: white">Reports</a></li>
+                </center>
+                    <hr>
+                    <div class="dropdown">
+                        <button class="dropdown-btn">Master Pages<i class="fa fa-caret-down"></i></button>
+                        <div class="dropdown-content">
+                            <a href="#">Site</a>
+                            <a href="#">Item Category</a>
+                            <a href="#">Item</a>
+                            <a href="#">Supplier</a>
+                            <a href="#">Settings</a>
+                        </div>
                     </div>
-                </div>
-                <hr>
-                <li><a href="#">Log Out</a></li>
+                    <hr>
+                <center>
+                    <li><a href="#">Log Out</a></li>
+                </center>
             </ul>
         </aside>
 
