@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["purchase_order_id"]))
                 <center><img src="../img/box.png" height="60" alt="Icon">&nbsp;SIT.io</center>
             </h1>
             <ul>
-                <li><a href="pod.php">Dashboard</a></li>
+                <li><a href="../pod.php">Dashboard</a></li>
                 <li class="selected"><a href="../index.php" style="color: white;">Purchase Order</a></li>
                 <li><a href="../dr_page.php">Delivery Receipt</a></li>
                 <li><a href="#">POWE</a></li>

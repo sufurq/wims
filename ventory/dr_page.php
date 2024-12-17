@@ -65,7 +65,7 @@ include('./search/searc_receipt.php');
                     <li><a href="#">Audit</a></li>
                 </center>
                 <center>
-                    <li><a href="#">Reports</a></li>
+                    <li><a href="report/reports.php">Reports</a></li>
                 </center>
                 <hr>
                 <div class="dropdown">

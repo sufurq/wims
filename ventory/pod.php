@@ -98,11 +98,11 @@ $conn->close();
                 <ul class="nav flex-column text-center">
                     <li class="nav-item"><a class="nav-link" href="pod.php">Dashboard</a></li>
                     <li class="nav-item"><a class="nav-link active" href="index.php">Purchase Order</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Delivery Receipt</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dr_page.php">Delivery Receipt</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">POWE</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">RIS</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Audit</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+                    <li class="nav-item"><a class="nav-link" href="report/reports.php">Reports</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Master Pages</a></li>
                     <li class="nav-item"><a class="nav-link" href="./logic/logout.php">Log Out</a></li>
                 </ul>

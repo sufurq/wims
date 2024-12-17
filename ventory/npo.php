@@ -116,8 +116,8 @@ $conn->close();
         </aside>
 
     <!-- Main Section -->
-    <div class="container">
-        <section class="purchase-order">
+    <div style="margin-left: 1%; width: 100%;" class="container">
+    <section class="purchase-order">
             <div class="form-container">
                 <button class="close-btn" onclick="closeForm()">&#10006;</button>
                 <center><h2>New Purchase Order</h2></center>
